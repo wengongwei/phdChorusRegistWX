@@ -1,0 +1,46 @@
+
+.kind-list {
+  background-color: #f8f8f8;
+  padding: 5% 5% 5% 5%;
+}
+
+.kind-list-item {
+  margin: 15pt 0;
+  background-color: #FFFFFF;
+  border-radius: 2pt;
+  overflow: hidden;
+}
+
+.kind-list-item:first-child {
+  margin-top: 0;
+}
+
+.kind-list-text{
+  flex: 1;
+}
+
+.kind-list-img {
+  width: 15pt;
+  height: 15pt;
+}
+
+.kind-list-item-hd {
+  padding: 15pt;
+  display: flex;
+  align-items: center;
+
+  transition: opacity .3s;
+}
+
+.kind-list-item-hd-show {
+  opacity: 0.2;
+}
+
+.kind-list-item-bd {
+  height: 0;
+  overflow: hidden;
+}
+
+.kind-list-item-bd-show {
+  height: auto;
+}

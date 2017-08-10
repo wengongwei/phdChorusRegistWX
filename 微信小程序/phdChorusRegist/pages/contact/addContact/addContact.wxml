@@ -1,0 +1,40 @@
+<!--addContact.wxml-->
+
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">姓名</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="蓝胖子" focus="true" confirm-type="完成" bindconfirm="bindNameChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">声部</view>
+    <radio-group class="radio-group" bindchange="bindContactPartChange">
+      <label style="display: flex" wx:for="{{contactPartItems}}" wx:key="item.value">
+        <view class="section-selector">
+          <radio value="{{item.name}}" checked="{{item.checked}}" />
+          {{item.value}}
+        </view>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">所在园区</view>
+    <radio-group class="radio-group" bindChange="bindLocationChange">
+      <label style="display: flex" wx:for="{{registLocationTypeItems}}" wx:key="item.value">
+        <view class="section-selector">
+          <radio value="{{item.name}}" checked="{{item.checked}}" />
+          {{item.value}}
+        </view>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="addContact">添加</button>
+  </view>
+
+</view>

@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/regist/registIndex/registIndex",
+    "pages/contact/contactIndex/contactIndex",
+    "pages/statics/staticsIndex/staticsIndex",
+    "pages/logs/logs",
+    "pages/regist/regist/regist",
+    "pages/regist/createRegistTable/createRegistTable",
+    "pages/contact/addContact/addContact",
+    "pages/statics/staticsByDay/staticsByDay",
+    "pages/statics/exportExcelFile/exportExcelFile",
+    "pages/statics/exportExcelFile/downloadExcelFile/downloadExcelFile"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "博士合唱团签到小程序",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#0099ff",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/regist/registIndex/registIndex",
+        "iconPath": "image/regist.png",
+        "selectedIconPath": "image/regist_selected.png",
+        "text": "签到"
+      },
+      {
+        "pagePath": "pages/contact/contactIndex/contactIndex",
+        "iconPath": "image/contact.png",
+        "selectedIconPath": "image/contact_selected.png",
+        "text": "团员"
+      },
+      {
+        "pagePath": "pages/statics/staticsIndex/staticsIndex",
+        "iconPath": "image/statics.png",
+        "selectedIconPath": "image/statics_selected.png",
+        "text": "统计"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
+  },
+  "debug": false
+}

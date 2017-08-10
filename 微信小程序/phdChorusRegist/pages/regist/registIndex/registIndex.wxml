@@ -1,0 +1,15 @@
+<!--registIndex.wxml-->
+
+
+<view class="index-space">
+
+  <view class="index-logo-space-area">
+    <image class="regist-index-logo" src="../image/regist_index_logo.png"></image>
+  </view>
+
+  <view>
+    <button class="index-button" type="default" plain="true" bindtap="createRegistTable">创建签到表</button>
+    <button class="index-button" type="default" plain="true" bindtap="regist">签到</button>
+  </view>
+
+</view>

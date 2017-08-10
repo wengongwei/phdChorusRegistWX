@@ -1,0 +1,52 @@
+/**
+ * 表单填充样式表
+*/
+
+.section-container {
+  padding-bottom: 50pt;
+}
+
+.section {
+  padding: 2% 10% 2% 10%;
+  margin-top: 10pt;
+}
+
+.section-title {
+  margin-bottom: 4pt;
+  text-align: left;
+  font-size: 12pt;
+  color: #999999;
+}
+
+.section-picker-button {
+  margin-top: 12pt;
+}
+
+.section-input-view {
+  border: 1pt solid lightgray;
+  border-radius: 4pt;
+  margin-top: 12pt;
+  height: 30pt;
+}
+
+.section-input {
+  padding-left: 10pt;
+  padding-right: 10pt;
+  vertical-align: middle;
+}
+
+.section-selector {
+  margin-top: 8pt;
+  margin-left: 10pt;
+  margin-right: 10pt;
+}
+
+.confirm-button-area {
+  margin-top: 15pt;
+  margin-bottom: 30pt;
+}
+
+.confirm-button {
+  width: 80%;
+  text-align: center;
+}

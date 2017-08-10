@@ -1,0 +1,17 @@
+/* contactIndex.wxss */
+
+@import '../../common/kind-list.wxss';
+@import '../../common/navigator.wxss';
+
+.contact-index {
+  background: #f8f8f8;
+}
+
+.index-button-area {
+  margin-top: 20pt;
+  margin-bottom: 20pt;
+}
+
+.index-button {
+  width: 80%
+}

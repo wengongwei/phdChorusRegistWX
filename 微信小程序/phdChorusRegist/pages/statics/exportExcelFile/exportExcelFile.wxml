@@ -1,0 +1,39 @@
+<!--exportExcelFile.wxml-->
+
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">开始日期</view>
+    <picker bindchange="bindFromDateChange" mode="date" value="{{fromDate}}">
+      <view class="section-picker-button">
+        <button type="default">{{fromDate}}</button>
+      </view>     
+    </picker>
+  </view>
+
+  <view class="section">
+    <view class="section-title">截止日期</view>
+    <picker bindchange="bindToDateChange" mode="date" value="{{toDate}}">
+      <view class="section-picker-button">
+        <button type="default">{{toDate}}</button>
+      </view>     
+    </picker>
+  </view>
+
+  <view class="section">
+    <view class="section-title">声部</view>
+    <radio-group class="radio-group" bindchange="bindPartChange">
+      <label style="display: flex" wx:for="{{partItems}}" wx:key="item.value">
+        <view class="section-selector">
+          <radio value="{{item.name}}" checked="{{item.checked}}" />
+          {{item.value}}
+        </view>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="exportExcelFile">导出Excel文件</button>
+  </view>
+
+</view>
