@@ -122,12 +122,12 @@ Page({
     // 服务器
     wx.request({
       url: config.serviceUrl.createRegistTableUrl,
-      method: 'POST',
       data: {
         registTableDate: this.data.registTableDate,
         registTableType: this.data.registTableType,
         registLocationType: this.data.registLocationType
       },
+      method: 'POST',
       header: {
         'content-type': 'application/json'
       },

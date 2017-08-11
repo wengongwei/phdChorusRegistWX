@@ -8,28 +8,29 @@ var config = {
   serviceUrl: {
 
     // 登录地址，用于建立会话
-    loginUrl: (httpsHost + 'wxLogin.php'),
+    loginUrl: (httpsHost + 'phdLogin.php'),
 
     // SATB12
-    contactInfoInSATB12Url: (httpsHost + 'wxContactInfoInSATB12.php'),
+    contactInfoInSATB12Url: (httpsHost + 'phdContactInfoInSATB12.php'),
 
     // SATB
-    contactInfoInSATBUrl: (httpsHost + 'wxContactInfoInSATB.php'),
+    contactInfoInSATBUrl: (httpsHost + 'phdContactInfoInSATB.php'),
 
     // 创建签到表
-    createRegistTableUrl: (httpsHost +'wxCreateRegistTable.php'),
+    createRegistTableUrl: (httpsHost +'phdCreateRegistTable.php'),
+    //createRegistTableUrl: (httpsHost + 'test.php'),
 
     // 签到
-    tableRegistUrl: (httpsHost + 'wxTableRegist.php'),
+    tableRegistUrl: (httpsHost + 'phdTableRegist.php'),
 
     // 添加新团员
-    addContactUrl: (httpsHost + 'wxAddContact.php'),
+    addContactUrl: (httpsHost + 'phdAddContact.php'),
   
     // 导出签到Excel文件
-    exportRegistExcelFileUrl: (httpsHost + 'wxExportRegistExcelFile.php'),
+    exportRegistExcelFileUrl: (httpsHost + 'phdExportRegistExcelFile.php'),
 
     // 每日出勤
-    registTableOnDateUrl: (httpsHost + 'registTableOnDate.php')
+    registTableOnDateUrl: (httpsHost + 'phdRegistTableOnDate.php')
   }
 
 };

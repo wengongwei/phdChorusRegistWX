@@ -1,5 +1,5 @@
 微信小程序ID
-wx4ed2a6886865fb6e
+phd4ed2a6886865fb6e
 密匙：
 4aea9de65671d826bce034a26fd59724
 
@@ -30,53 +30,55 @@ ssh -i /Users/zkey/Library/Mobile\ Documents/com\~apple\~CloudDocs/博士合唱�
 // 会话管理服务器
 ssh -i /Users/zkey/Library/Mobile\ Documents/com\~apple\~CloudDocs/博士合唱团/微信小程序/腾讯云业务服务器秘钥/phdChorusRegist root@123.207.161.64
 
-查看开启的Apache服务
-ps aux |grep httpd
-网页服务放在
-yjdata/www/www
-apache服务
-etc/apache2
-apache配置地址
-usr/local/apache2/conf/httpd.conf
-
+查看是否开启了某项服务
 ps -aux | grep xxx
 
 数据库服务器
+IP 10.66.85.131
 账号 root | 密码 19940530liang
 数据库
 phdChorusRegist
-账号 phdChrousRegist | 密码 SATB@phdChorus
+账号 phdChorusRegist | 密码 SATB@phdChorus
 排序规则
 utf8_unicode_ci
 
-
+系统编码配置
+etc/default/locale
 
 薄荷签到-小程序 服务器接口
 
-接口名：
-wxCreateRegistTable.php
-参数：
-registTableDate // 日期 '2018-08-06'
-registTableType // 类型
-registLocationType // 园区
-返回值：
-status // 0-成功；1-失败
+## 创建签到表
+/**
+ * 创建签到表
+ *
+ * 接口名
+ * wxCreateRegistTable.php
+ *
+ * 参数
+ * registTableDate // 日期 '2018-08-06'
+ * registTableType // 类型 '大排' OR '小排' OR '周日晚' OR '声乐课'
+ * registLocationType // 园区 '中关村' OR '雁栖湖'
+ *
+ * 返回值
+ * status // 0-成功 | 1-失败（签到表已存在）| 2-失败（创建签到表失败） | 3-参数错误 | 4-代码bug
+ *
+ */
 
 
 接口名：
-wxContactInfoInSATB12.php
+phdContactInfoInSATB12.php
 返回值：
 status // 0-成功；1-失败
 contactInfo // SATB12
 
-wxContactInfoInSATBUrl
+phdContactInfoInSATBUrl
 返回值：
 status // 0-成功；1-失败
 contactInfo // SATB
 
 
 接口名：
-wxTableRegistUrl.php
+phdTableRegist.php
 参数：
 registTableDate //
 registTableType //
@@ -88,7 +90,7 @@ status // 0-成功；1-失败
 
 
 接口名：
-wxAddContactUrl.php
+phdAddContactUrl.php
 参数
 registLocationType //
 selectedContactPart //
@@ -97,7 +99,7 @@ selectedContactName //
 status // 0-成功；1-失败
 
 接口名：
-wxExportRegistExcelFile.php
+phdExportRegistExcelFile.php
 参数
 fromDate
 toDate
