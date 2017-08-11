@@ -138,7 +138,7 @@ Page({
           title = '创建成功'
         }
         else if (res.data.status == 1) {
-          title = '签到表已存在，无需重复创建'
+          title = '该签到表已存在'
         }
 
         wx.showToast({

@@ -10,9 +10,10 @@
  * registTableDate // 日期 '2018-08-06'
  * registTableType // 类型 '大排' OR '小排' OR '周日晚' OR '声乐课'
  * registLocationType // 园区 '中关村' OR '雁栖湖'
+ * contactPartType // 声部 S1 | S2 | A1 | A2 | T1 | T2 | B1 | B2
  *
  * 返回值
- * status // 0-成功 | 1-失败（签到表已存在）| 2-失败（创建签到表失败） | 3-参数错误 | 4-代码bug
+ * status // 0-成功 | 1-失败（签到表已存在）| 2-失败（创建签到表失败） | 3-参数错误 | 4-服务器代码bug
  *
  */
 
@@ -34,7 +35,7 @@ $result = array();
 $result[return_params] = $registTableDate . $registTableType . $registLocationType;
 
 // 校验参数格式是否正确
-if (!(isValidTableDate($registTableDate) && isValidTableType($registTableType) && isValidTableLocationType($registLocationType))) {
+if (!(isValidTableDate($registTableDate) && isValidTableType($registTableType) && isValidLocationType($registLocationType))) {
     $result[return_status] = '3';
     echo json_encode($result);
     exit();

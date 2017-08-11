@@ -36,6 +36,35 @@ interface DatabaseManager {
 	public function insertRegistTable($registTableDate, $registTableType, $registLocationType) : int;
 
 
+    /**
+     * 团员是否已存在
+     *
+     * 参数
+     * contactName // 姓名
+     * contactPart // 声部
+     * contactLocation // 所在园区
+     *
+     * 返回值
+     * int // 0-不存在 | 1-存在
+     *
+     */
+    public function isContactExist($contactName, $contactPart, $contactLocation) : int;
+
+    /**
+     * 添加团员
+     *
+     * 参数
+     * contactName // 姓名
+     * contactPart // 声部
+     * contactLocation // 所在园区
+     *
+     * 返回值
+     * int // 0-成功 | 1-失败
+     *
+     */
+    public function insertContact($contactName, $contactPart, $contactLocation) : int;
+
+
 	/**
 	 * 签到
 	 *
@@ -88,7 +117,7 @@ class WXDatabaseManager implements DatabaseManager {
     }
 
     public function insertRegistTable($registTableDate, $registTableType, $registLocationType) : int {
-        $queryStr = "INSERT INTO " . self::_db_regist_table . "(date, type, location) VALUES('" . $registTableDate . "', '" . $registTableType . "', '" . $registLocationType . "')";
+        $queryStr = "INSERT INTO " . self::_db_regist_table . " (date, type, location) VALUES('" . $registTableDate . "', '" . $registTableType . "', '" . $registLocationType . "')";
         $result = $this->_mysqliConnection->query($queryStr);
         $status = 1;
         if ($result == true) {
@@ -97,6 +126,28 @@ class WXDatabaseManager implements DatabaseManager {
 
         return $status;
 	}
+
+    public function isContactExist($contactName, $contactPart, $contactLocation) : int {
+	    $queryStr = "SELECT id FROM " . self::_db_contact . " WHERE name = '" . $contactName . "' AND part = '" . $contactPart . "' AND location = '" . $contactLocation . "'";
+        $result = $this->_mysqliConnection->query($queryStr);
+        $status = 0;
+        if ($result->num_rows > 0) {
+            $status = 1;
+        }
+
+        return $status;
+	}
+
+    public function insertContact($contactName, $contactPart, $contactLocation) : int {
+	    $queryStr = "INSERT INTO " . self::_db_contact . " (name, part, location) VALUES ('" . $contactName . "', '" . $contactPart . "', '" . $contactLocation . "')";
+        $result = $this->_mysqliConnection->query($queryStr);
+        $status = 1;
+        if ($result == true) {
+            $status = 0;
+        }
+
+        return $status;
+    }
 
 	public function __destruct() {
 	    $this->_mysqliConnection->close();

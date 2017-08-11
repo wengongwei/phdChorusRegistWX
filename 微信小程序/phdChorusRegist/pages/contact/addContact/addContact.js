@@ -130,9 +130,9 @@ Page({
       url: config.serviceUrl.addContactUrl,
       method: 'POST',
       data: {
-        registLocationType: this.data.registLocationType,
-        selectedContactPart: this.data.selectedContactPart,
-        selectedContactName: this.data.selectedContactName
+        contactLocation: this.data.registLocationType,
+        contactPart: this.data.selectedContactPart,
+        contactName: this.data.selectedContactName
       },
       header: {
         'content-type': 'application/json'
@@ -145,7 +145,7 @@ Page({
           title = '添加成功'
         }
         else if (res.data.status == 1) {
-          title = '添加失败'
+          title = '该团员已存在'
         }
 
         wx.showToast({
