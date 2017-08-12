@@ -8,6 +8,7 @@ const validTableDateType = array('Y-m-d');
 const validTableType = array('大排', '小排', '周日晚', '声乐课');
 const validLocationType = array('中关村', '雁栖湖');
 const validPartType = array('S1', 'S2', 'A1', 'A2', 'T1', 'T2', 'B1', 'B2');
+const partArrayInSATB = array('S', 'A', 'T', 'B');
 
 function isValidTableDate($tableDate) {
     $unixTime = strtotime($tableDate);

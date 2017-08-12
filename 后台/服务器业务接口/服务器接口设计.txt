@@ -66,15 +66,26 @@ etc/default/locale
 
 
 接口名：
-phdContactInfoInSATB12.php
+phdContactListInSATB12.php
 返回值：
 status // 0-成功；1-失败
-contactInfo // SATB12
+contactList // SATB12
 
-phdContactInfoInSATBUrl
-返回值：
-status // 0-成功；1-失败
-contactInfo // SATB
+## 团员详细信息
+/**
+ * 团员列表(SATB12)中显示团员详细信息
+ *
+ * 接口名
+ * phdContactInfoInSATB.php
+ *
+ * 参数
+ * 无
+ *
+ * 返回值
+ * status // 0-成功 | 1-失败
+ * contactInfo // SATB12八声部团员列表{'T2' : [{contactName:'蓝胖子', contactPart:'T2', contactLocation:'中关村'}, ...], ...}
+ *
+ */
 
 
 接口名：

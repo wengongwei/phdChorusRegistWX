@@ -16,8 +16,8 @@
  *
  */
 
-require('phdUtils.php');
-require('phdDatabaseManager.php');
+include_once('phdUtils.php');
+include_once('phdDatabaseManager.php');
 
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));

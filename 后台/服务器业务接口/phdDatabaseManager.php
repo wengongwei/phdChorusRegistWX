@@ -65,6 +65,32 @@ interface DatabaseManager {
     public function insertContact($contactName, $contactPart, $contactLocation) : int;
 
 
+    /**
+     * 按SATB12获取团员详细信息
+     *
+     * 参数
+     * 无
+     *
+     * 返回值
+     * contactInfo // SATB12八声部团员列表{'T2' : [{contactID:'5', contactName:'蓝胖子'}, ...], ...}
+     *
+     */
+    public function contactInfoInSATB12() : array;
+
+
+    /**
+     * 按SATB获取团员详细信息
+     *
+     * 参数
+     * 无
+     *
+     * 返回值
+     * contactInfo // SATB四声部团员列表{'S' : [{contactID:'5', contactName:'蓝胖子', contactPart:'T2', contactLocation:'中关村'}, ...], ...}
+     *
+     */
+    public function contactInfoForRegistInSATB12() : array;
+
+
 	/**
 	 * 签到
 	 *
@@ -92,6 +118,12 @@ class WXDatabaseManager implements DatabaseManager {
 	const _db_regist_table = "regist_table";
 	const _db_contact = "contact";
 	const _db_regist_info = "regist_info";
+
+    const _partArrayInSATB12 = array('S1', 'S2', 'A1', 'A2', 'T1', 'T2', 'B1', 'B2');
+    const _db_contact_id = 'id';
+    const _db_contact_part = 'part';
+    const _db_contact_name = 'name';
+    const _db_contact_location = 'location';
 
 	private $_mysqliConnection;
 
@@ -147,6 +179,45 @@ class WXDatabaseManager implements DatabaseManager {
         }
 
         return $status;
+    }
+
+
+    public function contactInfoInSATB12() : array {
+        $contactInfo = array();
+
+        foreach (self::_partArrayInSATB12 as $part) {
+            $queryStr = "SELECT * from " . self::_db_contact . " WHERE part = '" . $part . "'";
+            $result = $this->_mysqliConnection->query($queryStr);
+            $partInfo = array();
+            while ($row = $result->fetch_assoc()) {
+                $contactID = $row[self::_db_contact_id];
+                $contactName = $row[self::_db_contact_name];
+                $contactPart = $row[self::_db_contact_part];
+                $contactLocation = $row[self::_db_contact_location];
+                $partInfo[] = array(self::_db_contact_id=>$contactID, self::_db_contact_name=>$contactName, self::_db_contact_part=>$contactPart, self::_db_contact_location=>$contactLocation);
+            }
+
+            $contactInfo[$part] = $partInfo;
+        }
+
+        return $contactInfo;
+    }
+
+    public function contactInfoForRegistInSATB12() : array {
+        $contactInfo = array();
+
+        foreach (self::_partArrayInSATB12 as $part) {
+            $queryStr = "SELECT name from " . self::_db_contact . " WHERE part = '" . $part . "'";
+            $result = $this->_mysqliConnection->query($queryStr);
+            $partInfo = array();
+            while ($row = $result->fetch_assoc()) {
+                $partInfo[] = $row[self::_db_contact_name];
+            }
+
+            $contactInfo[$part] = $partInfo;
+        }
+
+        return $contactInfo;
     }
 
 	public function __destruct() {
