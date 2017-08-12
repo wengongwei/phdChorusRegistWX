@@ -44,8 +44,8 @@ if (!(isValidTableDate($registTableDate) && isValidTableType($registTableType) &
 $dbManager = new WXDatabaseManager();
 
 // 是否已存在相同的签到表
-$tableExist = $dbManager->isRegistTableExist($registTableDate, $registTableType, $registLocationType);
-if ($tableExist == 1) {
+$tableID = $dbManager->idOfRegistTable($registTableDate, $registTableType, $registLocationType);
+if ($tableID == -1) {
     $result[return_status] = '1';
     echo json_encode($result);
     exit();

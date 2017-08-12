@@ -203,24 +203,38 @@ Page({
       },
       success: function (res) {
         console.log('createRegistTable', res.data)
-        var title = ''
-        if (res.data.status == 0) {
-          title = '签到成功'
+        var status = res.data.status
+        if (status == 0) {
+          wx.showToast({
+            title: '签到成功',
+            mask: true,
+            icon: 'success',
+            duration: 2500
+          })
         }
-        else if (res.data.status == 1) {
-          title = '签到失败'
-        }
+        else {
+          warningContent = ''
+          if (status == 1) {
+            warningContent = '签到表不存在，请联系团长或声部长创建签到表'
+          }
+          else if (status == 2) {
+            warningContent = '该团员不存在，请联系声部长添加团员'
+          }
+          else if (status == 3) {
+            warningContent = '你已签过到了，无需重复签到'
+          }
 
-        wx.showToast({
-          title: title,
-          mask: true,
-          icon: 'success',
-          duration: 2500
-        })
+          wx.hideLoading();
+          wx.showModal({
+            title: '签到失败',
+            content: warningContect,
+            confirmText: '好',
+            showCancel: false
+          })
+        }
       },
       fail: function (res) {
         wx.hideLoading()
-
         wx.showModal({
           title: '无法连接服务器',
           content: '请检查网络连接',

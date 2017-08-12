@@ -17,10 +17,10 @@ interface DatabaseManager {
 	 * registLocationType // 园区 '中关村' OR '雁栖湖'
 	 *
 	 * 返回值
-	 * int // 0-不存在 | 1-存在
+	 * int // -1表示registTable不存在 | 如存在则返回签到表的数据库表id值
 	 *
 	 */
-	public function isRegistTableExist($registTableDate, $registTableType, $registLocationType) : int;
+	public function idOfRegistTable($registTableDate, $registTableType, $registLocationType) : int;
 
 
 	/**
@@ -45,10 +45,10 @@ interface DatabaseManager {
      * contactLocation // 所在园区
      *
      * 返回值
-     * int // 0-不存在 | 1-存在
+     * int // -1表示contact不存在 | 如存在则返回contact的数据库表id值
      *
      */
-    public function isContactExist($contactName, $contactPart, $contactLocation) : int;
+    public function idOfContact($contactName, $contactPart, $contactLocation) : int;
 
     /**
      * 添加团员
@@ -91,21 +91,19 @@ interface DatabaseManager {
     public function contactInfoForRegistInSATB12() : array;
 
 
-	/**
-	 * 签到
-	 *
-	 * 参数
-	 * registTableDate //
-	 * registTableType //
-	 * registLocationType //
-	 * selectedContactPart //
-	 * selectedContactName //
-	 *
-	 * 返回值
-	 * int // 0-成功 1-签到表不存在 2-失败(已签到)
-	 *
-	 */
-	//public function tableRegist($registTableDate, $registTableType, $registLocationType, $selectedContactPart, $selectedContactName);
+    /*
+     * 签到
+     *
+     * 参数
+     * registTableID // 签到表id
+     * contactID // 团员id
+     *
+     * 返回值
+     * status // 0-成功 | 1-失败(已签到，无需重复签到) | 2-失败(数据库代码逻辑错误)
+     *
+     */
+    public function tableRegist($registTableID, $contactID) : int;
+
 }
 
 class WXDatabaseManager implements DatabaseManager {
@@ -120,6 +118,7 @@ class WXDatabaseManager implements DatabaseManager {
 	const _db_regist_info = "regist_info";
 
     const _partArrayInSATB12 = array('S1', 'S2', 'A1', 'A2', 'T1', 'T2', 'B1', 'B2');
+
     const _db_contact_id = 'id';
     const _db_contact_part = 'part';
     const _db_contact_name = 'name';
@@ -137,12 +136,14 @@ class WXDatabaseManager implements DatabaseManager {
         $this->_mysqliConnection->set_charset('utf8');
     }
 
-    public function isRegistTableExist($registTableDate, $registTableType, $registLocationType) : int {
+    public function idOfRegistTable($registTableDate, $registTableType, $registLocationType) : int {
 	    $queryStr = "SELECT id FROM " . self::_db_regist_table . " WHERE date = '" . $registTableDate . "' AND type = '". $registTableType. "' AND location = '" . $registLocationType . "'";
         $result = $this->_mysqliConnection->query($queryStr);
-        $status = 0;
+        $status = -1;
         if ($result->num_rows > 0) {
-            $status = 1;
+            while ($row = $result->fetch_assoc()) {
+                $status = $row['id'];
+            }
         }
 
         return $status;
@@ -159,12 +160,14 @@ class WXDatabaseManager implements DatabaseManager {
         return $status;
 	}
 
-    public function isContactExist($contactName, $contactPart, $contactLocation) : int {
+    public function idOfContact($contactName, $contactPart, $contactLocation) : int {
 	    $queryStr = "SELECT id FROM " . self::_db_contact . " WHERE name = '" . $contactName . "' AND part = '" . $contactPart . "' AND location = '" . $contactLocation . "'";
         $result = $this->_mysqliConnection->query($queryStr);
-        $status = 0;
+        $status = -1;
         if ($result->num_rows > 0) {
-            $status = 1;
+            while ($row = $result->fetch_assoc()) {
+                $status = $row['id'];
+            }
         }
 
         return $status;
@@ -219,6 +222,44 @@ class WXDatabaseManager implements DatabaseManager {
 
         return $contactInfo;
     }
+
+    public function tableRegist($registTableID, $contactID) : int {
+        // 是否已经签过到了
+        $selectStr = "SELECT id, attend FROM " . self::_db_regist_info . " WHERE regist_table_id = '" . $registTableID . "' AND contact_id = '" . $contactID . "'";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $registID = -1;
+        $attend = false;
+        if ($selectResult->num_rows > 0) {
+            while ($row = $selectResult->fetch_assoc()) {
+                $registID = $row['id'];
+                $attend = $row['attend'];
+            }
+        }
+
+        if ($registID > 0 && $attend) {
+            return 1;
+        }
+        else {
+            $queryStr = '';
+            if ($registID > 0) {
+                // update 签到表中 attend的值
+                $queryStr = "UPDATE " . self::_db_regist_info . " SET attend = 'true' WHERE regist_table_id = '" . $registTableID . "' AND contact_id = '" . $contactID . "'";
+            } else {
+                // insert 新条目
+                $queryStr = "INSERT INTO " . self::_db_regist_info . " (regist_table_id, contact_id, attend) " . " VALUES ('" . $registTableID . "', '" . $contactID . "', 'true')";
+            }
+
+            $queryResult = $this->_mysqliConnection->query($queryStr);
+            if ($queryResult) {
+                return 0;
+            }
+
+            return 2;
+        }
+
+        return -1;
+	}
+
 
 	public function __destruct() {
 	    $this->_mysqliConnection->close();
