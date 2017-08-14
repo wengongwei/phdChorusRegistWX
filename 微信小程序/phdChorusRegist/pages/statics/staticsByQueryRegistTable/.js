@@ -85,32 +85,34 @@ Page({
   },
 
   bindTypeChange: function (e) {
+    var newType = e.detail.value
     var tmpArray = this.data.registTableTypeItems
     for (var i = 0, len = tmpArray.length; i < len; ++i) {
-      tmpArray[i].checked = (tmpArray[i].checked == e.detail.value)
+      tmpArray[i].checked = (tmpArray[i].value == newType)
     }
 
     this.setData({
       registTableTypeItems: tmpArray,
-      registTableType: e.detail.value
+      registTableType: newType
     })
   },
 
   bindLocationChange: function (e) {
+    var newLocation = e.detail.value;
     var tmpArray = this.data.registLocationTypeItems
     for (var i = 0, len = tmpArray.length; i < len; ++i) {
-      tmpArray[i].checked = (tmpArray[i].checked == e.detail.value)
+      tmpArray[i].checked = (tmpArray[i].value == newLocation)
     }
 
     this.setData({
       registLocationTypeItems: tmpArray,
-      registLocationType: e.detail.value
+      registLocationType: newLocation
     })
   },
 
   queryRegistTable: function (e) {
     wx.request({
-      url: '',
+      url: 'registTableOnDateUrl',
       fail: function (e) {
         
       }

@@ -36,7 +36,7 @@
   </view>
 
   <view class="confirm-button-area">
-    <button class="confirm-button" type="primary" bindtap="queryRegistTable">创建签到表</button>
+    <button class="confirm-button" type="primary" bindtap="queryRegistTable">查询签到表</button>
   </view>
 
 </view>

@@ -1,4 +1,4 @@
-// staticsIndex.js
+// staticsByQueryRegistTable.js
 Page({
 
   /**
@@ -62,17 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-
-  exportExcelFile: function () {
-    wx.navigateTo({
-      url: '../exportExcelFile/exportExcelFile',
-    })
-  },
-
-  staticsByDay: function () {
-    wx.navigateTo({
-      url: '../staticsBySelectRegistTable/staticsBySelectRegistTable',
-    })
   }
 })

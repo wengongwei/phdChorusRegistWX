@@ -8,32 +8,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-    list: [
-      {
-        id: 'S',
-        name: '女高音',
-        open: false,
-        pages: ['王冕', '朱思虹']
-      },
-      {
-        id: 'A',
-        name: '女中音',
-        open: false,
-        pages: ['温雅婷', '肖寒']
-      },
-      {
-        id: 'T',
-        name: '男高音',
-        open: false,
-        pages: ['梁志鹏', '江文宇']
-      },
-      {
-        id: 'B',
-        name: '男低音',
-        open: false,
-        pages: ['李洪宇', '文俊']
-      }
-    ]
+    contactInfoList: [],
+
+    partList: [
+      { id: 'S1', name: '女高音S1' },
+      { id: 'S2', name: '女高音S2' },
+      { id: 'A1', name: '女中音A1' },
+      { id: 'A2', name: '女中音A2' },
+      { id: 'T1', name: '男高音T1' },
+      { id: 'T2', name: '男高音T2' },
+      { id: 'B1', name: '男低音B1' },
+      { id: 'B2', name: '男低音B2' }
+    ],
+
   },
 
   /**
@@ -41,81 +28,17 @@ Page({
    * 从options中可以获取上个页面穿过来的参数（options.title）
    */
   onLoad: function (options) {
-    wx.showNavigationBarLoading();
-
-    wx.request({
-      url: config.serviceUrl.contactInfoInSATBUrl,
-      method: 'POST',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (contactInfo) {
-        this.setData({
-          list: contactInfo
-        })
-      },
-      fail: function (errMessage) {
-        wx.showModal({
-          title: '无法连接服务器',
-          content: '请检查网络连接',
-          confirmText: '好'
-        })
-      }
-    })
+    this.loadContactInfo()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    wx.hideNavigationBarLoading();
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
   onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+    this.loadContactInfo()
   },
 
   kindToggle: function (e) {
     var id = e.currentTarget.id
-    var list = this.data.list
+    console.log('target id:', id)
+    var list = this.data.contactInfoList
     for (var i = 0, len = list.length; i < len; ++i) {
       if (list[i].id == id) {
         list[i].open = !list[i].open
@@ -126,7 +49,50 @@ Page({
     }
 
     this.setData({
-      list: list
+      contactInfoList: list
+    })
+  },
+
+  loadContactInfo: function () {
+    console.log('contact info loading')
+    wx.showNavigationBarLoading()
+
+    var that = this
+
+    wx.request({
+      url: config.serviceUrl.contactInfoInSATB12Url,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        console.log('contact info:', res.data)
+        var contactList = new Array()
+        if (res.data.status == 0) {
+          var contactDic = res.data.contactInfo
+          var partList = that.data.partList
+          for (var i = 0; i < partList.length; ++i) {
+            var partTag = partList[i]
+            contactList.push({ id: partTag.id, name: partTag.name, open: false, contactList: contactDic[partTag.id]})
+          }
+
+          that.setData({
+            contactInfoList: contactList
+          })
+        }
+      },
+      fail: function (errMessage) {
+        wx.showModal({
+          title: '无法连接服务器',
+          content: '请检查网络连接',
+          confirmText: '好',
+          showCancel: false
+        })
+      },
+      complete: function () {
+        wx.hideNavigationBarLoading()
+        wx.stopPullDownRefresh()
+      }
     })
   },
 

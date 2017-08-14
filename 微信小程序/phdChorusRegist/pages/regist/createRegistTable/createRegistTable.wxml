@@ -12,7 +12,7 @@
 
   <view class="section">
     <view class="section-title">签到表类型</view>
-    <radio-group bindChange="bindTypeChange">
+    <radio-group bindchange="bindTypeChange">
       <label class="radio" style="display: flex" wx:for="{{registTableTypeItems}}" wx:key="item.value">
         <view class="section-selector">
           <radio value="{{item.name}}" checked="{{item.checked}}" />
@@ -24,7 +24,7 @@
 
   <view class="section">
     <view class="section-title">签到所在园区</view>
-    <radio-group class="radio-group" bindChange="bindLocationChange">
+    <radio-group class="radio-group" bindchange="bindLocationChange">
       <label style="display: flex" wx:for="{{registLocationTypeItems}}" wx:key="item.value">
         <view class="section-selector">
           <radio value="{{item.name}}" checked="{{item.checked}}" />

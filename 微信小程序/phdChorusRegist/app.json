@@ -7,9 +7,11 @@
     "pages/regist/regist/regist",
     "pages/regist/createRegistTable/createRegistTable",
     "pages/contact/addContact/addContact",
-    "pages/statics/staticsByDay/staticsByDay",
     "pages/statics/exportExcelFile/exportExcelFile",
-    "pages/statics/exportExcelFile/downloadExcelFile/downloadExcelFile"
+    "pages/statics/exportExcelFile/downloadExcelFile/downloadExcelFile",
+    "pages/statics/staticsBySelectRegistTable/staticsBySelectRegistTable",
+    "pages/statics/staticsByQueryRegistTable/staticsByQueryRegistTable",
+    "pages/statics/registTableDetailStatics/registTableDetailStatics"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

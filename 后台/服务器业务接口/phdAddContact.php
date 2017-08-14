@@ -44,7 +44,7 @@ $dbManager = new WXDatabaseManager();
 
 // 是否已存在相同的contact
 $contactExist = $dbManager->idOfContact($contactName, $contactPart, $contactLocation);
-if ($contactExist == -1) {
+if ($contactExist != -1) {
     $result[return_status] = '1';
     echo json_encode($result);
     exit();

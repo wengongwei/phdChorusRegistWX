@@ -32,7 +32,7 @@
 }
 
 .function-list-item-subtitle-light {
-  color: lightgray;
+  color: #999999;
   font-size: 12pt;
   padding-bottom: 10pt;
   text-align: center;

@@ -56,4 +56,54 @@ function isValidPartType($partType) {
     return false;
 }
 
+function weekdayFromDate($date) {
+    $weekdayInt = date('w', strtotime($date));
+    switch ($weekdayInt) {
+        case 0:
+            return '周日';
+        case 1:
+            return '周一';
+        case 2:
+            return '周二';
+        case 3:
+            return '周三';
+        case 4:
+            return '周四';
+        case 5:
+            return '周五';
+        case 6:
+            return '周六';
+    }
+
+    return '周X';
+}
+
+function nameStringFromNameList($nameList) {
+    $nameStr = "";
+    foreach ($nameList as $name) {
+        $nameStr .= ($name . '、');
+    }
+
+    return $nameStr;
+}
+
+function partDescription($part) {
+    $primaryPart = substr($part, 0, 1);
+    $partName = '';
+    if ($primaryPart == 'S') {
+        $partName = '女高音';
+    }
+    else if ($primaryPart == 'A') {
+        $partName = 女中音;
+    }
+    else if ($primaryPart == 'T') {
+        $partName = '男高音';
+    }
+    else if ($primaryPart == 'B') {
+        $partName = '男低音';
+    }
+
+    return $partName . $part;
+}
+
 ?>

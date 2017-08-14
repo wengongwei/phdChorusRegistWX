@@ -24,7 +24,7 @@ Page({
     ],
 
     // 服务器返回的团员信息
-    contactInfo: {S1 : ['s1', 's2', 's3'], A1 : ['a1', 'a2', 'a3']},
+    contactInfo: {},
 
     // 选择声部
     contactPartItems: [
@@ -38,31 +38,48 @@ Page({
       {value: 'B2', name: 'B2'}
     ],
 
-    // 当前声部的团员
-    contactPartInfoArray: [],
+    // 当前声部的团员信息
+    selectedPartInfoArray: [],
+
+    // 当前声部团员姓名列表
+    selectedPartContactNameList: [],
+    
+    
 
     registTableDate: '2017-08-06',
     registTableType: '大排',
     registLocationType: '中关村',
     selectedContactPart: 'T2',
     selectedContactName: '蓝胖子',
+    selectedContactID: '-1'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.loadContactInfo();
+  },
+
+  loadContactInfo: function () {
     wx.showNavigationBarLoading()
-    
+    var that = this
     wx.request({
-      url: config.serviceUrl.contactInfoInSATB12Url,
+      url: config.serviceUrl.phdContactInfoForRegistInSATB12Url,
       method: 'POST',
       header: {
         'content-type': 'application/json'
       },
-      success: function (contactInfo) {
-        this.setData({
-          contactInfo: contactInfo
+      success: function (res) {
+        console.log('regist wx.request:', res.data)
+        var contactList = res.data.contactList
+        var partInfo = contactList[that.data.selectedContactPart];
+        var partContactNameList = that.nameListFromPartInfo(partInfo);
+        console.log(partContactNameList);
+        that.setData({
+          contactInfo: res.data.contactList,
+          selectedPartInfoArray: partInfo,
+          selectedPartContactNameList: partContactNameList
         })
       },
       fail: function (errMessage) {
@@ -77,61 +94,27 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  nameListFromPartInfo: function (partInfo) {
+    var nameList = new Array();
+    for (var i = 0; i < partInfo.length; i++) {
+      var contact = partInfo[i];
+      nameList[i] = contact.name;
+    }
+
+    return nameList;
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
+  contactIdFromName: function (name) {
+    var partInfo = this.data.selectedPartInfoArray;
+    for (var i = 0; i < partInfo.length; i++) {
+      if (name == partInfo[i].name) {
+        return partInfo[i].id
+      }
+    }
 
+    return -1;
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
-  bindDateChange: function (e) {
-    this.setData({
-      registTableDate: e.detail.value
-    })
-  },
-  
   bindDateChange: function (e) {
     this.setData({
       registTableDate: e.detail.value
@@ -139,26 +122,28 @@ Page({
   },
 
   bindTypeChange: function (e) {
+    var newType = e.detail.value;
     var tmpArray = this.data.registTableTypeItems
     for (var i = 0, len = tmpArray.length; i < len; ++i) {
-      tmpArray[i].checked = (tmpArray[i].checked == e.detail.value)
+      tmpArray[i].checked = (tmpArray[i].value == newType)
     }
 
     this.setData({
       registTableTypeItems: tmpArray,
-      registTableType: e.detail.value
+      registTableType: newType
     })
   },
 
   bindLocationChange: function (e) {
+    var newLocation = e.detail.value
     var tmpArray = this.data.registLocationTypeItems
     for (var i = 0, len = tmpArray.length; i < len; ++i) {
-      tmpArray[i].checked = (tmpArray[i].checked == e.detail.value)
+      tmpArray[i].checked = (tmpArray[i].value == newLocation)
     }
 
     this.setData({
       registLocationTypeItems: tmpArray,
-      registLocationType: e.detail.value
+      registLocationType: newLocation
     })
   },
 
@@ -166,20 +151,33 @@ Page({
     console.log('regist change part to', e.detail.value)
     var newPart = e.detail.value
     var newPartInfo = this.data.contactInfo[newPart]
+    var partContactNameList = this.nameListFromPartInfo(newPartInfo);
+
+    var tmpArray = this.data.contactPartItems
+    for (var i = 0, len = tmpArray.length; i < len; ++i) {
+      tmpArray[i].checked = (tmpArray[i].value == newPart)
+    }
+
     this.setData({
+      contactPartItems: tmpArray,
       selectedContactPart: newPart,
-      contactPartInfoArray: newPartInfo
+      selectedPartInfoArray: newPartInfo,
+      selectedPartContactNameList: partContactNameList
     })
   },
 
   bindContactNameChange: function (e) {
+    var contactName = this.data.selectedPartContactNameList[e.detail.value];
+    var contactID = this.contactIdFromName(contactName)
+    console.log('contactID change to:', contactID)
     this.setData({
-      selectedContactName: this.data.contactPartInfoArray[e.detail.value]
+      selectedContactName: contactName,
+      selectedContactID: contactID
     })
   },
 
   regist: function () {
-    console.log('regist', this.data.registTableDate, this.data.registTableType, this.data.registLocationType, this.data.selectedContactPart, this.data.selectedContactName)
+    console.log('regist', this.data.registTableDate, this.data.registTableType, this.data.registLocationType, this.data.selectedContactID)
 
     // 显示正在创建
     wx.showLoading({
@@ -195,14 +193,13 @@ Page({
         registTableDate: this.data.registTableDate,
         registTableType: this.data.registTableType,
         registLocationType: this.data.registLocationType,
-        selectedContactPart: this.data.selectedContactPart,
-        selectedContactName: this.data.selectedContactName
+        registContactID: this.data.selectedContactID
       },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
-        console.log('createRegistTable', res.data)
+        console.log('table regist...', res.data)
         var status = res.data.status
         if (status == 0) {
           wx.showToast({
@@ -213,7 +210,7 @@ Page({
           })
         }
         else {
-          warningContent = ''
+          var warningContent = ''
           if (status == 1) {
             warningContent = '签到表不存在，请联系团长或声部长创建签到表'
           }
@@ -221,13 +218,13 @@ Page({
             warningContent = '该团员不存在，请联系声部长添加团员'
           }
           else if (status == 3) {
-            warningContent = '你已签过到了，无需重复签到'
+            warningContent = '你已经签过到了，无需重复签到'
           }
 
           wx.hideLoading();
           wx.showModal({
             title: '签到失败',
-            content: warningContect,
+            content: warningContent,
             confirmText: '好',
             showCancel: false
           })

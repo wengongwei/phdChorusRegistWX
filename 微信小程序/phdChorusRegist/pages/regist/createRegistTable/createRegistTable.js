@@ -39,48 +39,6 @@ Page({
     wx.hideNavigationBarLoading()
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  },
-
   bindDateChange: function (e) {
     this.setData({
       registTableDate: e.detail.value
@@ -88,26 +46,28 @@ Page({
   },
 
   bindTypeChange: function (e) {
+    var newType = e.detail.value
     var tmpArray = this.data.registTableTypeItems
     for (var i = 0, len = tmpArray.length; i < len; ++i) {
-      tmpArray[i].checked = (tmpArray[i].checked == e.detail.value)
+      tmpArray[i].checked = (tmpArray[i].value == newType)
     }
 
     this.setData({
       registTableTypeItems: tmpArray,
-      registTableType: e.detail.value
+      registTableType: newType
     })
   },
 
   bindLocationChange: function (e) {
+    var newLocation = e.detail.value;
     var tmpArray = this.data.registLocationTypeItems
     for (var i = 0, len = tmpArray.length; i < len; ++i) {
-      tmpArray[i].checked = (tmpArray[i].checked == e.detail.value)
+      tmpArray[i].checked = (tmpArray[i].value == newLocation)
     }
 
     this.setData({
       registLocationTypeItems: tmpArray,
-      registLocationType: e.detail.value
+      registLocationType: newLocation
     })
   },
 
@@ -147,12 +107,6 @@ Page({
           icon: 'success',
           duration: 2500
         })
-
-        setTimeout(function () {
-          wx.navigateBack({
-
-          })
-        }, 3000)
       },
       fail: function (res) {
         wx.hideLoading()

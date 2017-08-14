@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText" : "团员"
+  "navigationBarTitleText" : "团员",
+  "enablePullDownRefresh": true
 }
