@@ -29,7 +29,13 @@ contact_id INT // 外键，连接contact表
 attend BOOLEAN //是否到场
 
 建表语句
-CREATE TABLE `phdChorusRegist`.`regist_info` ( `id` INT NOT NULL AUTO_INCREMENT COMMENT '主键' , `regist_table_id` INT NOT NULL COMMENT '外键regsit_table' , `contact_id` INT NOT NULL COMMENT '外键contact' , `attend` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否到场' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '签到信息';
+CREATE TABLE `phdChorusRegist`.`regist_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `regist_table_id` INT NOT NULL COMMENT '外键regsit_table' , `contact_id` INT NOT NULL COMMENT '外键contact' , `attend` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否到场' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '签到信息';
+
+// 加入外键约束
+CREATE TABLE `phdChorusRegist`.`regist_info` ( `id` INT NOT NULL AUTO_INCREMENT COMMENT '主键' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT '外键regsit_table' , `contact_id` INT UNSIGNED NOT NULL COMMENT '外键contact' , `attend` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否到场' , PRIMARY KEY (`id`) , FOREIGN KEY(regist_table_id) REFERENCES regist_table(id) ON DELETE CASCADE, FOREIGN KEY(contact_id) REFERENCES contact(id) ON DELETE CASCADE) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '签到信息';
+
+
+
 
 # 业务中要用到的mysql语句
 
@@ -92,12 +98,11 @@ LIMIT 10
 其中theDate由客户端提供
 
 ## 查询某张签到表中团员的出勤
-SELECT contact.name, contact.part, contact.location
+SELECT contact.name
 FROM contact
-INNER JOIN regist_info ON
-contact.id = regist_info.contact_id
-WHERE regist_info.regist_table_id = theTableID
-GROUP BY contact.part
+INNER JOIN regist_info ON contact.id = regist_info.contact_id
+WHERE regist_info.regist_table_id = theTableID AND contact.location = contactLocation
+GROUP BY regist_info.attend
 
 其中，theTableID由客户端提供
 
