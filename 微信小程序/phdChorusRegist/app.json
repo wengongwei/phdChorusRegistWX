@@ -11,7 +11,9 @@
     "pages/statics/exportExcelFile/downloadExcelFile/downloadExcelFile",
     "pages/statics/staticsBySelectRegistTable/staticsBySelectRegistTable",
     "pages/statics/staticsByQueryRegistTable/staticsByQueryRegistTable",
-    "pages/statics/registTableDetailStatics/registTableDetailStatics"
+    "pages/statics/registTableDetailStatics/registTableDetailStatics",
+    "pages/contact/detailContactInfo/detailContactInfo",
+    "pages/contact/alterContactInfo/alterContactInfo"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

@@ -3,6 +3,10 @@
 
 <view class="contact">
 
+  <view class="index-button-area"> 
+    <button bindtap="addContact" class="index-button" type="default" plain="true">添加团员</button>
+  </view>
+
   <view class="kind-list">
     <block wx:for-items="{{contactInfoList}}" wx:key="{{item.id}}">
       <view class="kind-list-item">
@@ -13,8 +17,8 @@
         <view class="kind-list-item-bd {{item.open ? 'kind-list-item-bd-show' : ''}}">
           <view class="navigator-box {{item.open ? 'navigator-box-show' : ''}}">
             <block wx:for-items="{{item.contactList}}" wx:for-item="contact" wx:key="{{contact.id}}">
-              <navigator url="../contactDetailInfo/contactDetailInfo?contactID={{contact.contactID}}" class="navigator">
-                <view class="navigator-text">{{contact.name}}</view>
+              <navigator url="../detailContactInfo/detailContactInfo?contactID={{contact.id}}" class="navigator">
+                <view class="navigator-text">{{contact.name}} · {{contact.part}} · {{contact.location}}</view>
                 <view class="navigator-arrow"></view>
               </navigator>
             </block>
@@ -23,10 +27,5 @@
       </view>
     </block>
   </view>
-
-  <view class="index-button-area"> 
-    <button bindtap="addContact" class="index-button" type="default" plain="true">添加团员</button>
-  </view>
-
 
 </view>

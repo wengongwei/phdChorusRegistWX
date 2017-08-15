@@ -1,0 +1,82 @@
+# 博士合唱团签到小程序-MySQL数据库设计
+
+## 数据库表列值
+园区 = 中关村 | 雁栖湖
+声部 = S1 | S2 | A1 | A2 | T1 | T2 | B1 | B2
+日期 = 2018-09-12
+签到表类型 = 大排 | 小排 | 周日晚 | 声乐课
+
+
+## 建立数据库
+create DATABASE phdChorusRegist
+
+
+## contact表
+// 主键
+id INT UNSIGNED NOT NULL AUTO_INCREMENT 
+
+// 姓名
+name TINYTEXT NOT NULL 
+
+// 所在声部
+part TINYTEXT NOT NULL 
+
+// 所在园区
+location TINYTEXT NOT NULL 
+
+//是否纳入统计范围内，默认为true
+include_in_statics BOOLEAN NOT NULL DEFAULT TRUE 
+
+建表语句
+CREATE TABLE `phdChorusRegist`.`contact` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `name` TINYTEXT NOT NULL COMMENT '姓名' , `part` TINYTEXT NOT NULL COMMENT '声部' , `location` TINYTEXT NOT NULL COMMENT '所在园区' , `include_in_statics` BOOLEAN NOT NULL DEFAULT TRUE COMMENT '是否纳入统计范围' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '博士合唱团团员';
+
+
+## regist_table签到表
+// 主键
+id INT UNSIGNED NOT NULL AUTO_INCREMENT 
+
+//日期
+date DATE NOT NULL
+
+//类型
+type TINYTEXT NOT NULL
+
+// 签到所在园区
+location TINYTEXT NOT NULL
+
+建表语句
+CREATE TABLE `phdChorusRegist`.`regist_table` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `date` DATE NOT NULL , `type` TINYTEXT NOT NULL , `location` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '签到表';
+
+
+## regist_info签到信息表
+//主键
+id INT NOT NULL AUTO_INCREMENT 
+
+// 外键，连接regist_table表
+regist_table_id INT UNSIGNED NOT NULL 
+
+// 外键，连接contact表
+contact_id INT UNSIGNED NOT NULL 
+
+//是否到场
+attend BOOLEAN NOT NULL DEFAUL 
+
+// 加入外键约束
+CREATE TABLE `phdChorusRegist`.`regist_info` ( `id` INT NOT NULL AUTO_INCREMENT COMMENT '主键' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT '外键regsit_table' , `contact_id` INT UNSIGNED NOT NULL COMMENT '外键contact' , `attend` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否到场' , PRIMARY KEY (`id`) , FOREIGN KEY(regist_table_id) REFERENCES regist_table(id) ON DELETE CASCADE, FOREIGN KEY(contact_id) REFERENCES contact(id) ON DELETE CASCADE) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '签到信息';
+
+// 单独添加外键
+ALTER TABLE regist_info ADD FOREIGN KEY(regist_table_id) REFERENCES regist_table(id) ON DELETE CASCADE;
+
+ALTER TABLE regist_info ADD FOREIGN KEY(contact_id) REFERENCES contact(id) ON DELETE CASCADE;
+
+
+
+
+
+
+
+
+
+
+
+

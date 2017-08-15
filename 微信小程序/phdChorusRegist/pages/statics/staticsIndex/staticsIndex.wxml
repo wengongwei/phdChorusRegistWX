@@ -11,7 +11,7 @@
 
   <view class="function-list-view-dark" bindtap="staticsByDay">
     <view class="function-list-item">
-      <view class="function-list-item-title-dark">每日出勤数据</view>
+      <view class="function-list-item-title-dark">出勤数据</view>
       <view class="function-list-item-subtitle-dark">选定一张签到表，即可查看全团及各声部当日出勤、请假、缺勤的人员列表及百分比</view>
     </view>
   </view>

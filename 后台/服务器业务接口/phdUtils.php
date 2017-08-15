@@ -106,4 +106,22 @@ function partDescription($part) {
     return $partName . $part;
 }
 
+function descriptionForRegistTable($table) {
+    $weekday = weekdayFromDate($table['date']);
+    $tableDescription = $table['date'] . $weekday . $table['location'] . $table['type'];
+    return $tableDescription;
+}
+
+
+/**
+ * excel文件 - 列值转列标
+ */
+function IntToExcelChar($index, $start = 65) {
+    $str = '';
+    if (floor($index / 26) > 0) {
+        $str .= IntToExcelChar(floor($index / 26)-1);
+    }
+    return $str . chr($index % 26 + $start);
+}
+
 ?>

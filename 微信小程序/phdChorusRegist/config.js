@@ -33,7 +33,13 @@ var config = {
     registInfoOfRegistTableUrl: (httpsHost + 'phdRegistInfoOfRegistTable.php'),
 
     // 签到表列表
-    registTableListUrl: (httpsHost + 'phdRegistTableList.php')
+    registTableListUrl: (httpsHost + 'phdRegistTableList.php'),
+  
+    // 团员详细信息
+    detailContactInfoUrl: (httpsHost + 'phdDetailContactInfo.php'),
+  
+    // 修改团员信息
+    updateContactInfoUrl: (httpsHost + 'updateContactInfo.php')
   }
 
 };

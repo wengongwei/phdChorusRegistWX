@@ -2,6 +2,8 @@
 
 <?php
 
+include_once ('phdUtils.php');
+
 /**
  * 数据库管理单例
  */
@@ -50,6 +52,18 @@ interface DatabaseManager {
      */
     public function idOfContact($contactName, $contactPart, $contactLocation) : int;
 
+
+    /**
+     * 团员信息
+     *
+     * 参数
+     * contactID // 团员id
+     *
+     * 返回值
+     * contact // 团员信息{id: 12, name: '蓝胖子', part: 'T2', location: '中关村'}
+     *
+     */
+    public function contactInfo($contactID) : array ;
     /**
      * 添加团员
      *
@@ -91,7 +105,7 @@ interface DatabaseManager {
     public function contactInfoForRegistInSATB12() : array;
 
 
-    /*
+    /**
      * 签到
      *
      * 参数
@@ -104,7 +118,7 @@ interface DatabaseManager {
      */
     public function tableRegist($registTableID, $contactID) : int;
 
-    /*
+    /**
      * 获取签到表(regist_table)
      *
      * 参数
@@ -116,7 +130,7 @@ interface DatabaseManager {
      */
     public function registTableList($theTableID, $isNewer) : array;
 
-    /*
+    /**
      * 获取签到表中的出勤名单
      *
      * 参数
@@ -128,6 +142,42 @@ interface DatabaseManager {
      *
      */
     public function registInfoOfRegistTable($registTableID, $contactLocationType) : array;
+
+    /**
+     * 符合要求的签到表
+     *
+     * 参数
+     * type // 签到表类型
+     *
+     * 返回值
+     * 签到表数组 // 按date-location排升序 [{id: 10, type: 大排, date: 2017-08-06, location:中关村}, ...]
+     *
+     */
+    public function registTableOfType($type) : array;
+
+    /**
+     * SATB12八声部按照location的分声部分园区团员名单(共16个数组)
+     *
+     * 参数
+     * 无
+     *
+     * 返回值
+     * 分声部分园区团员名单数组(按contact_id升序排) contactSections [{part: T2, location: 中关村, contactList:[{id: 3, name: 蓝胖, locaton: 中关村, part: T2}, ...]}, ...]
+     */
+    public function contactSectionsByPartAndLocation() : array;
+
+    /**
+     * 指定签到表的出勤描述
+     *
+     * 参数
+     * registTableID // 签到表id
+     * contactSections // 按照这个数组中的contact顺序，依次描述contact是否签到(0 | 1)
+     *
+     * 返回值
+     * 签到的0 | 1描述
+     *
+     */
+    public function attendDescriptionForRegistTable($registTableID, $contactSections) : array;
 }
 
 class WXDatabaseManager implements DatabaseManager {
@@ -222,6 +272,20 @@ class WXDatabaseManager implements DatabaseManager {
 
         return intval($contactID);
 	}
+
+    public function contactInfo($contactID) : array {
+	    $selectStr = "SELECT * FROM " . self::_db_contact . " WHERE id = " . $contactID;
+	    $selectResult = $this->_mysqliConnection->query($selectStr);
+	    $contact = array();
+	    while ($row = $selectResult->fetch_assoc()) {
+	        $contact['id'] = $row['id'];
+	        $contact['name'] = $row['name'];
+	        $contact['part'] = $row['part'];
+	        $contact['location'] = $row['location'];
+        }
+
+        return $contact;
+    }
 
     public function insertContact($contactName, $contactPart, $contactLocation) : int {
 	    $queryStr = "INSERT INTO " . self::_db_contact . " (name, part, location) VALUES ('" . $contactName . "', '" . $contactPart . "', '" . $contactLocation . "')";
@@ -444,6 +508,114 @@ class WXDatabaseManager implements DatabaseManager {
 
         return $registInfo;
 	}
+
+    public function registTableOfType($type) : array {
+	    $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE type = '" . $type . "' ORDER BY date, location DESC";
+	    $selectResult = $this->_mysqliConnection->query($selectStr);
+	    $result = array();
+	    while ($row = $selectResult->fetch_assoc()) {
+	        $result[] = array('id'=>$row['id'], 'type'=>$row['type'], 'location'=>$row['location'], 'date'=>$row['date']);
+        }
+
+        $selectResult->free();
+
+        return $result;
+    }
+
+    public function contactSectionsByPartAndLocation() : array {
+
+	    $contactSections = array();
+	    foreach (validPartType as $part) {
+	        foreach (validLocationType as $location) {
+                $contactSection[] = array('part'=>$part, 'location'=>$location);
+            }
+        }
+
+        $queryStr = '';
+        foreach ($contactSections as $section) {
+            $location = $section['location'];
+            $part = $section['part'];
+            $queryStr .= "SELECT * FROM " . self::_db_contact . " WHERE part = '" . $part . "' AND location = '" . $location . "' ORDER BY id ASCE;";
+        }
+
+        $sectionIndex = 0;
+        if ($this->_mysqliConnection->multi_query($queryStr)) {
+            do {
+                $contactList = array();
+                if ($result = $this->_mysqliConnection->store_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        $contactList[] = array('id'=>$row['id'], 'name'=>$row['name'], 'part'=>$row['part'], 'location'=>$row['location']);
+                    }
+
+                    $result->free();
+                }
+
+                $section = $contactSections[$sectionIndex];
+                $section['contactList'] = $contactList;
+                $contactSections[$sectionIndex] = $section;
+                ++$sectionIndex;
+            }while($this->_mysqliConnection->next_result());
+        }
+
+        return $contactSections;
+    }
+
+    public function attendDescriptionForRegistTable($registTableID, $contactSections) : array {
+
+	    // 为每个section构造一条query语句
+        $queryStr = '';
+        foreach ($contactSections as $section) {
+            $location = $section['location'];
+            $part = $section['part'];
+            $queryStr .= "SELECT contact.id FROM contact INNER JOIN regist_info ON contact.id = regist_info.contact_id WHERE regist_info.regist_table_id = " . $registTableID . " AND regist_info.attend = 1 AND contact.part = '" . $part . "' AND contact.location = '" . $location . "' ORDER BY contact.id ASCE;";
+        }
+
+        // 获取每个section的出勤人员名单(regist_info.attend=1)
+        $sectionIndex = 0;
+        if ($this->_mysqliConnection->multi_query($queryStr)) {
+            do {
+                $attendList = array();
+                if ($result = $this->_mysqliConnection->store_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        $attendList[] = $row['id'];
+                    }
+
+                    $result->free();
+                }
+
+                $section = $contactSections[$sectionIndex];
+                $section['attendList'] = $attendList;
+                $contactSections[$sectionIndex] = $section;
+            }while($this->_mysqliConnection->next_result());
+        }
+
+        // 比对section中的attendList和contactList，得出attendDescription
+        $attendDescription = array();
+        foreach ($contactSections as $section) {
+            $contactList = $section['contactList'];
+            $attendList = $section['attendList'];
+
+            $j = 0;
+            for ($i = 0; $i < count($contactList); $i++) {
+                $contact = $contactList[$i];
+                $contactID = $contact['id'];
+                $attendID = $attendList[$j];
+                if ($contactID == $attendID) {
+                    $attendDescription[] = 1;
+                    ++$j;
+                }
+                else if ($contactID < $attendID) {
+                    $attendDescription[] = 0;
+                }
+                else {
+                    // 程序不应该运行到此处
+                    $attendDescription[] = 0;
+                }
+            }
+        }
+
+        return $attendDescription;
+    }
 
 	public function __destruct() {
 	    $this->_mysqliConnection->close();

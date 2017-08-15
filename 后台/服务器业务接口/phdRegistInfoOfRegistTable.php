@@ -43,6 +43,13 @@ const return_params = 'params';
 const return_registInfo = 'registInfo';
 $result = array();
 
+// 校验参数是否合法
+if ($registTableID < 1 || ($contactLocationType != 0 && $contactLocationType != 1 && $contactLocationType != 2)) {
+    $result[return_status] = 2;
+    echo json_encode($result);
+    exit();
+}
+
 // 查询表单
 $dbManager = new WXDatabaseManager();
 $registInfoFromDB = $dbManager->registInfoOfRegistTable($registTableID, $contactLocationType);

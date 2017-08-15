@@ -85,7 +85,6 @@ Page({
       },
       success: function (res) {
         console.log('addContactUrl:', res.data)
-        wx.hideLoading()
         var title = ''
         if (res.data.status == 0) {
           title = '添加成功'

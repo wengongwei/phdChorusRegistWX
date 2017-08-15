@@ -5,7 +5,7 @@
   <view class="section">
     <view class="section-title">姓名</view>
     <view class="section-input-view">
-      <input class="section-input" type="text" placeholder="蓝胖子" focus="true" confirm-type="完成" bindconfirm="bindNameChange" />
+      <input class="section-input" type="text" placeholder="蓝胖子" focus="true" confirm-type="完成" bindinput="bindNameChange" bindconfirm="bindNameChange" />
     </view>
   </view>
 
