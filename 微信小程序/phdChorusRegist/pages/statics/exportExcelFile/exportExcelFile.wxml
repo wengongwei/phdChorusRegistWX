@@ -20,18 +20,6 @@
     </picker>
   </view>
 
-  <view class="section">
-    <view class="section-title">声部</view>
-    <radio-group class="radio-group" bindchange="bindPartChange">
-      <label style="display: flex" wx:for="{{partItems}}" wx:key="item.value">
-        <view class="section-selector">
-          <radio value="{{item.name}}" checked="{{item.checked}}" />
-          {{item.value}}
-        </view>
-      </label>
-    </radio-group>
-  </view>
-
   <view class="confirm-button-area">
     <button class="confirm-button" type="primary" bindtap="exportExcelFile">导出Excel文件</button>
   </view>

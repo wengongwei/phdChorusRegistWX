@@ -11,12 +11,12 @@
  * Time: 15:22
  */
 
-include_once ('php_excel_classes/PHPExcel.php');
-include_once ('php_excel_classes/PHPExcel/Writer/Excel2007.php');
+include_once ('php_excel_classes_1.8.1/PHPExcel.php');
+include_once ('php_excel_classes_1.8.1/PHPExcel/Writer/Excel2007.php');
 include_once ('phdDatabaseManager.php');
 include_once ('phdUtils.php');
 
-// 找到给定日期范围内的签到表
+
 class RegistInfoExcelFileWrite {
 
     private $_dbManager;
@@ -26,10 +26,16 @@ class RegistInfoExcelFileWrite {
     }
 
     /**
-     * @param $fromDate 开始日期
-     * @param $toDate 截至日期
+     * 整合制定日期范围内的签到表
+     *
+     * 参数
+     * fromDate // 开始日期
+     * toDate // 截至日期
+     *
+     * 返回值
+     * filePath // Excel文件下载路径
      */
-    public function excelFileDownloadPathOfRegistInfoInSATB($fromDate, $toDate) {
+    public function excelFileDownloadPathOfRegistInfoInSATB($fromDate, $toDate) : string {
 
         // 找到给定日期范围内的签到表
         $registTableSections = $this->registTableSections($fromDate, $toDate);
@@ -45,6 +51,10 @@ class RegistInfoExcelFileWrite {
 
         // 为$registTableSections中每种type创建一个excel工作簿(WorkSheet)
         // 即为 大排 | 小排 | 周日晚 | 声乐课 各创建一个WorkSheet
+
+        // 文字颜色
+        $yanqiTextStyle = new PHPExcel_RichText();
+
         for ($i = 0; $i < count($registTableSections); $i++) {
             $tableSection = $registTableSections[$i];
             $theWorkSheet = new PHPExcel_Worksheet($excelFile, $tableSection['type']);
@@ -77,11 +87,13 @@ class RegistInfoExcelFileWrite {
                 }
             }
 
+
             // 每张签到表创建一列
             $currentColumn = $startColumn + 4;
-            for ($j = 0; $j < count($tableSection); ++$j) {
+            $tableList = $tableSection['tableList'];
+            for ($j = 0; $j < count($tableList); $j++) {
                 $currentRow = $startRow;
-                $registTable = $tableSection[$j];
+                $registTable = $tableList[$j];
 
                 // 在当前行写下签到表名称
                 $theWorkSheet->setCellValueByColumnAndRow($currentColumn, $currentRow, $registTable['name']);
@@ -94,7 +106,7 @@ class RegistInfoExcelFileWrite {
 
                 // 在当前列写当前签到表的签到信息
                 for ($k = 0; $k < count($registInfo); $k++) {
-                    $theWorkSheet->setCellValueByColumnAndRow($currentColumn, $currentRow, $registInfo[k]);
+                    $theWorkSheet->setCellValueByColumnAndRow($currentColumn, $currentRow, $registInfo[$k]);
 
                     // 移到下一行
                     ++$currentRow;
@@ -113,7 +125,15 @@ class RegistInfoExcelFileWrite {
 
             // 每行求和运算(该团员出勤了多少次)的起止列
             $sumColumnFrom = $startColumn + 4;
-            $sumColumnTo = $currentColumn - 1;
+
+            // 当前WorkSheet没有签到表，则列没有移动
+            if ($currentColumn == $startColumn) {
+                $sumColumnTo = $currentColumn;
+            }
+            else {
+                $sumColumnTo = $currentColumn - 1;
+            }
+
 
             // 每列求和运算(每张签到表有多少人出勤)
             $sumAtRow = $sumRowTo + 2;
@@ -128,16 +148,19 @@ class RegistInfoExcelFileWrite {
             $sumColumnFromFlag = IntToExcelChar($sumColumnFrom);
             $sumColumnToFlag = IntToExcelChar($sumColumnTo);
             for ($j = $sumRowFrom; $j <= $sumRowTo; $j++) {
-                $sumSentence = '=SUM(' . $sumColumnFromFlag . $j . ':' . $sumColumnToFlag . $sumColumnToFlag . ')';
-                $theWorkSheet->setCellValueByColumnAndRow($j, $sumAtColumn, $sumSentence);
+                $sumSentence = '=SUM(' . $sumColumnFromFlag . $j . ':' . $sumColumnToFlag . $j . ')';
+                $theWorkSheet->setCellValueByColumnAndRow($sumAtColumn, $j, $sumSentence);
             }
+
 
         }
 
         // 保存文件
         $excelWriter = PHPExcel_IOFactory::createWriter($excelFile, 'Excel2007');
-        $excelWriter->save("/excel/" . "博士合唱团" . $fromDate . "至" . $toDate . "签到表" . ".xlsx");
-
+        $fileName = "博士合唱团" . $fromDate . "至" . $toDate . "签到表" . ".xlsx";
+        $filePath = __DIR__ . '/excel_file/' . $fileName;
+        $excelWriter->save($filePath);
+        return '/excel_file/' . $fileName;
     }
 
     /**
@@ -151,10 +174,10 @@ class RegistInfoExcelFileWrite {
      * 签到表数组 [{type: 大排, tableList: [{id: 5, name:2017-08-12周日雁栖湖大排}, ...]}, ...]
      *
      */
-    private function registTableSections($fromDate, $toDate) : array {
+    public function registTableSections($fromDate, $toDate) : array {
         $result = array();
         foreach (validTableType as $type) {
-            $tableArray = $this->_dbManager->registTableOfType($type);
+            $tableArray = $this->_dbManager->registTableOfType($type, $fromDate, $toDate);
             $tableList = array();
             foreach ($tableArray as $table) {
                 $tableList[] = array('id'=>$table['id'], 'name'=>descriptionForRegistTable($table));
@@ -162,6 +185,8 @@ class RegistInfoExcelFileWrite {
 
             $result[] = array('type'=>$type, 'tableList'=>$tableList);
         }
+
+        return $result;
     }
 
     /**
@@ -173,7 +198,7 @@ class RegistInfoExcelFileWrite {
      * 返回值
      * 分声部分园区团员名单数组 [{part: T2, location: 中关村, contactList:[{id: 3, name: 蓝胖, locaton: 中关村, part: T2}, ...]}, ...]
      */
-    private function contactSections() : array {
+    public function contactSections() : array {
         return $this->_dbManager->contactSectionsByPartAndLocation();
     }
 
@@ -187,7 +212,7 @@ class RegistInfoExcelFileWrite {
      * 签到表出勤描述 [0, 1, 1, 0 ,1, 0, ...]
      *
      */
-    private function attendList($registTableID, $contactSections) : array {
+    public function attendList($registTableID, $contactSections) : array {
         return $this->_dbManager->attendDescriptionForRegistTable($registTableID, $contactSections);
     }
 

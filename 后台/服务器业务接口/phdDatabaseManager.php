@@ -144,7 +144,7 @@ interface DatabaseManager {
     public function registInfoOfRegistTable($registTableID, $contactLocationType) : array;
 
     /**
-     * 符合要求的签到表
+     * 指定起止日期内制定类型的签到表
      *
      * 参数
      * type // 签到表类型
@@ -153,7 +153,7 @@ interface DatabaseManager {
      * 签到表数组 // 按date-location排升序 [{id: 10, type: 大排, date: 2017-08-06, location:中关村}, ...]
      *
      */
-    public function registTableOfType($type) : array;
+    public function registTableOfType($type, $fromDate, $toDate) : array;
 
     /**
      * SATB12八声部按照location的分声部分园区团员名单(共16个数组)
@@ -509,8 +509,8 @@ class WXDatabaseManager implements DatabaseManager {
         return $registInfo;
 	}
 
-    public function registTableOfType($type) : array {
-	    $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE type = '" . $type . "' ORDER BY date, location DESC";
+    public function registTableOfType($type, $fromDate, $toDate): array {
+	    $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE type = '" . $type . "' AND date BETWEEN '" . $fromDate ."' AND '" . $toDate . "' ORDER BY date, location DESC";
 	    $selectResult = $this->_mysqliConnection->query($selectStr);
 	    $result = array();
 	    while ($row = $selectResult->fetch_assoc()) {
@@ -527,7 +527,7 @@ class WXDatabaseManager implements DatabaseManager {
 	    $contactSections = array();
 	    foreach (validPartType as $part) {
 	        foreach (validLocationType as $location) {
-                $contactSection[] = array('part'=>$part, 'location'=>$location);
+                $contactSections[] = array('part'=>$part, 'location'=>$location);
             }
         }
 
@@ -535,7 +535,7 @@ class WXDatabaseManager implements DatabaseManager {
         foreach ($contactSections as $section) {
             $location = $section['location'];
             $part = $section['part'];
-            $queryStr .= "SELECT * FROM " . self::_db_contact . " WHERE part = '" . $part . "' AND location = '" . $location . "' ORDER BY id ASCE;";
+            $queryStr .= "SELECT * FROM " . self::_db_contact . " WHERE part = '" . $part . "' AND location = '" . $location . "' ORDER BY id ASC;";
         }
 
         $sectionIndex = 0;
@@ -561,13 +561,13 @@ class WXDatabaseManager implements DatabaseManager {
     }
 
     public function attendDescriptionForRegistTable($registTableID, $contactSections) : array {
-
+        $contactSectionsWithAttendList = $contactSections;
 	    // 为每个section构造一条query语句
         $queryStr = '';
-        foreach ($contactSections as $section) {
+        foreach ($contactSectionsWithAttendList as $section) {
             $location = $section['location'];
             $part = $section['part'];
-            $queryStr .= "SELECT contact.id FROM contact INNER JOIN regist_info ON contact.id = regist_info.contact_id WHERE regist_info.regist_table_id = " . $registTableID . " AND regist_info.attend = 1 AND contact.part = '" . $part . "' AND contact.location = '" . $location . "' ORDER BY contact.id ASCE;";
+            $queryStr .= "SELECT contact.id FROM contact INNER JOIN regist_info ON contact.id = regist_info.contact_id WHERE regist_info.regist_table_id = " . $registTableID . " AND regist_info.attend = 1 AND contact.part = '" . $part . "' AND contact.location = '" . $location . "' ORDER BY contact.id ASC;";
         }
 
         // 获取每个section的出勤人员名单(regist_info.attend=1)
@@ -583,20 +583,21 @@ class WXDatabaseManager implements DatabaseManager {
                     $result->free();
                 }
 
-                $section = $contactSections[$sectionIndex];
+                $section = $contactSectionsWithAttendList[$sectionIndex];
                 $section['attendList'] = $attendList;
-                $contactSections[$sectionIndex] = $section;
+                $contactSectionsWithAttendList[$sectionIndex] = $section;
+                ++$sectionIndex;
             }while($this->_mysqliConnection->next_result());
         }
 
         // 比对section中的attendList和contactList，得出attendDescription
         $attendDescription = array();
-        foreach ($contactSections as $section) {
+        foreach ($contactSectionsWithAttendList as $section) {
             $contactList = $section['contactList'];
             $attendList = $section['attendList'];
 
-            $j = 0;
-            for ($i = 0; $i < count($contactList); $i++) {
+            $i = $j = 0;
+            for ($i = 0; $i < count($contactList), $j < count($attendList); $i++) {
                 $contact = $contactList[$i];
                 $contactID = $contact['id'];
                 $attendID = $attendList[$j];
@@ -611,6 +612,11 @@ class WXDatabaseManager implements DatabaseManager {
                     // 程序不应该运行到此处
                     $attendDescription[] = 0;
                 }
+            }
+
+            // 除开attendList，剩下的人都是absent
+            for ( ; $i < count($contactList); $i++) {
+                $attendDescription[] = 0;
             }
         }
 

@@ -9,7 +9,7 @@ var config = {
 
     // 登录地址，用于建立会话
     //loginUrl: (httpsHost + 'phdLogin.php'),
-
+    httpsHost ,
     // SATB12 for regist
     phdContactInfoForRegistInSATB12Url: (httpsHost + 'phdContactInfoForRegistInSATB12.php'),
 

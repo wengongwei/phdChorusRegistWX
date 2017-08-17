@@ -8,16 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    partItems: [
-      { value: 'S', name: 'S' },
-      { value: 'A', name: 'A' },
-      { value: 'T', name: 'T', checked: 'true' },
-      { value: 'B', name: 'B' }
-    ],
-
-    fromDate: '2016-08-06',
-    toDate: '2016-08-06',
-    part: 'T'
+    fromDate: '2017-08-06',
+    toDate: '2017-08-06',
   },
 
   /**
@@ -95,7 +87,7 @@ Page({
   },
 
   exportExcelFile: function (e) {
-    console.log('export excel file from ', this.data.fromDate, ' to ', this.data.toDate, ' for part ', this.data.part)
+    console.log('export excel file from ', this.data.fromDate, ' to ', this.data.toDate)
 
     wx.showLoading({
       title: '正在导出...'
@@ -106,16 +98,16 @@ Page({
       method: 'POST',
       data: {
         fromDate: this.data.fromDate,
-        toDate: this.data.toDate,
-        part: this.data.part
+        toDate: this.data.toDate
       },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
         console.log('exportRegistExcelFileUrl:', res.data)
-        var fileName = res.data.fileName;
-        var filePath = res.data.filePath;
+        var fileName = res.data.fileName
+        var filePath = res.data.filePath
+        filePath = config.serviceUrl.httpsHost + filePath
         if (res.data.status == 0) {
           wx.redirectTo({
             url: 'downloadExcelFile/downloadExcelFile?filePath=' + filePath + '&fileName=' + fileName

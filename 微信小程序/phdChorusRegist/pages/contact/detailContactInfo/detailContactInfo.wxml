@@ -1,0 +1,18 @@
+<!--detailContactInfo.wxml-->
+
+
+<view class="contact-view">
+
+<view class="title-view">
+  <view class="title-text">{{contact.name}}</view>
+</view>
+
+<view class="subtitle-view">
+  <view class="subtitle-text">{{contact.part}} · {{contact.location}}</view>
+</view>
+
+<view class="button-area"> 
+  <button bindtap="alterInfo" class="button" type="default" plain="true">修改团员信息</button>
+</view>
+
+</view>
