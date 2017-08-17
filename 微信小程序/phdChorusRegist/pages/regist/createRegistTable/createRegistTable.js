@@ -1,6 +1,7 @@
 // createRegistTable.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -85,7 +86,8 @@ Page({
       data: {
         registTableDate: this.data.registTableDate,
         registTableType: this.data.registTableType,
-        registLocationType: this.data.registLocationType
+        registLocationType: this.data.registLocationType,
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       method: 'POST',
       header: {
@@ -93,20 +95,32 @@ Page({
       },
       success: function(res) {
         console.log('createRegistTable', res.data)
-        var title = ''
+        
         if (res.data.status == 0) {
-          title = '创建成功'
+          wx.showToast({
+            title: '创建成功',
+            mask: true,
+            icon: 'success',
+            duration: 2500
+          })
         }
-        else if (res.data.status == 1) {
-          title = '该签到表已存在'
-        }
+        else {
+          var warningContent = ''
+          if (res.data.status == 1) {
+            warningContent = '该签到表已存在'
+          }
+          else if (res.data.status == 5) {
+            warningContent = '您无权进行此项操作，请联系声部长'
+          }
 
-        wx.showToast({
-          title: title,
-          mask: true,
-          icon: 'success',
-          duration: 2500
-        })
+          wx.hideLoading()
+          wx.showModal({
+            title: '创建失败',
+            content: warningContent,
+            confirmText: '好',
+            showCancel: false
+          })
+        }  
       },
       fail: function (res) {
         wx.hideLoading()

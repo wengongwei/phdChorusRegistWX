@@ -1,6 +1,7 @@
 // regist.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -193,7 +194,8 @@ Page({
         registTableDate: this.data.registTableDate,
         registTableType: this.data.registTableType,
         registLocationType: this.data.registLocationType,
-        registContactID: this.data.selectedContactID
+        registContactID: this.data.selectedContactID,
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       header: {
         'content-type': 'application/json'
@@ -219,6 +221,9 @@ Page({
           }
           else if (status == 3) {
             warningContent = '你已经签过到了，无需重复签到'
+          }
+          else if (status == 6) {
+            warningContent = '您无权进行此项操作，请联系声部长'
           }
 
           wx.hideLoading();

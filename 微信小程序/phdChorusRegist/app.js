@@ -5,6 +5,8 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+
+    this.getUserInfo()
   },
   getUserInfo:function(cb){
     var that = this
@@ -17,6 +19,7 @@ App({
           wx.getUserInfo({
             success: function (res) {
               that.globalData.userInfo = res.userInfo
+              console.log(res.userInfo)
               typeof cb == "function" && cb(that.globalData.userInfo)
             }
           })

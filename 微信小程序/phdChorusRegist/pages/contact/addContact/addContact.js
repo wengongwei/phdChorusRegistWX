@@ -1,6 +1,7 @@
 // addContact.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -52,7 +53,8 @@ Page({
     }
     this.setData({
       selectedContactPart: newPart,
-      contactPartItems: tmpArray
+      contactPartItems: tmpArray,
+      wxNickname: appInstance.globalData.userInfo.nickName
     })
   },
 
@@ -78,7 +80,8 @@ Page({
       data: {
         contactLocation: this.data.registLocationType,
         contactPart: this.data.selectedContactPart,
-        contactName: this.data.selectedContactName
+        contactName: this.data.selectedContactName,
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       header: {
         'content-type': 'application/json'
@@ -87,24 +90,37 @@ Page({
         console.log('addContactUrl:', res.data)
         var title = ''
         if (res.data.status == 0) {
-          title = '添加成功'
+          wx.showToast({
+            title: '添加成功',
+            mask: true,
+            icon: 'success',
+            duration: 2500
+          })
         }
-        else if (res.data.status == 1) {
-          title = '该团员已存在'
+        else {
+          var warningContent = '';
+          if (res.data.status == 1) {
+            warningContent = '该团员已存在'
+          }
+          else if (res.data.status == 5) {
+            warningContent = '您无权进行此操作，请联系声部长'
+          }
+          wx.hideLoading()
+          wx.showModal({
+            title: '添加失败',
+            content: warningContent,
+            confirmText: '好',
+            showCancel: false
+          })
         }
-
-        wx.showToast({
-          title: title,
-          mask: true,
-          icon: 'success',
-          duration: 2500
-        })
       },
       fail: function (res) {
+        wx.hideLoading()
         wx.showModal({
           title: '无法连接服务器',
           content: '请检查网络连接',
-          confirmText: '好'
+          confirmText: '好',
+          showCancel: false
         })
 
         console.log("createRegistTable fail:", res.data)

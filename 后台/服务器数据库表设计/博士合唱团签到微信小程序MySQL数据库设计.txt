@@ -71,6 +71,14 @@ ALTER TABLE regist_info ADD FOREIGN KEY(contact_id) REFERENCES contact(id) ON DE
 
 
 
+## 授权用户列表
+
+授权用户可使用‘添加团员’、‘签到’等设计数据库修改的功能
+
+id // 主键
+wx_nickname // 微信昵称
+
+CREATE TABLE `phdChorusRegist`.`authorized_user` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `wx_nickname` TINYTEXT NOT NULL COMMENT '微信昵称' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权(修改数据库内容)用户列表';
 
 
 

@@ -178,6 +178,18 @@ interface DatabaseManager {
      *
      */
     public function attendDescriptionForRegistTable($registTableID, $contactSections) : array;
+
+    /**
+     * 判定用户是否为授权用户，授权用户可进行数据库修改相关的操作
+     *
+     * 参数
+     * wxNickname // 微信昵称
+     *
+     * 返回值
+     * status // 0-未授权 | 1-已授权
+     *
+     */
+    public function userAuthorizedStatus($wxNickname) : int;
 }
 
 class WXDatabaseManager implements DatabaseManager {
@@ -190,6 +202,7 @@ class WXDatabaseManager implements DatabaseManager {
 	const _db_regist_table = "regist_table";
 	const _db_contact = "contact";
 	const _db_regist_info = "regist_info";
+    const _db_authorized_user = "authorized_user";
 
     const _partArrayInSATB12 = array('S1', 'S2', 'A1', 'A2', 'T1', 'T2', 'B1', 'B2');
     const _partArrayInABST12 = array('A1', 'A2', 'B1', 'B2', 'S1', 'S2', 'T1', 'T2');
@@ -623,7 +636,20 @@ class WXDatabaseManager implements DatabaseManager {
         return $attendDescription;
     }
 
-	public function __destruct() {
+    public function userAuthorizedStatus($wxNickname): int {
+        $queryStr = "SELECT id FROM " . self::_db_authorized_user . " WHERE wx_nickname = '" . $wxNickname ."'";
+        $result = $this->_mysqliConnection->query($queryStr);
+        $status = 0;
+        if ($result->num_rows > 0) {
+            $status = 1;
+        }
+
+        $result->free();
+
+        return $status;
+    }
+
+    public function __destruct() {
 	    $this->_mysqliConnection->close();
     }
 

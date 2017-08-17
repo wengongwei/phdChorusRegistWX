@@ -11,9 +11,10 @@
  * registTableType // 签到表类型
  * registLocationType // 签到地点
  * registContactID // 团员ID
+ * wxNickname // 小程序使用者的nickname，用以进行鉴权操作
  *
  * 返回值
- * status // 0-成功 | 1-失败(签到表不存在) | 2-失败(联系人不存在) | 3-失败(已签到，无需重复签到) | 4-失败(系统代码bug) | 5-失败(参数错误)
+ * status // 0-成功 | 1-失败(签到表不存在) | 2-失败(联系人不存在) | 3-失败(已签到，无需重复签到) | 4-失败(系统代码bug) | 5-失败(参数错误) | 6-无操作权限
  *
  */
 
@@ -27,13 +28,23 @@ $registTableType = $_INPUT->registTableType;
 $registLocationType = $_INPUT->registLocationType;
 $registContactID = $_INPUT->registContactID;
 $registContactID = intval($registContactID);
+$wxNickname = $_INPUT->wxNickname;
 
 // 定义返回值
 const return_status = 'status';
 const return_params = 'params';
 $result = array();
 
-$result[return_params] = $registTableDate . $registTableType . $registLocationType . $registContactID;
+$result[return_params] = $registTableDate . $registTableType . $registLocationType . $registContactID . $wxNickname;
+
+$dbManager = new WXDatabaseManager();
+
+// 判定用户是否有进行此操作的权限
+if($dbManager->userAuthorizedStatus($wxNickname) != 1) {
+    $result[return_status] = '6';
+    echo json_encode($result);
+    exit();
+}
 
 // 校验参数格式是否正确
 if (!(isValidTableDate($registTableDate) && isValidTableType($registTableType) && isValidLocationType($registLocationType))) {
@@ -49,8 +60,6 @@ if ($registContactID < 1) {
     exit();
 }
 
-
-$dbManager = new WXDatabaseManager();
 
 // 检查签到表是否存在
 $registTableID = $dbManager->idOfRegistTable($registTableDate, $registTableType, $registLocationType);
