@@ -39,8 +39,12 @@ $result[return_params] = $registTableDate . $registTableType . $registLocationTy
 
 $dbManager = new WXDatabaseManager();
 
+// 找到用户对应的声部
+$contactInfo = $dbManager->contactInfo($registContactID);
+$contactPart = $contactInfo['part'];
+
 // 判定用户是否有进行此操作的权限
-if($dbManager->userAuthorizedStatus($wxNickname) != 1) {
+if($dbManager->userAuthorizedStatus($wxNickname, $contactPart) != 1) {
     $result[return_status] = '6';
     echo json_encode($result);
     exit();

@@ -40,7 +40,7 @@ $dbManager = new WXDatabaseManager();
 
 
 // 判定用户是否有进行此操作的权限
-if($dbManager->userAuthorizedStatus($wxNickname) != 1) {
+if($dbManager->userAuthorizedStatus($wxNickname, $contactPart) != 1) {
     $result[return_status] = '5';
     echo json_encode($result);
     exit();

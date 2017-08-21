@@ -64,6 +64,7 @@ interface DatabaseManager {
      *
      */
     public function contactInfo($contactID) : array ;
+
     /**
      * 添加团员
      *
@@ -180,16 +181,17 @@ interface DatabaseManager {
     public function attendDescriptionForRegistTable($registTableID, $contactSections) : array;
 
     /**
-     * 判定用户是否为授权用户，授权用户可进行数据库修改相关的操作
+     * 判定用户是否为requestAuthority的授权用户，授权用户可进行数据库修改相关的操作
+     * 声部长只能修改自己声部相关的信息，团长可以修改所有信息
      *
      * 参数
      * wxNickname // 微信昵称
-     *
+     * $requestAuthority // 授权范围，S | A | T | B | ALL
      * 返回值
      * status // 0-未授权 | 1-已授权
      *
      */
-    public function userAuthorizedStatus($wxNickname) : int;
+    public function userAuthorizedStatus($wxNickname, $requestAuthority): int;
 }
 
 class WXDatabaseManager implements DatabaseManager {
@@ -636,12 +638,22 @@ class WXDatabaseManager implements DatabaseManager {
         return $attendDescription;
     }
 
-    public function userAuthorizedStatus($wxNickname): int {
-        $queryStr = "SELECT id FROM " . self::_db_authorized_user . " WHERE wx_nickname = '" . $wxNickname ."'";
+    public function userAuthorizedStatus($wxNickname, $requestAuthority): int {
+        $queryStr = "SELECT authority FROM " . self::_db_authorized_user . " WHERE wx_nickname = '" . $wxNickname ."'";
         $result = $this->_mysqliConnection->query($queryStr);
         $status = 0;
         if ($result->num_rows > 0) {
-            $status = 1;
+            $authority = '';
+            while ($row = $result->fetch_assoc()) {
+                $authority = $row['authority'];
+            }
+
+            if ($authority == 'ALL') {
+                $status = 1;
+            }
+            else if (strpos($requestAuthority, $authority) === 0) {
+                $status = 1;
+            }
         }
 
         $result->free();
