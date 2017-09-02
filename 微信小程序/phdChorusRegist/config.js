@@ -1,7 +1,7 @@
 // 小程序配置
 
 // 服务器IP
-var httpsHost = "https://www.liangzhipeng.cn/phdChorusRegist/";
+var httpsHost = "https://www.liangzhipeng.cn/test_phdChorusRegist/";
 
 var config = {
 
@@ -39,7 +39,10 @@ var config = {
     detailContactInfoUrl: (httpsHost + 'phdDetailContactInfo.php'),
   
     // 修改团员信息
-    updateContactInfoUrl: (httpsHost + 'updateContactInfo.php')
+    updateContactInfoUrl: (httpsHost + 'phdUpdateContactInfo.php'),
+
+    // 删除团员
+    deleteContactInfoUrl: (httpsHost + 'phdDeleteContact.php')
   }
 
 };

@@ -25,9 +25,15 @@ Page({
       { value: '雁栖湖', name: '雁栖湖' }
     ],
 
+    includeInStaticsTypeItems: [
+      { value: '1', name: '是', checked: 'true'},
+      {value: '0', name: '否'}
+    ],
+
     registLocationType: '中关村',
     selectedContactPart: 'T2',
-    selectedContactName: '蓝胖子'
+    selectedContactName: '',
+    includeInStatics: 1
   },
 
   bindLocationChange: function (e) {
@@ -53,8 +59,7 @@ Page({
     }
     this.setData({
       selectedContactPart: newPart,
-      contactPartItems: tmpArray,
-      wxNickname: appInstance.globalData.userInfo.nickName
+      contactPartItems: tmpArray
     })
   },
 
@@ -64,9 +69,33 @@ Page({
     })
   },
 
+  bindIncludeInStaticsChange: function (e) {
+    console.log('include in statics change:', e.detail.value)
+    var newInclude = e.detail.value
+    var tmpArray = this.data.includeInStaticsTypeItems
+    for (var i = 0, len = tmpArray.length; i < len; ++i) {
+      tmpArray[i].checked = (tmpArray[i].value == newInclude)
+    }
+
+    this.setData({
+      includeInStatics: newInclude,
+      includeInStaticsTypeItems: tmpArray
+    })
+  },
+
   addContact: function (e) {
     console.log("add contact ", this.data.selectedContactName, this.data.selectedContactPart, this.data.registLocationType)
   
+    if (this.data.selectedContactName.length <= 0) {
+      wx.showModal({
+        title: '请输入团员姓名',
+        confirmText: '好',
+        showCancel: false
+      })
+
+      return
+    }
+
     // 显示正在创建
     wx.showLoading({
       title: '正在添加...',
@@ -81,6 +110,7 @@ Page({
         contactLocation: this.data.registLocationType,
         contactPart: this.data.selectedContactPart,
         contactName: this.data.selectedContactName,
+        contactIncludeInStatics: this.data.includeInStatics,
         wxNickname: appInstance.globalData.userInfo.nickName
       },
       header: {
@@ -88,7 +118,6 @@ Page({
       },
       success: function (res) {
         console.log('addContactUrl:', res.data)
-        var title = ''
         if (res.data.status == 0) {
           wx.showToast({
             title: '添加成功',

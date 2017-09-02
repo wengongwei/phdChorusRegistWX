@@ -72,13 +72,36 @@ interface DatabaseManager {
      * contactName // 姓名
      * contactPart // 声部
      * contactLocation // 所在园区
+     * contactIncludeInStatics // 是否纳入统计数据 1-纳入 | 0-不纳入
      *
      * 返回值
      * int // 0-成功 | 1-失败
      *
      */
-    public function insertContact($contactName, $contactPart, $contactLocation) : int;
+    public function insertContact($contactName, $contactPart, $contactLocation, $contactIncludeInStatics) : int;
 
+    /**
+     * 修改（更新）团员信息
+     *
+     * 参数同insertContact接口
+     *
+     * 返回值
+     * int // 0-成功 | 1-失败
+     *
+     */
+    public function updateContactInfo($contactID, $contactName, $contactPart, $contactLocation, $contactIncludeInStatics) : int;
+
+    /**
+     * 删除团员
+     *
+     * 参数
+     * contactID
+     *
+     * 返回值
+     * int // 0-成功 | 1-失败
+     *
+     */
+    public function deleteContact($contactID) : int;
 
     /**
      * 按SATB12获取团员详细信息
@@ -200,7 +223,7 @@ class WXDatabaseManager implements DatabaseManager {
 	const _dbHost = "10.66.85.131";
 	const _dbUsername = "phdChorusRegist";
 	const _dbPassword = "SATB@phdChorus";
-	const _dbName = "test_phdChorusRegist";
+	const _dbName = "phdChorusRegist";
 	const _db_regist_table = "regist_table";
 	const _db_contact = "contact";
 	const _db_regist_info = "regist_info";
@@ -297,13 +320,14 @@ class WXDatabaseManager implements DatabaseManager {
 	        $contact['name'] = $row['name'];
 	        $contact['part'] = $row['part'];
 	        $contact['location'] = $row['location'];
+	        $contact['includeInStatics'] = $row['include_in_statics'];
         }
 
         return $contact;
     }
 
-    public function insertContact($contactName, $contactPart, $contactLocation) : int {
-	    $queryStr = "INSERT INTO " . self::_db_contact . " (name, part, location) VALUES ('" . $contactName . "', '" . $contactPart . "', '" . $contactLocation . "')";
+    public function insertContact($contactName, $contactPart, $contactLocation, $contactIncludeInStatics) : int {
+	    $queryStr = "INSERT INTO " . self::_db_contact . " (name, part, location, include_in_statics) VALUES ('" . $contactName . "', '" . $contactPart . "', '" . $contactLocation . "', " . $contactIncludeInStatics . ")";
         $result = $this->_mysqliConnection->query($queryStr);
         $status = 1;
         if ($result == true) {
@@ -313,6 +337,27 @@ class WXDatabaseManager implements DatabaseManager {
         return $status;
     }
 
+    public function updateContactInfo($contactID, $contactName, $contactPart, $contactLocation, $contactIncludeInStatics) : int {
+	    $queryStr = "UPDATE " . self::_db_contact . " SET name = '" . $contactName . "', part = '" . $contactPart . "', location = '" . $contactLocation . "', include_in_statics = " . $contactIncludeInStatics . " WHERE id = " . $contactID . "";
+        $result = $this->_mysqliConnection->query($queryStr);
+        $status = 1;
+        if ($result == true) {
+            $status = 0;
+        }
+
+        return $status;
+	}
+
+    public function deleteContact($contactID) : int {
+	    $queryStr = "DELETE FROM " . self::_db_contact . " WHERE id = " . $contactID;
+        $result = $this->_mysqliConnection->query($queryStr);
+        $status = 1;
+        if ($result == true) {
+            $status = 0;
+        }
+
+        return $status;
+    }
 
     public function contactInfoInSATB12() : array {
         $contactInfo = array();

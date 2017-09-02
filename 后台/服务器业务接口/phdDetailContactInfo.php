@@ -22,7 +22,7 @@
  *
  * 返回值
  * status // 0-成功 | 1-失败 | 2-失败(参数错误) | 3-失败(服务器代码bug)
- * contact // 团员信息{id: 12, name: '蓝胖子', part: 'T2', location: '中关村'}
+ * contact // 团员信息{id: 12, name: '蓝胖子', part: 'T2', location: '中关村', includeInStatics: 1}
  *
  */
 
