@@ -1,0 +1,25 @@
+<!--pages/recruit/recruitIndex/recruitIndex.wxml-->
+<view >
+
+  <view class="function-list-view-light" bindtap="regist">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">面试签到</view>
+      <view class="function-list-item-subtitle-light">填写签到信息，排队等待叫号，等待过程中请保持安静</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-dark" bindtap="createRegistTable">
+    <view class="function-list-item">
+      <view class="function-list-item-title-dark">创建签到表</view>
+      <view class="function-list-item-subtitle-dark">指定日期和面试地点，即可为面试者创建一张面试签到表</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-light" bindtap="staticByTable">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">查看签到数据</view>
+      <view class="function-list-item-subtitle-light">选定一张签到表，即可查看当日签到人员信息</view>
+    </view>
+  </view>
+
+</view>

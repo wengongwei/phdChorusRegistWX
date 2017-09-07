@@ -42,7 +42,22 @@ var config = {
     updateContactInfoUrl: (httpsHost + 'phdUpdateContactInfo.php'),
 
     // 删除团员
-    deleteContactInfoUrl: (httpsHost + 'phdDeleteContact.php')
+    deleteContactInfoUrl: (httpsHost + 'phdDeleteContact.php'),
+
+    // 招新-面试者签到
+    recruit_tableRegistUrl: (httpsHost + 'recruit/phdRecruitTableRegist.php'),
+
+    // 招新-创建签到表
+    recruit_createRegistTableUrl: (httpsHost + 'recruit/phdRecruitCreateRegistTable.php'),
+
+    // 招新-查看签到表列表
+    recruit_registTableListUrl: (httpsHost + 'recruit/phdRecruitRegistTableList.php'),
+
+    // 招新-查看签到表详细信息
+    recruit_registTableInfoUrl: (httpsHost + 'recruit/phdRecruitRegistTableInfo.php'),
+
+    // 招新-查看签到详细信息
+    recruit_interviewerInfoUrl: (httpsHost + 'recruit/phdRecruitInterviewerInfo.php')
   }
 
 };

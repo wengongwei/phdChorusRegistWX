@@ -13,7 +13,13 @@
     "pages/statics/staticsByQueryRegistTable/staticsByQueryRegistTable",
     "pages/statics/registTableDetailStatics/registTableDetailStatics",
     "pages/contact/detailContactInfo/detailContactInfo",
-    "pages/contact/alterContactInfo/alterContactInfo"
+    "pages/contact/alterContactInfo/alterContactInfo",
+    "pages/recruit/recruitIndex/recruitIndex",
+    "pages/recruit/createRegistTable/createRegistTable",
+    "pages/recruit/registTableList/registTableList",
+    "pages/recruit/registTableInfo/registTableInfo",
+    "pages/recruit/interviewerInfo/interviewerInfo",
+    "pages/recruit/regist/regist"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
@@ -44,6 +50,12 @@
         "iconPath": "image/statics.png",
         "selectedIconPath": "image/statics_selected.png",
         "text": "统计"
+      },
+      {
+        "pagePath": "pages/recruit/recruitIndex/recruitIndex",
+        "iconPath": "image/recruit.png",
+        "selectedIconPath": "image/recruit_selected.png",
+        "text": "招新"
       }
     ]
   },

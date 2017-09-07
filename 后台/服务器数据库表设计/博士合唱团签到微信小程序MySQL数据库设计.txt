@@ -6,12 +6,12 @@
 日期 = 2018-09-12
 签到表类型 = 大排 | 小排 | 周日晚 | 声乐课
 
+## 日常排练签到
 
-## 建立数据库
+### 建立数据库
 create DATABASE phdChorusRegist
 
-
-## contact表
+### contact表
 // 主键
 id INT UNSIGNED NOT NULL AUTO_INCREMENT 
 
@@ -31,7 +31,7 @@ include_in_statics BOOLEAN NOT NULL DEFAULT TRUE
 CREATE TABLE `phdChorusRegist`.`contact` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `name` TINYTEXT NOT NULL COMMENT '姓名' , `part` TINYTEXT NOT NULL COMMENT '声部' , `location` TINYTEXT NOT NULL COMMENT '所在园区' , `include_in_statics` BOOLEAN NOT NULL DEFAULT TRUE COMMENT '是否纳入统计范围' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '博士合唱团团员';
 
 
-## regist_table签到表
+### regist_table签到表
 // 主键
 id INT UNSIGNED NOT NULL AUTO_INCREMENT 
 
@@ -48,7 +48,7 @@ location TINYTEXT NOT NULL
 CREATE TABLE `phdChorusRegist`.`regist_table` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `date` DATE NOT NULL , `type` TINYTEXT NOT NULL , `location` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '签到表';
 
 
-## regist_info签到信息表
+### regist_info签到信息表
 //主键
 id INT NOT NULL AUTO_INCREMENT 
 
@@ -71,13 +71,15 @@ ALTER TABLE regist_info ADD FOREIGN KEY(contact_id) REFERENCES contact(id) ON DE
 
 
 
-## 授权用户列表
+### 授权用户列表
 
 授权用户可使用‘添加团员’、‘签到’等设计数据库修改的功能
 
 id // 主键
 wx_nickname // 微信昵称
-authority // 用户权限 S | A | T | B | ALL，声部长只可修改自己声部相关的信息，团长可以修改所有的信息
+
+authority 
+// 用户权限 S | A | T | B | ALL，声部长只可修改自己声部相关的信息，团长可以修改所有的信息
 
 CREATE TABLE `phdChorusRegist`.`authorized_user` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `wx_nickname` TINYTEXT NOT NULL COMMENT '微信昵称' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权(修改数据库内容)用户列表';
 
@@ -87,6 +89,75 @@ ALTER TABLE `authorized_user` ADD `authority` TINYTEXT NOT NULL COMMENT '用户�
 
 
 
+## 招新
+
+### 建立数据库
+create DATABASE phdChorusRecruit;
+
+### authorized_user授权用户列表
+
+授权用户可使用‘添加团员’、‘签到’等设计数据库修改的功能
+
+id // 主键
+wx_nickname // 微信昵称
+authority // 用户权限 S | A | T | B | ALL，声部长只可修改自己声部相关的信息，团长可以修改所有的信息
+
+CREATE TABLE `test_phdChorusRecruit`.`authorized_user` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `wx_nickname` TINYTEXT NOT NULL COMMENT '微信昵称' , `authority` TINYTEXT NOT NULL COMMENT '用户权限' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权(修改数据库内容)用户列表';
 
 
+### regist_table签到表
+// 主键
+id INT UNSIGNED NOT NULL AUTO_INCREMENT 
+
+//日期
+date DATE NOT NULL
+
+// 签到所在园区
+location TINYTEXT NOT NULL
+
+CREATE TABLE `test_phdChorusRecruit`.`regist_table` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `date` DATE NOT NULL COMMENT '签到日期' , `location` TINYTEXT NOT NULL COMMENT '签到地点' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试签到表';
+
+
+### regist_info签到信息
+
+// 主键
+id
+
+// 外键
+regist_table_id
+
+// 签到者姓名
+name
+
+// 性别
+sex
+
+// 签到者所在园区
+location
+
+// 培养单位
+company
+
+// 年级
+grade
+
+// 手机号
+phone
+
+// 邮箱
+email
+
+// 声乐水平
+vocal
+
+// 是否会乐器
+instruments
+
+// 是否识谱
+readMusic
+
+// 建表语句
+CREATE TABLE `test_phdChorusRecruit`.`regist_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT 'regist_table外键' , `name` TINYTEXT NOT NULL COMMENT '姓名' , `sex` BOOLEAN NOT NULL COMMENT '性别-男1&女0' , `location` TINYTEXT NOT NULL COMMENT '所在园区' , `company` TINYTEXT NOT NULL COMMENT '培养单位' , `grade` TINYTEXT NOT NULL COMMENT '年级' , `phone` TINYTEXT NOT NULL COMMENT '手机号' , `email` TINYTEXT NOT NULL COMMENT '邮件' , `vocal` TINYTEXT NOT NULL COMMENT '声乐水平' , `instruments` TINYTEXT NOT NULL COMMENT '是否会乐器' , `readMusic` TINYTEXT NOT NULL COMMENT '是否识谱' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试者签到信息';
+
+ALTER TABLE `test_phdChorusRecruit`.`regist_info` ADD FOREIGN KEY(regist_table_id) REFERENCES regist_table(id) ON DELETE CASCADE;
 

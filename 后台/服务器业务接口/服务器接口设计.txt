@@ -36,9 +36,13 @@ ps -aux | grep xxx
 数据库服务器
 IP 10.66.85.131
 账号 root | 密码 19940530liang
-数据库
-phdChorusRegist
+
+数据库 phdChorusRegist
 账号 phdChorusRegist | 密码 SATB@phdChorus
+
+数据库 phdChorusRecruit
+账号 phdChorusRecruit | SATB@phdChorus
+
 排序规则
 utf8_unicode_ci
 

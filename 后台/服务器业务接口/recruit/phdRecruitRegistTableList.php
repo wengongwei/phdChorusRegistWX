@@ -1,14 +1,14 @@
 <?php
 /**
- * Created by 梁志鹏 on 17-8-13 上午9:52
+ * Created by 梁志鹏 on 17-9-6 下午3:11
  * Copyright (c) 2017 PhdChorus. All rights reserved.
  */
 
 /**
  * Created by PhpStorm.
  * User: zkey
- * Date: 2017/8/13
- * Time: 上午9:52
+ * Date: 2017/9/6
+ * Time: 下午3:11
  */
 
 /*
@@ -24,18 +24,13 @@
  *
  */
 
-include_once('phdUtils.php');
-include_once('phdDatabaseManager.php');
+include_once('phdRecruitDatabaseManager.php');
 
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
 $theTableID = $_INPUT->theTableID;
 $isNewer = $_INPUT->isNewer;
-
-
-$theTableID = intval($theTableID);
 $isNewer = intval($isNewer);
-
 
 // 定义返回值
 const return_status = 'status';
@@ -53,15 +48,14 @@ if ($theTableID < 1 || ($isNewer != 0 && $isNewer != 1)) {
 }
 
 // 查询表单
-$dbManager = new WXDatabaseManager();
+$dbManager = new WXRecruitDatabaseManager();
 $tableList = $dbManager->registTableList($theTableID, $isNewer);
 $registTableList = array();
 
 // 拼接签到表信息
 for ($i = 0; $i < count($tableList); $i++) {
     $table = $tableList[$i];
-    $weekday = weekdayFromDate($table['date']);
-    $tableName = $table['date'] . $weekday . $table['location'] . $table['type'];
+    $tableName = $table['date'] . $table['location'];
     $tableID = $table['id'];
     $registTableList[] = array('id'=>$tableID, 'name'=>$tableName);
 }

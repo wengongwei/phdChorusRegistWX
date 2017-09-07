@@ -223,7 +223,7 @@ class WXDatabaseManager implements DatabaseManager {
 	const _dbHost = "10.66.85.131";
 	const _dbUsername = "phdChorusRegist";
 	const _dbPassword = "SATB@phdChorus";
-	const _dbName = "phdChorusRegist";
+	const _dbName = "test_phdChorusRegist";
 	const _db_regist_table = "regist_table";
 	const _db_contact = "contact";
 	const _db_regist_info = "regist_info";
@@ -509,7 +509,7 @@ class WXDatabaseManager implements DatabaseManager {
 	    $attendStatus = array(0, 1);
 	    foreach (self::_partArrayInSATB12 as $part) {
             foreach ($attendStatus as $attend) {
-                $queryStr .= "SELECT contact.name FROM contact INNER JOIN regist_info ON contact.id = regist_info.contact_id WHERE regist_info.regist_table_id = " . $registTableID . " AND regist_info.attend = " . $attend . " AND contact.part = '" . $part . "' AND contact.location like '" . $contactLocation . "' ; ";
+                $queryStr .= "SELECT contact.name FROM contact INNER JOIN regist_info ON contact.id = regist_info.contact_id WHERE regist_info.regist_table_id = " . $registTableID . " AND regist_info.attend = " . $attend . " AND contact.part = '" . $part . "' AND contact.location like '" . $contactLocation . "' AND contact.include_in_statics = 1; ";
             }
         }
 

@@ -1,0 +1,33 @@
+/* pages/recruit/interviewerInfo/interviewerInfo.wxss */
+
+.contact-view {
+  padding: 10% 10% 10% 10%;
+}
+
+.title-view {
+  margin-top: 15pt;
+  margin-bottom: 10pt;
+}
+
+.title-text {
+  color: #000000;
+  font-size: 20pt;
+}
+
+.subtitle-view {
+  margin-top: 10pt;
+}
+
+.subtitle-text {
+  color: #999999;
+  font-size: 12pt;
+}
+
+.section-view {
+  margin-top: 15pt;
+}
+
+.section-text {
+  color: #333333;
+  font-size: 12pt;
+}
