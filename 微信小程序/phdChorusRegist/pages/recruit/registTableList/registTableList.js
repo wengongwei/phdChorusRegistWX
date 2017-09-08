@@ -1,6 +1,7 @@
 // pages/recruit/registTableList/registTableList.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -28,7 +29,8 @@ Page({
       url: config.serviceUrl.recruit_registTableListUrl,
       data: {
         theTableID: lastTableID,
-        isNewer: '0'
+        isNewer: '0',
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       method: 'POST',
       header: {
@@ -57,6 +59,16 @@ Page({
           })
 
           wx.hideNavigationBarLoading();
+        }
+        else {
+          if (res.data.status == 5) {
+            wx.showModal({
+              title: '您无权查看数据',
+              content: '仅有招新小组能查看签到数据',
+              confirmText: '好',
+              showCancel: false
+            })
+          }
         }
       },
       fail: function (res) {

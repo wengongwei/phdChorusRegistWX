@@ -69,16 +69,16 @@
   </view>
 
   <view class="section">
-    <view class="section-title">培养单位</view>
+    <view class="section-title">培养单位(请注明培养单位所在地)</view>
     <view class="section-input-view">
-      <input class="section-input" type="text" placeholder="中科院软件所" confirm-type="完成" bindinput="bindCompanyChange" bindconfirm="bindCompanyChange" />
+      <input class="section-input" type="text" placeholder="北京-软件所 / 广州-植物所" confirm-type="完成" bindinput="bindCompanyChange" bindconfirm="bindCompanyChange" />
     </view>
   </view>
 
   <view class="section">
-    <view class="section-title">年级</view>
+    <view class="section-title">年级(请注明是硕士还是博士)</view>
     <view class="section-input-view">
-      <input class="section-input" type="text" placeholder="研一" confirm-type="完成" bindinput="bindGradeChange" bindconfirm="bindGradeChange" />
+      <input class="section-input" type="text" placeholder="硕士 / 博士 / 硕博连读 一年级" confirm-type="完成" bindinput="bindGradeChange" bindconfirm="bindGradeChange" />
     </view>
   </view>
 
@@ -109,7 +109,7 @@
   <view class="section">
     <view class="section-title">是否学过乐器</view>
     <view class="section-input-view">
-      <input class="section-input" type="text" placeholder="无/钢琴+10级/小提琴+8级" confirm-type="完成" bindinput="bindInstrumentsChange" bindconfirm="bindInstrumentsChange" />
+      <input class="section-input" type="text" placeholder="无 / 钢琴10级 / 小提琴8级" confirm-type="完成" bindinput="bindInstrumentsChange" bindconfirm="bindInstrumentsChange" />
     </view>
   </view>
 

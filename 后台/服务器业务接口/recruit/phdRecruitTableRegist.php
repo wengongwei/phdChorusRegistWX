@@ -68,7 +68,6 @@ if (strlen($contactName) <= 0 || strlen($contactPhone) <= 0 || strlen($contactEm
     exit();
 }
 
-
 $dbManager = new WXRecruitDatabaseManager();
 
 // 查询是否有该签到表
@@ -80,6 +79,16 @@ if ($tableID == -1) {
     exit();
 }
 
+// 查看是否已签到
+$interviewerID = $dbManager->registIdOfInterviewer($tableID, $contactName);
+if ($interviewerID != -1) {
+    $result[return_status] = 3;
+    $result[return_registID] = $interviewerID;
+    echo json_encode($result);
+    exit();
+}
+
+// 签到
 $interviewerID = $dbManager->tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic);
 if ($interviewerID == -1) {
     $result[return_status] = 4;

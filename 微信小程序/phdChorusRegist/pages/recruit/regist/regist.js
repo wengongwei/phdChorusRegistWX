@@ -201,10 +201,10 @@ Page({
         else {
           warningTitle = '签到失败'
           if (status == 1) {
-            warningContent = '签到表不存在，请联系团长或声部长创建签到表'
+            warningContent = '请注意选择正确的签到时间和签到地点'
           }
           else if (status == 3) {
-            warningContent = '你已经签过到了，无需重复签到'
+            warningContent = '你已经签过到了，无需重复签到。您是' + res.data.registID + '号面试者，请耐心等待叫号，等待过程中请保持安静'
           }
           else if (status == 5) {
             warningContent = '请填写完整的信息'

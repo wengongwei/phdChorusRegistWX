@@ -54,6 +54,20 @@ interface RecruitDatabaseManager {
 
     /*
      * 接口功能
+     * 查看面试者的签到ID
+     *
+     * 参数
+     * theTableID // 签到表ID
+     * contactName // 面试者姓名
+     *
+     * 返回值
+     * interviewerID // -1-未签到 | 面试者签到ID
+     *
+     */
+    public function registIdOfInterviewer ($theTableID, $contactName) : int;
+
+    /*
+     * 接口功能
      * 签到者签到
      *
      * 参数
@@ -72,7 +86,7 @@ interface RecruitDatabaseManager {
      * 返回值
      * interviewerID // -1-失败 | 签到ID
      */
-    public function tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic);
+    public function tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic) : int;
 
     /**
      * 获取签到表(regist_table)
@@ -109,7 +123,7 @@ interface RecruitDatabaseManager {
      * 返回值
      * interviewerInfo // {'id': 14, 'name': 蓝胖, 'sex': 1, 'location': 中关村, 'company': 中科院软件所, 'grade': 研三, 'phone': 13317945775, 'email': zhipengliang@qq.com, 'vocal': 了解一点, 'instruments': 钢琴+6级, 'readMusic': 简谱}
      */
-    public function interviewerDetailInfo($interviewerID);
+    public function interviewerDetailInfo($interviewerID) : array;
 }
 
 class WXRecruitDatabaseManager implements RecruitDatabaseManager
@@ -184,13 +198,26 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $status;
     }
 
-    public function tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic) {
+    public function tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic) : int {
         $insertStr = "INSERT INTO " . self::_db_regist_info . " (regist_table_id, name, sex, location, company, grade, phone, email, vocal, instruments, readMusic) VALUES (". $tableID .", '" . $contactName ."', " . $contactSex . ", '" . $contactLocation . "', '" . $contactCompany . "', '" . $contactGrade . "', '" . $contactPhone . "', '" . $contactEmail . "', '" . $contactVocalAbility . "', '" . $contactInstruments . "', '" . $contactReadMusic . "');";
         $result = $this->_mysqliConnection->query($insertStr);
         $interviewerID = -1;
         if ($result == true) {
             $interviewerID = $this->_mysqliConnection->insert_id;
         }
+
+        return $interviewerID;
+    }
+
+    public function registIdOfInterviewer ($theTableID, $contactName) : int {
+        $selectStr = "SELECT id FROM " . self::_db_regist_info . " WHERE regist_table_id = " . $theTableID . " AND name = '" . $contactName ."';";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $interviewerID = -1;
+        while ($row = $selectResult->fetch_assoc()) {
+            $interviewerID = $row['id'];
+        }
+
+        $selectResult->free();
 
         return $interviewerID;
     }
@@ -231,7 +258,7 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $interviewerList;
     }
 
-    public function interviewerDetailInfo($interviewerID) {
+    public function interviewerDetailInfo($interviewerID) : array {
         $selectStr = "SELECT * FROM " . self::_db_regist_info . " WHERE id = " . $interviewerID . " ;";
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $interviewer = array();

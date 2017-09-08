@@ -21,7 +21,7 @@
  * 返回值
  * status // 0-成功 | 1-失败 | 2-失败(参数错误) | 3-失败(系统代码bug)
  * registTableList // 签到表数组[{'name' : '20170815周三中关村大排', 'id' : '15'}, ...]
- *
+ * wxNickname // 小程序使用者的nickname，用以进行鉴权操作
  */
 
 include_once('phdRecruitDatabaseManager.php');
@@ -31,6 +31,7 @@ $_INPUT = json_decode(file_get_contents("php://input"));
 $theTableID = $_INPUT->theTableID;
 $isNewer = $_INPUT->isNewer;
 $isNewer = intval($isNewer);
+$wxNickname = $_INPUT->wxNickname;
 
 // 定义返回值
 const return_status = 'status';
@@ -47,8 +48,16 @@ if ($theTableID < 1 || ($isNewer != 0 && $isNewer != 1)) {
     exit();
 }
 
-// 查询表单
 $dbManager = new WXRecruitDatabaseManager();
+
+// 判定用户是否有进行此操作的权限
+if($dbManager->userAuthorizedStatus($wxNickname, 'ALL') != 1) {
+    $result[return_status] = '5';
+    echo json_encode($result);
+    exit();
+}
+
+// 查询表单
 $tableList = $dbManager->registTableList($theTableID, $isNewer);
 $registTableList = array();
 
