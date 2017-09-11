@@ -29,6 +29,7 @@ include_once('phdRecruitDatabaseManager.php');
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
 $registTableID = $_INPUT->registTableID;
+$registTableID = intval($registTableID);
 $contactName = $_INPUT->contactName;
 
 // 定义返回值
@@ -38,6 +39,12 @@ const return_interviewID = 'interviewID';
 $result = array();
 
 $result[return_params] = $registTableID . $contactName;
+
+if ($registTableID < 1 || strlen($contactName) <= 0) {
+    $result[return_status] = 5;
+    echo json_encode($result);
+    exit();
+}
 
 $dbManager = new WXRecruitDatabaseManager();
 

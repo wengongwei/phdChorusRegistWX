@@ -1,6 +1,7 @@
 // contactIndex.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -62,13 +63,17 @@ Page({
     wx.request({
       url: config.serviceUrl.contactInfoInSATB12Url,
       method: 'POST',
+      data: {
+        wxNickname: appInstance.globalData.userInfo.nickName
+      },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
         console.log('contact info:', res.data)
-        var contactList = new Array()
-        if (res.data.status == 0) {
+        var status = res.data.status
+        if (status == 0) {
+          var contactList = new Array()
           var contactDic = res.data.contactInfo
           var partList = that.data.partList
           for (var i = 0; i < partList.length; ++i) {
@@ -79,6 +84,16 @@ Page({
           that.setData({
             contactInfoList: contactList
           })
+        }
+        else {
+          if (res.data.status == 5) {
+            wx.showModal({
+              title: '没有权限',
+              content: '仅团委会可查看数据',
+              confirmText: '好',
+              showCancel: false
+            })
+          }
         }
       },
       fail: function (errMessage) {

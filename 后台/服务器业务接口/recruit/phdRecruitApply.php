@@ -64,18 +64,18 @@ $contactSkill = $_INPUT->contactSkill;
 $contactExperience = $_INPUT->contactExperience;
 $contactExpect = $_INPUT->contactExpect;
 $registTableID = $_INPUT->registTableID;
-
-// 验证参数是否正确
-if (strlen($contactName) <= 0 || strlen($contactNation) <= 0 || strlen($contactPhone) <= 0 || strlen($contactEmail) <= 0 || strlen($contactStudentId) <= 0 || strlen($contactCompany) <= 0 || strlen($contactGrade) <= 0 || strlen($contactInstruments) <= 0) {
-    $result[return_status] = 5;
-    echo json_encode($result);
-    exit();
-}
-
+$registTableID = intval($registTableID);
 
 const return_status = 'status';
 const return_params = 'params';
 $result = array();
+
+// 验证参数是否正确
+if ($registTableID < 1 || strlen($contactName) <= 0 || strlen($contactNation) <= 0 || strlen($contactPhone) <= 0 || strlen($contactEmail) <= 0 || strlen($contactStudentId) <= 0 || strlen($contactCompany) <= 0 || strlen($contactGrade) <= 0 || strlen($contactInstruments) <= 0) {
+    $result[return_status] = 5;
+    echo json_encode($result);
+    exit();
+}
 
 $dbManager = new WXRecruitDatabaseManager();
 

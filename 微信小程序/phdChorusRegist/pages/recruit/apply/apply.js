@@ -62,7 +62,7 @@ Page({
     contactSkill: '',
     contactExperience: '',
     contactExpect: '',
-    interviewTime: '',
+    interviewTime: -1,
   },
 
   onLoad: function (options) {
@@ -301,6 +301,16 @@ Page({
             showCancel: false
           })
         }
+        else {
+          if (status == 5) {
+            wx.showModal({
+              title: '报名失败',
+              content: '请完整填写信息',
+              confirmText: '好',
+              showCancel: false
+            })
+          }
+        }
       },
       fail: function (res) {
         wx.showModal({
@@ -309,7 +319,6 @@ Page({
           confirmText: '好',
           showCancel: false
         })
-
         console.log("tableRegist fail:", res.data)
       },
       complete: function () {

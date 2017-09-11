@@ -18,6 +18,7 @@
  * 参数
  * registTableID // 签到表id
  * status // 将签到表设置为该status
+ * wxNickname //
  *
  * 返回值
  * status // 0-成功 | 1-失败
@@ -29,6 +30,7 @@ include_once('phdRecruitDatabaseManager.php');
 $_INPUT = json_decode(file_get_contents("php://input"));
 $registTableID = $_INPUT->registTableID;
 $status = $_INPUT->status;
+$wxNickname = $_INPUT->wxNickname;
 
 // 定义返回值
 const return_status = 'status';
@@ -38,6 +40,13 @@ $result = array();
 $result[return_params] = $registTableID . $status;
 
 $dbManager = new WXRecruitDatabaseManager();
+// 判定用户是否有进行此操作的权限
+if($dbManager->userAuthorizedStatus($wxNickname, 'ALL') != 1) {
+    $result[return_status] = '5';
+    echo json_encode($result);
+    exit();
+}
+
 $status = $dbManager->setRegistTableStatus($registTableID, $status);
 if ($status == 0) {
     $result[return_status] = 0;

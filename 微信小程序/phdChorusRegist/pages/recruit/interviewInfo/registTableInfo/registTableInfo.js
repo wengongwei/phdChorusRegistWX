@@ -35,7 +35,8 @@ Page({
       data: {
         registTableID: this.data.registTableID,
         theWaiterID: this.data.theWaiterID,
-        interviewStatus: interviewStatus
+        interviewStatus: interviewStatus,
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       method: 'POST',
       header: {

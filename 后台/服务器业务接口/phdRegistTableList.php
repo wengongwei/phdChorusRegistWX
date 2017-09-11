@@ -17,6 +17,7 @@
  * 参数
  * theTableID // 用以参考的tableID
  * isNewer // 0-返回比tableID小的10张签到表(所有符合条件的签到表，按tableID倒序排，取前10张) | 1-返回比tableID大的所有签到表
+ * wxNickname //
  *
  * 返回值
  * status // 0-成功 | 1-失败 | 2-失败(参数错误) | 3-失败(系统代码bug)
@@ -31,7 +32,7 @@ include_once('phdDatabaseManager.php');
 $_INPUT = json_decode(file_get_contents("php://input"));
 $theTableID = $_INPUT->theTableID;
 $isNewer = $_INPUT->isNewer;
-
+$wxNickname = $_INPUT->wxNickname;
 
 $theTableID = intval($theTableID);
 $isNewer = intval($isNewer);
@@ -54,6 +55,16 @@ if ($theTableID < 1 || ($isNewer != 0 && $isNewer != 1)) {
 
 // 查询表单
 $dbManager = new WXDatabaseManager();
+
+// 判定用户是否有进行此操作的权限
+if($dbManager->userAuthorizedStatus($wxNickname, 'ANY') != 1) {
+    $result[return_status] = '5';
+    echo json_encode($result);
+    exit();
+}
+
+
+
 $tableList = $dbManager->registTableList($theTableID, $isNewer);
 $registTableList = array();
 

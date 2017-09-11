@@ -35,7 +35,8 @@ Page({
       },
       success: function (res) {
         console.log('valid regist table for apply:', res.data)
-        if (res.data.status == 0) {
+        var status = res.data.status
+        if (status == 0) {
           that.setData({
             interviewTimeTypeItems: res.data.tableList
           })
@@ -101,13 +102,15 @@ Page({
           })
         }
         else {
-          var title = '签到失败'
           var content = ''
           if (status == 1) {
             content = '如已签到，请勿重复签到。否则请检查您选择的面试时间、姓名是否与之前确认面试时所填写的相同'
           }
+          else if (status == 5) {
+            content = '请完整填写信息'
+          }
           wx.showModal({
-            title: title,
+            title: '签到失败',
             content: content,
             confirmText: '好',
             showCancel: false

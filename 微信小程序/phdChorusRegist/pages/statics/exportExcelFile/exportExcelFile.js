@@ -1,6 +1,7 @@
 // exportExcelFile.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -10,62 +11,6 @@ Page({
   data: {
     fromDate: '2017-08-06',
     toDate: '2017-08-06',
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
   },
 
   bindFromDateChange: function (e) {
@@ -98,32 +43,44 @@ Page({
       method: 'POST',
       data: {
         fromDate: this.data.fromDate,
-        toDate: this.data.toDate
+        toDate: this.data.toDate,
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
         console.log('exportRegistExcelFileUrl:', res.data)
-        var fileName = res.data.fileName
-        var filePath = res.data.filePath
-        filePath = config.serviceUrl.httpsHost + filePath
-        if (res.data.status == 0) {
+        var status = res.data.status
+        if (status == 0) {
+          var fileName = res.data.fileName
+          var filePath = res.data.filePath
+          filePath = config.serviceUrl.httpsHost + filePath
           wx.redirectTo({
             url: 'downloadExcelFile/downloadExcelFile?filePath=' + filePath + '&fileName=' + fileName
           })
         }
-        else if (res.data.status == 1) {
-          wx.hideLoading()
+        else {
+          var title = ''
+          var content = ''
+          if (status == 1) {
+            title = '服务器错误'
+            content = '请联系签到小程序管理员'
+          }
+          else if (status == 5) {
+            title = '没有权限'
+            content = '仅团委会可查看数据'
+          }
+
           wx.showModal({
-            title: '服务器错误',
-            content: '请联系签到小程序管理员',
-            confirmText: '好'
+            title: title,
+            content: content,
+            confirmText: '好',
+            showCancel: false
           })
         }
       },
       fail: function (res) {
-        wx.hideLoading()
         wx.showModal({
           title: '无法连接服务器',
           content: '请检查网络连接',
@@ -131,6 +88,9 @@ Page({
         })
 
         console.log("createRegistTable fail:", res.data)
+      },
+      complete: function () {
+        wx.hideLoading()
       }
     })
   }

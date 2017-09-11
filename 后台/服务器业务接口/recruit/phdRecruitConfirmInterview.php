@@ -20,7 +20,7 @@
  * contactName // 姓名
  *
  * 返回
- * status // 0-成功 | 1-失败
+ * status // 0-成功 | 1-失败 | 5-失败(参数错误)
  */
 
 include_once('phdRecruitDatabaseManager.php');
@@ -28,6 +28,7 @@ include_once('phdRecruitDatabaseManager.php');
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
 $registTableID = $_INPUT->registTableID;
+$registTableID = intval($registTableID);
 $contactName = $_INPUT->contactName;
 
 // 定义返回值
@@ -36,6 +37,12 @@ const return_params = 'params';
 $result = array();
 
 $result[return_params] = $registTableID . $contactName;
+
+if ($registTableID < 1 || strlen($contactName) <= 0) {
+    $result[return_status] = 5;
+    echo json_encode($result);
+    exit();
+}
 
 $dbManager = new WXRecruitDatabaseManager();
 

@@ -1,6 +1,7 @@
 // staticsBySelectRegistTable.js
 
 var config = require('../../../config');
+var appInstance = getApp();
 
 Page({
 
@@ -28,7 +29,8 @@ Page({
       url: config.serviceUrl.registTableListUrl,
       data: {
         theTableID: lastTableID,
-        isNewer: '0'
+        isNewer: '0',
+        wxNickname: appInstance.globalData.userInfo.nickName
       },
       method: 'POST',
       header: {
@@ -55,9 +57,19 @@ Page({
             registTableList: tableList,
             lastRegistTableID: lastTable.id
           })
-
-          wx.hideNavigationBarLoading();
         }
+        else {
+          if (res.data.status == 5) {
+            wx.showModal({
+              title: '没有权限',
+              content: '仅团委会可查看数据',
+              confirmText: '好',
+              showCancel: false
+            })
+          }
+        }
+
+        wx.hideNavigationBarLoading();
       },
       fail: function (res) {
         wx.showModal({

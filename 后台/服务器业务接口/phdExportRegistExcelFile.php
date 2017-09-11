@@ -20,6 +20,7 @@
  * 参数
  * fromDate // 起始日期
  * toDate // 截止日期
+ * wxNickname //
  *
  * 返回值
  * status // 0-成功 | 1-失败 | 2-失败(参数错误) | 4-失败(服务器代码bug)
@@ -30,11 +31,13 @@
 
 include_once('phdUtils.php');
 include_once('phdRegistInfoByExcelFileInSATB.php');
+include_once('phdDatabaseManager.php');
 
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
 $fromDate = $_INPUT->fromDate;
 $toDate = $_INPUT->toDate;
+$wxNickname = $_INPUT->wxNickname;
 
 // 定义返回值
 const return_status = 'status';
@@ -45,6 +48,13 @@ $result = array();
 
 $result[return_params] = $fromDate . $toDate;
 
+// 判定用户是否有进行此操作的权限
+$dbManager = new WXDatabaseManager();
+if($dbManager->userAuthorizedStatus($wxNickname, 'ANY') != 1) {
+    $result[return_status] = '5';
+    echo json_encode($result);
+    exit();
+}
 
 // 校验参数是否合法
 if (!(isValidTableDate($fromDate) && isValidTableDate($toDate))) {

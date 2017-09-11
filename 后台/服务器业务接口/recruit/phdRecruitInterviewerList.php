@@ -19,6 +19,7 @@
  * registTableID // 签到表id
  * theWaiterID // 用以参考的interviewerID
  * interviewStatus // 面试状态位 1-已报名 | 2-已确认参加面试 | 3-已现场面试签到
+ * wxNickname //
  *
  * 返回值
  * status // 0-成功 | 1-失败
@@ -34,6 +35,7 @@ $theWaiterID = $_INPUT->theWaiterID;
 $theWaiterID = intval($theWaiterID);
 $interviewStatus = $_INPUT->interviewStatus;
 $interviewStatus = intval($interviewStatus);
+$wxNickname = $_INPUT->wxNickname;
 
 // 定义返回值
 const return_status = 'status';
@@ -44,6 +46,14 @@ $result = array();
 $result[return_params] = $registTableID . $theWaiterID . $interviewStatus;
 
 $dbManager = new WXRecruitDatabaseManager();
+// 鉴权
+if($dbManager->userAuthorizedStatus($wxNickname, 'ALL') != 1) {
+    $result[return_status] = '5';
+    echo json_encode($result);
+    exit();
+}
+
+
 $list = array();
 if ($interviewStatus == 1 || $interviewStatus == 2) {
     $list = $dbManager->applicantList($registTableID, $interviewStatus);

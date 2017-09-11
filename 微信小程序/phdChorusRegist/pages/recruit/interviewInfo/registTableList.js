@@ -15,7 +15,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.loadRegistTableList(1);
+    this.loadRegistTableList();
   },
 
   loadRegistTableList: function () {
@@ -87,7 +87,7 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    this.loadRegistTableList(0)
+    this.loadRegistTableList()
   },
 
   registTableInfo: function (e) {

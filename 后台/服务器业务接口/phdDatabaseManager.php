@@ -209,7 +209,7 @@ interface DatabaseManager {
      *
      * 参数
      * wxNickname // 微信昵称
-     * $requestAuthority // 授权范围，S | A | T | B | ALL
+     * $requestAuthority // 授权范围，S | A | T | B | ALL | ANY，ANY指的是对所有授权用户开放
      * 返回值
      * status // 0-未授权 | 1-已授权
      *
@@ -693,6 +693,9 @@ class WXDatabaseManager implements DatabaseManager {
                 $authority = $row['authority'];
             }
 
+            if ($requestAuthority == 'ANY') {
+                $status = 1;
+            }
             if ($authority == 'ALL') {
                 $status = 1;
             }

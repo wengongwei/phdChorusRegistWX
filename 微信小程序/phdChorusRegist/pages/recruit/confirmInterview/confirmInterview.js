@@ -12,7 +12,7 @@ Page({
     interviewTimeTypeItems: [],
 
     contactName: '',
-    interviewTime: 0
+    interviewTime: -1
   },
 
   onLoad: function (options) {
@@ -36,12 +36,12 @@ Page({
       },
       success: function (res) {
         console.log('valid regist table for apply:', res.data)
-        if (res.data.status == 0) {
+        var status = res.data.status
+        if (status == 0) {
           that.setData({
             interviewTimeTypeItems: res.data.tableList
           })
         }
-        wx.hideLoading()
       },
       fail: function (res) {
         wx.showModal({
@@ -50,6 +50,9 @@ Page({
           confirmText: '好',
           showCancel: false
         })
+      },
+      complete: function () {
+        wx.hideLoading()
       }
     })
   },
@@ -100,10 +103,17 @@ Page({
             showCancel: false
           })
         }
-        else if (status == 1) {
+        else {
+          var content = ''
+          if (status == 1) {
+            content = '如已确认，请勿重复确认。否则请检查您选择的面试时间、姓名是否与之前报名表中所填写的相同'
+          }
+          else if(status == 5) {
+            content = '请完整填写信息'
+          }
           wx.showModal({
             title: '确认失败',
-            content: '如已确认，请勿重复确认。否则请检查您选择的面试时间、姓名是否与之前报名表中所填写的相同',
+            content: content,
             confirmText: '好',
             showCancel: false
           })

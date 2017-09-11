@@ -68,20 +68,36 @@ Page({
     wx.request({
       url: config.serviceUrl.phdContactInfoForRegistInSATB12Url,
       method: 'POST',
+      data: {
+        wxNickname: appInstance.globalData.userInfo.nickName
+      },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
         console.log('regist wx.request:', res.data)
-        var contactList = res.data.contactList
-        var partInfo = contactList[that.data.selectedContactPart];
-        var partContactNameList = that.nameListFromPartInfo(partInfo);
-        console.log(partContactNameList);
-        that.setData({
-          contactInfo: res.data.contactList,
-          selectedPartInfoArray: partInfo,
-          selectedPartContactNameList: partContactNameList
-        })
+        var status = res.data.status
+        if (status == 0) {
+          var contactList = res.data.contactList
+          var partInfo = contactList[that.data.selectedContactPart];
+          var partContactNameList = that.nameListFromPartInfo(partInfo);
+          console.log(partContactNameList);
+          that.setData({
+            contactInfo: res.data.contactList,
+            selectedPartInfoArray: partInfo,
+            selectedPartContactNameList: partContactNameList
+          })
+        }
+        else {
+          if (status == 5) {
+            wx.showModal({
+              title: '没有权限',
+              content: '仅团委会可查看数据',
+              confirmText: '好',
+              showCancel: false
+            })
+          }
+        }
       },
       fail: function (errMessage) {
         wx.showToast({
