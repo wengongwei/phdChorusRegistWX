@@ -1,0 +1,29 @@
+<!--pages/recruit/registTableInfo/registTableInfo.wxml-->
+
+
+<view class="swiper-tab">  
+    <view class="swiper-tab-list {{interviewStatus==1 ? 'on' : ''}}" data-current="1" bindtap="swichStatus">已报名</view>  
+    <view class="swiper-tab-list {{interviewStatus==2 ? 'on' : ''}}" data-current="2" bindtap="swichStatus">已确认</view>  
+    <view class="swiper-tab-list {{interviewStatus==3 ? 'on' : ''}}" data-current="3" bindtap="swichStatus">已签到</view>  
+</view>
+
+
+<view class='body-view'>
+
+<view class="header-button-area"> 
+    <button bindtap="copyPhone" class="header-button" type="default" plain="true">一键复制所有人的手机号码</button>
+</view>
+
+<view class="header-button-area"> 
+    <button bindtap="copyEmail" class="header-button" type="default" plain="true">一键复制所有人的邮箱地址</button>
+</view>
+
+<view class="item-list-view">
+  <block wx:for-items="{{interviewerList}}" wx:key="{{item.id}}">
+    <view id="{{item.id}}" class="item-list-item" bindtap="queryRegistTable">
+        <view class="item-list-text">{{item.name}}</view>
+    </view>  
+  </block>
+</view>
+
+</view>

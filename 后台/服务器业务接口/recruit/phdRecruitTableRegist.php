@@ -40,16 +40,6 @@ include_once('phdRecruitDatabaseManager.php');
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
 $contactName = $_INPUT->contactName;
-$contactSex = $_INPUT->contactSex;
-$contactSex = intval($contactSex);
-$contactPhone = $_INPUT->contactPhone;
-$contactEmail = $_INPUT->contactEmail;
-$contactLocation = $_INPUT->contactLocation;
-$contactCompany = $_INPUT->contactCompany;
-$contactGrade = $_INPUT->contactGrade;
-$contactVocalAbility = $_INPUT->contactVocalAbility;
-$contactInstruments = $_INPUT->contactInstruments;
-$contactReadMusic = $_INPUT->contactReadMusic;
 $registTableDate = $_INPUT->registTableDate;
 $registLocationType = $_INPUT->registLocationType;
 
@@ -59,10 +49,10 @@ const return_params = 'params';
 const return_registID = 'registID';
 $result = array();
 
-$result[return_params] = $contactName . $contactSex . $contactPhone . $contactEmail . $contactLocation . $contactCompany . $contactGrade . $contactVocalAbility . $contactInstruments . $contactReadMusic . $registTableDate . $registLocationType;
+$result[return_params] = $contactName .  $registTableDate . $registLocationType;
 
 // 验证参数是否正确
-if (strlen($contactName) <= 0 || strlen($contactPhone) <= 0 || strlen($contactEmail) <= 0 || strlen($contactCompany) <= 0 || strlen($contactGrade) <= 0 || strlen($contactInstruments) <= 0) {
+if (strlen($contactName) <= 0) {
     $result[return_status] = 5;
     echo json_encode($result);
     exit();
@@ -79,6 +69,7 @@ if ($tableID == -1) {
     exit();
 }
 
+/*
 // 查看是否已签到
 $interviewerID = $dbManager->registIdOfInterviewer($tableID, $contactName);
 if ($interviewerID != -1) {
@@ -87,6 +78,7 @@ if ($interviewerID != -1) {
     echo json_encode($result);
     exit();
 }
+*/
 
 // 签到
 $interviewerID = $dbManager->tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic);

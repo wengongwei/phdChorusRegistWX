@@ -1,24 +1,38 @@
 <!--pages/recruit/recruitIndex/recruitIndex.wxml-->
 <view >
 
-  <view class="function-list-view-light" bindtap="regist">
+  <view class="function-list-view-dark" bindtap="apply">
     <view class="function-list-item">
-      <view class="function-list-item-title-light">面试签到</view>
-      <view class="function-list-item-subtitle-light">填写签到信息，排队等待叫号，等待过程中请保持安静</view>
+      <view class="function-list-item-title-dark">合唱团报名</view>
+      <view class="function-list-item-subtitle-dark">根据提示填写报名信息，提交报名表后，等待面试通知</view>
     </view>
   </view>
 
-  <view class="function-list-view-dark" bindtap="createRegistTable">
+<view class="function-list-view-light" bindtap="confirmInterview">
     <view class="function-list-item">
-      <view class="function-list-item-title-dark">创建签到表</view>
-      <view class="function-list-item-subtitle-dark">指定日期和面试地点，即可为面试者创建一张面试签到表</view>
+      <view class="function-list-item-title-light">确认参加面试</view>
+      <view class="function-list-item-subtitle-light">收到面试通知后，在此选择面试时间和地点，确认参加面试</view>
     </view>
   </view>
 
-  <view class="function-list-view-light" bindtap="staticByTable">
+  <view class="function-list-view-dark" bindtap="interviewRegist">
     <view class="function-list-item">
-      <view class="function-list-item-title-light">查看签到数据</view>
-      <view class="function-list-item-subtitle-light">选定一张签到表，即可查看当日签到人员信息</view>
+      <view class="function-list-item-title-dark">面试签到</view>
+      <view class="function-list-item-subtitle-dark">在面试现场填写签到信息，排队等待叫号，等待过程中请保持安静</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-light" bindtap="setRegistTable">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">设置签到表</view>
+      <view class="function-list-item-subtitle-light">指定日期和地点，创建签到表，并将签到表用于报名、面试等</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-dark" bindtap="interviewInfo">
+    <view class="function-list-item">
+      <view class="function-list-item-title-dark">查看面试信息</view>
+      <view class="function-list-item-subtitle-dark">选定一张签到表，即可查看已报名、已面试、已录取的人员信息</view>
     </view>
   </view>
 

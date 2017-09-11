@@ -14,12 +14,17 @@
     "pages/statics/registTableDetailStatics/registTableDetailStatics",
     "pages/contact/detailContactInfo/detailContactInfo",
     "pages/contact/alterContactInfo/alterContactInfo",
+
     "pages/recruit/recruitIndex/recruitIndex",
-    "pages/recruit/createRegistTable/createRegistTable",
-    "pages/recruit/registTableList/registTableList",
-    "pages/recruit/registTableInfo/registTableInfo",
-    "pages/recruit/interviewerInfo/interviewerInfo",
-    "pages/recruit/regist/regist"
+    "pages/recruit/apply/apply",
+    "pages/recruit/confirmInterview/confirmInterview",
+    "pages/recruit/interviewRegist/interviewRegist",
+    "pages/recruit/setRegistTable/registTableList",
+"pages/recruit/setRegistTable/createRegistTable/createRegistTable",
+"pages/recruit/setRegistTable/registTableInfo/registTableInfo",
+"pages/recruit/interviewInfo/registTableList",
+"pages/recruit/interviewInfo/registTableInfo/registTableInfo",
+"pages/recruit/interviewInfo/interviewerInfo/interviewerInfo"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

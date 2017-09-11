@@ -1,0 +1,28 @@
+<!--pages/recruit/confirmInterview/confirmInterview.wxml-->
+
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">姓名</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="蓝胖子" focus="true" confirm-type="完成" bindinput="bindNameChange" bindconfirm="bindNameChange" />
+    </view>
+  </view>
+
+  <view class="section">
+  <view class="section-title">选择考核时间和校区</view>
+  <radio-group class="radio-group" bindchange="bindInterviewTimeChange">
+    <label style="display: flex" wx:for="{{interviewTimeTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="confirmInterview">确认参加面试</button>
+  </view>
+
+  </view>

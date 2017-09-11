@@ -1,0 +1,15 @@
+<view class='body-view'>
+
+<view class="header-button-area"> 
+    <button bindtap="createRegistTable" class="header-button" type="default" plain="true">创建签到表</button>
+</view>
+
+<view class="item-list-view">
+  <block wx:for-items="{{registTableList}}" wx:key="{{item.id}}">
+    <view id="{{item.id}}" class="item-list-item" bindtap="registTableInfo">
+        <view class="item-list-text">{{item.name}}</view>
+    </view>  
+  </block>
+</view>
+
+</view>

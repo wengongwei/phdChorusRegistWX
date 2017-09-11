@@ -1,0 +1,2 @@
+<!--pages/recruit/.wxml-->
+<text>{{page}}.wxml</text>

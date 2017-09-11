@@ -1,7 +1,7 @@
 // 小程序配置
 
 // 服务器IP
-var httpsHost = "https://www.liangzhipeng.cn/test_phdChorusRegist/";
+var httpsHost = "https://www.liangzhipeng.cn/phdChorusRegist/";
 
 var config = {
 
@@ -44,9 +44,6 @@ var config = {
     // 删除团员
     deleteContactInfoUrl: (httpsHost + 'phdDeleteContact.php'),
 
-    // 招新-面试者签到
-    recruit_tableRegistUrl: (httpsHost + 'recruit/phdRecruitTableRegist.php'),
-
     // 招新-创建签到表
     recruit_createRegistTableUrl: (httpsHost + 'recruit/phdRecruitCreateRegistTable.php'),
 
@@ -56,8 +53,28 @@ var config = {
     // 招新-查看签到表详细信息
     recruit_registTableInfoUrl: (httpsHost + 'recruit/phdRecruitRegistTableInfo.php'),
 
+    // 招新-报名-获取签到表
+    recruit_validRegistTableForApply: (httpsHost + 'recruit/phdValidRegistTableForApply.php'),
+
+    // 招新-现场面试签到-获取签到表
+    recruit_validRegistTableForRegist: (httpsHost + 'recruit/phdValidRegistTableForRegist.php'),
+
+    // 招新-报名
+    recruit_apply: (httpsHost + 'recruit/phdRecruitApply.php'),
+
+    // 招新-确认参加面试
+    recruit_confirmInterview: (httpsHost + 'recruit/phdRecruitConfirmInterview.php'),
+
+    // 招新-现场面试签到
+    recruit_interviewRegist: (httpsHost + 'recruit/phdRecruitInterviewRegist.php'),
+
+    // 招新-签到表-面试者列表
+    recruit_interviewerList: (httpsHost + 'recruit/phdRecruitInterviewerList.php'),
+
     // 招新-查看签到详细信息
-    recruit_interviewerInfoUrl: (httpsHost + 'recruit/phdRecruitInterviewerInfo.php')
+    recruit_interviewerInfoUrl: (httpsHost + 'recruit/phdRecruitInterviewerInfo.php'),
+
+    recruit_setRegistTableStatusUrl: (httpsHost + 'recruit/phdRecruitSetRegistTableStatus.php')
   }
 
 };

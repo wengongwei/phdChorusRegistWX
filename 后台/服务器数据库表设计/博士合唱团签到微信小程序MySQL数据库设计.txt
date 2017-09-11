@@ -115,7 +115,102 @@ date DATE NOT NULL
 // 签到所在园区
 location TINYTEXT NOT NULL
 
+// 签到表状态 0-禁用 | 1-可用于报名&确认参加面试 | 2-可用于现场签到面试
+status
+
 CREATE TABLE `test_phdChorusRecruit`.`regist_table` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `date` DATE NOT NULL COMMENT '签到日期' , `location` TINYTEXT NOT NULL COMMENT '签到地点' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试签到表';
+
+ALTER TABLE `regist_table` ADD `status` TINYINT UNSIGNED NOT NULL DEFAULT '0' COMMENT '签到表状态(0-禁用)' AFTER `location`;
+
+
+// contact_info人员信息表
+
+// 主键
+id
+
+// 签到者姓名
+name
+
+// 性别
+sex
+
+// 民族
+nation
+
+// 学号
+studentId
+
+// 签到者所在园区
+location
+
+// 培养单位
+company
+
+// 年级
+grade
+
+// 手机号
+phone
+
+// 邮箱
+email
+
+// 声乐水平
+vocal
+
+// 是否会乐器
+instruments
+
+// 是否识谱
+readMusic
+
+// 是否钢伴
+pianist
+
+// 兴趣爱好
+interest
+
+// 技能
+skill
+
+// 艺术团体经历
+experience
+
+// 对合唱团的期望
+expect
+
+
+//建表
+CREATE TABLE `phdChorusRecruit`.`contact_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `name` TINYTEXT NOT NULL COMMENT '姓名' , `sex` BOOLEAN NOT NULL COMMENT '性别' , `nation` TINYTEXT NOT NULL COMMENT '民族' , `studentId` TINYTEXT NOT NULL COMMENT '学号' , `location` TINYTEXT NOT NULL COMMENT '所在园区' , `company` TINYTEXT NOT NULL COMMENT '培养单位' , `grade` TINYTEXT NOT NULL COMMENT '年级' , `phone` TINYTEXT NOT NULL COMMENT '手机号' , `email` TINYTEXT NOT NULL COMMENT '邮箱' , `vocal` TINYTEXT NOT NULL COMMENT '声乐水平' , `instruments` TINYTEXT NOT NULL COMMENT '乐器水平' , `readMusic` TINYTEXT NOT NULL COMMENT '识谱水平' , `pianist` BOOLEAN NOT NULL COMMENT '是否钢伴' , `interest` TINYTEXT NOT NULL COMMENT '兴趣爱好' , `skill` TINYTEXT NOT NULL COMMENT '技能' , `experience` TINYTEXT NOT NULL COMMENT '艺术团体经历' , `expect` TINYTEXT NOT NULL COMMENT '对合唱团的期望' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试者个人信息';
+fd
+
+### interview_info面试信息
+
+// 主键
+id 
+
+// 个人信息id
+contact_info_id
+
+// 签到表id
+regist_table_id
+
+// 面试状态 
+status 0-已报名 1-已确认参加 2-已面试签到
+
+// 面试签到ID (每张签到表的面试者都从1开始编号)
+waiterID // 默认为0
+
+// 是否通过考核
+pass // 默认值0
+
+// 分配至声部
+part
+
+CREATE TABLE `phdChorusRecruit`.`interview_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `contact_info_id` INT UNSIGNED NOT NULL COMMENT '外键-面试者个人信息' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT '外键-签到表id' , `pass` BOOLEAN NOT NULL COMMENT '是否通过考核' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试信息';
+
+ALTER TABLE `interview_info` ADD `status` TINYINT NOT NULL DEFAULT '0' COMMENT '面试状态' AFTER `regist_table_id`;
+
 
 
 ### regist_info签到信息
@@ -160,4 +255,7 @@ readMusic
 CREATE TABLE `test_phdChorusRecruit`.`regist_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT 'regist_table外键' , `name` TINYTEXT NOT NULL COMMENT '姓名' , `sex` BOOLEAN NOT NULL COMMENT '性别-男1&女0' , `location` TINYTEXT NOT NULL COMMENT '所在园区' , `company` TINYTEXT NOT NULL COMMENT '培养单位' , `grade` TINYTEXT NOT NULL COMMENT '年级' , `phone` TINYTEXT NOT NULL COMMENT '手机号' , `email` TINYTEXT NOT NULL COMMENT '邮件' , `vocal` TINYTEXT NOT NULL COMMENT '声乐水平' , `instruments` TINYTEXT NOT NULL COMMENT '是否会乐器' , `readMusic` TINYTEXT NOT NULL COMMENT '是否识谱' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试者签到信息';
 
 ALTER TABLE `test_phdChorusRecruit`.`regist_info` ADD FOREIGN KEY(regist_table_id) REFERENCES regist_table(id) ON DELETE CASCADE;
+
+
+
 

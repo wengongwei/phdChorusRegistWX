@@ -32,12 +32,36 @@ interface RecruitDatabaseManager {
      * 参数
      * registTableDate // 日期 '2018-08-06'
      * registLocationType // 园区 '中关村' OR '雁栖湖'
+     * registTableStatus // 签到表状态 0-禁用 | 1-用于报名和确认面试 | 2-用于现场面试签到
      *
      * 返回值
      * int // 0-成功 | 1-失败
      *
      */
-    public function insertRegistTable($registTableDate, $registLocationType) : int;
+    public function insertRegistTable($registTableDate, $registLocationType, $registTableStatus) : int;
+
+    /*
+     * 接口功能
+     * 签到表详细信息
+     *
+     * 参数
+     * registTableID // 签到表ID
+     *
+     * 返回值
+     * registTable // {id: 15, date: 2017-02-23, location: 中关村, status:0}
+     *
+     */
+    public function registTableInfo($registTableID) : array;
+
+
+    /*
+     * 接口功能
+     * 获取相应类型的签到表
+     *
+     * 参数
+     * registTableType // 签到表状态 0-禁用 | 1-用于报名和确认面试 | 2-用于现场面试签到
+     */
+    public function validRegistTableOfType($registTableType) : array;
 
     /**
      * 判定用户是否为requestAuthority的授权用户，授权用户可进行数据库修改相关的操作
@@ -54,21 +78,58 @@ interface RecruitDatabaseManager {
 
     /*
      * 接口功能
-     * 查看面试者的签到ID
+     * 获取签到表(regist_table)
      *
      * 参数
-     * theTableID // 签到表ID
-     * contactName // 面试者姓名
+     * theTableID // 用以参考的tableID
+     * isNewer // 0-返回比tableID小的10张签到表(所有符合条件的签到表，按tableID倒序排，取前10张) | 1-返回比tableID大的所有签到表
      *
      * 返回值
-     * interviewerID // -1-未签到 | 面试者签到ID
-     *
+     * registTableList // 签到表数组[{'id': '12', 'date': '2017-08-11', 'location': '中关村'}, ...]
      */
-    public function registIdOfInterviewer ($theTableID, $contactName) : int;
+    public function registTableList($theTableID, $isNewer) : array;
 
     /*
      * 接口功能
-     * 签到者签到
+     * 设置签到表status
+     *
+     * 参数
+     * registTableID // 签到表id
+     * status // 将签到表设置为该status
+     *
+     * 返回值
+     * status // 0-成功 | 1-失败
+     */
+    public function setRegistTableStatus($registTableID, $status) : int;
+
+    /*
+     * 接口功能
+     * 查看签到表状态
+     *
+     * 参数
+     * registTableID // 签到表id
+     *
+     * 返回值
+     * status // 签到表状态
+     */
+    public function statusOfRegistTable($registTableID) : int;
+
+    /*
+     * 接口功能
+     * 在报名表中添加一条信息
+     *
+     * 参数
+     * registTableID // 签到表ID
+     * contactID // 面试者信息ID
+     *
+     * 返回值
+     * status // 0-成功 | 1-失败
+     */
+    public function applyToJoin($registTableID, $contactID) : int;
+
+    /*
+     * 接口功能
+     * 添加一条面试者信息
      *
      * 参数
      * tableID // 签到表ID
@@ -84,46 +145,64 @@ interface RecruitDatabaseManager {
      * contactReadMusic // 是否识谱
      *
      * 返回值
-     * interviewerID // -1-失败 | 签到ID
-     */
-    public function tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic) : int;
-
-    /**
-     * 获取签到表(regist_table)
+     * 该条记录的id
      *
-     * 参数
-     * theTableID // 用以参考的tableID
-     * isNewer // 0-返回比tableID小的10张签到表(所有符合条件的签到表，按tableID倒序排，取前10张) | 1-返回比tableID大的所有签到表
-     *
-     * 返回值
-     * registTableList // 签到表数组[{'id': '12', 'date': '2017-08-11', 'location': '中关村'}, ...]
      */
-    public function registTableList($theTableID, $isNewer) : array;
+    public function addContactInfo($contactName, $contactSex, $contactNation, $contactPhone, $contactEmail, $contactStudentId, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments ,$contactReadMusic ,$contactPianist, $contactInterest, $contactSkill, $contactExperience, $contactExpect) : int;
 
     /*
      * 接口功能
-     * 获取签到表中面试者列表
+     * 确认参加面试
      *
      * 参数
      * registTableID // 签到表ID
-     * theInterviewerID // 用以参考的面试者ID
+     * contactName // 姓名
      *
-     * 返回值
-     * interviewerList // 比theInterviewerID大的所有的面试者 [{'id': 12, 'name': 蓝胖}, ...]
+     * 返回
+     * status // 0-成功 | 1-失败
      */
-    public function interviewerListOfRegistTable($registTableID, $theInterviewerID) : array;
+    public function confirmInterview($registTableID, $contactName) : int;
 
     /*
      * 接口功能
-     * 获取面试者(regist_info)详细信息
+     * 面试现场签到
      *
      * 参数
-     * interviewerID // 面试者ID
+     * registTableID // 签到表ID
+     * contactName // 姓名
+     *
+     * 返回
+     * waiterID // -1-失败 | 其他-现场面试的ID     *
+     */
+    public function interviewRegist($registTableID, $contactName) : int;
+
+    /*
+     * 接口功能
+     * 获取签到表中已现场签到面试者列表
+     *
+     * 参数
+     * registTableID // 签到表ID
+     * waiterID // 用以参考的面试者ID
+     * interviewStatus // 面试状态位 1-已报名 | 2-已确认参加面试 | 3-已现场面试签到
      *
      * 返回值
-     * interviewerInfo // {'id': 14, 'name': 蓝胖, 'sex': 1, 'location': 中关村, 'company': 中科院软件所, 'grade': 研三, 'phone': 13317945775, 'email': zhipengliang@qq.com, 'vocal': 了解一点, 'instruments': 钢琴+6级, 'readMusic': 简谱}
+     * interviewerList // 比theInterviewerID大的所有的面试者 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
      */
-    public function interviewerDetailInfo($interviewerID) : array;
+    public function interviewerList($registTableID, $waiterID, $interviewStatus) : array;
+
+    /*
+     * 接口功能
+     * 获取签到表中已报名或已确认参加面试的面试者列表
+     *
+     * 参数
+     * registTableID // 签到表ID
+     * waiterID // 用以参考的面试者ID
+     * interviewStatus // 面试状态位 1-已报名 | 2-已确认参加面试 | 3-已现场面试签到
+     *
+     * 返回值
+     * interviewerList // 比theInterviewerID大的所有的面试者 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
+     */
+    public function applicantList($registTableID, $interviewStatus) : array;
 }
 
 class WXRecruitDatabaseManager implements RecruitDatabaseManager
@@ -135,6 +214,8 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     const _dbName = "test_phdChorusRecruit";
     const _db_regist_table = "regist_table";
     const _db_regist_info = "regist_info";
+    const _db_interview_info = "interview_info";
+    const _db_contact_info = "contact_info";
     const _db_authorized_user = "authorized_user";
 
     private $_mysqliConnection;
@@ -187,8 +268,8 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return intval($tableID);
     }
 
-    public function insertRegistTable($registTableDate, $registLocationType) : int {
-        $queryStr = "INSERT INTO " . self::_db_regist_table . " (date, location) VALUES ('" . $registTableDate . "', '" . $registLocationType . "')";
+    public function insertRegistTable($registTableDate, $registLocationType, $registTableStatus) : int {
+        $queryStr = "INSERT INTO " . self::_db_regist_table . " (date, location, status) VALUES ('" . $registTableDate . "', '" . $registLocationType . "', " . $registTableStatus . ");";
         $result = $this->_mysqliConnection->query($queryStr);
         $status = 1;
         if ($result == true) {
@@ -198,28 +279,58 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $status;
     }
 
-    public function tableRegist($tableID, $contactName, $contactSex, $contactPhone, $contactEmail, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments, $contactReadMusic) : int {
-        $insertStr = "INSERT INTO " . self::_db_regist_info . " (regist_table_id, name, sex, location, company, grade, phone, email, vocal, instruments, readMusic) VALUES (". $tableID .", '" . $contactName ."', " . $contactSex . ", '" . $contactLocation . "', '" . $contactCompany . "', '" . $contactGrade . "', '" . $contactPhone . "', '" . $contactEmail . "', '" . $contactVocalAbility . "', '" . $contactInstruments . "', '" . $contactReadMusic . "');";
-        $result = $this->_mysqliConnection->query($insertStr);
-        $interviewerID = -1;
-        if ($result == true) {
-            $interviewerID = $this->_mysqliConnection->insert_id;
+    public function validRegistTableOfType($registTableType) : array {
+        $selectStr = $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE status = " . $registTableType . ";";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $tableList = array();
+        while ($row = $selectResult->fetch_assoc()) {
+            $table = array();
+            $table['id'] = $row['id'];
+            $table['date'] = $row['date'];
+            $table['location'] = $row['location'];
+            $table['status'] = $row['status'];
+            $tableList[] = $table;
         }
 
-        return $interviewerID;
+        return $tableList;
     }
 
-    public function registIdOfInterviewer ($theTableID, $contactName) : int {
-        $selectStr = "SELECT id FROM " . self::_db_regist_info . " WHERE regist_table_id = " . $theTableID . " AND name = '" . $contactName ."';";
+    public function registTableInfo($registTableID) : array {
+        $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE id = " . $registTableID . ";";
         $selectResult = $this->_mysqliConnection->query($selectStr);
-        $interviewerID = -1;
+        $table = array();
         while ($row = $selectResult->fetch_assoc()) {
-            $interviewerID = $row['id'];
+            $table['id'] = $row['id'];
+            $table['date'] = $row['date'];
+            $table['location'] = $row['location'];
+            $table['status'] = $row['status'];
         }
 
         $selectResult->free();
 
-        return $interviewerID;
+        return $table;
+    }
+
+    public function addContactInfo($contactName, $contactSex, $contactNation, $contactPhone, $contactEmail, $contactStudentId, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments ,$contactReadMusic ,$contactPianist, $contactInterest, $contactSkill, $contactExperience, $contactExpect) : int {
+        $insertStr = "INSERT INTO " . self::_db_contact_info . " (name, sex, nation, studentId, location, company, grade, phone, email, vocal, instruments, readMusic, pianist, interest, skill, experience, expect) VALUES ('" . $contactName ."', " . $contactSex . ", '" . $contactNation . "', '" . $contactStudentId . "', '" . $contactLocation . "', '" . $contactCompany . "', '" . $contactGrade . "', '" . $contactPhone . "', '" . $contactEmail . "', '" . $contactVocalAbility . "', '" . $contactInstruments . "', '" . $contactReadMusic . "', " . $contactPianist . ", '" . $contactInterest . "', '" . $contactSkill . "', '" . $contactExperience . "', '" . $contactExpect . "');";
+        $result = $this->_mysqliConnection->query($insertStr);
+        $contactID = -1;
+        if ($result == true) {
+            $contactID = $this->_mysqliConnection->insert_id;
+        }
+
+        return $contactID;
+    }
+
+    public function applyToJoin($registTableID, $contactID) : int {
+        $insertStr = "INSERT INTO " . self::_db_interview_info . "(contact_info_id, regist_table_id, status) VALUE (" . $contactID . ", " . $registTableID. ", 1);";
+        $result = $this->_mysqliConnection->query($insertStr);
+        $status = 1;
+        if ($result == true) {
+            $status = 0;
+        }
+
+        return $status;
     }
 
     public function registTableList($theTableID, $isNewer) : array {
@@ -245,12 +356,73 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $tableList;
     }
 
-    public function interviewerListOfRegistTable($registTableID, $theInterviewerID) : array {
-        $selectStr = "SELECT id, name FROM " . self::_db_regist_info . " WHERE regist_table_id = " . $registTableID . " AND id > " . $theInterviewerID . " ORDER BY id ASC";
+    public function statusOfRegistTable($registTableID) : int {
+        $selectStr = "SELECT status FROM" . self::_db_regist_table . " WHERE id = " . $registTableID . ";";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $status = 0;
+        while ($row = $selectResult->fetch_assoc()) {
+            $status = $row['status'];
+        }
+
+        return $status;
+    }
+
+    public function setRegistTableStatus($registTableID, $status) : int {
+        $updateStr = "UPDATE " . self::_db_regist_table . " SET status = " . $status . " WHERE id = " . $registTableID . ";";
+        $updateResult = $this->_mysqliConnection->query($updateStr);
+        $status = 1;
+        if ($updateResult == true) {
+            $status = 0;
+        }
+
+        return $status;
+    }
+
+    public function confirmInterview($registTableID, $contactName) : int {
+        $updateStr = "UPDATE " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id SET interview_info.status = 2 WHERE interview_info.regist_table_id = " . $registTableID . " AND contact_info.name = '" . $contactName ."';";
+        $updateResult = $this->_mysqliConnection->query($updateStr);
+        $status = 1;
+        if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
+            $status = 0;
+        }
+
+        return $status;
+    }
+
+    public function interviewRegist($registTableID, $contactName) : int {
+        // 查询该签到表已经有多少人签到了
+        $countStr = "COUNT(id) FROM " . self::_db_interview_info . " WHERE status = 3;";
+        $countResult = $this->_mysqliConnection->query($countStr);
+
+        $waiterID = $countResult + 1;
+        $updateStr = "UPDATE " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id SET interview_info.status = 3, interview_info.waiterID = " . $waiterID . " WHERE interview_info.regist_table_id = " . $registTableID . " AND contact_info.name = '" . $contactName ."';";
+        $updateResult = $this->_mysqliConnection->query($updateStr);
+        if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
+            return $waiterID;
+        }
+
+        return -1;
+    }
+
+    public function applicantList($registTableID, $interviewStatus) : array {
+        $selectStr = "SELECT interview_info.id, interview_info.waiterID, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.status >= " . $interviewStatus . " ORDER BY interview_info.id ASC;";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $applicantList = array();
+        while ($row = $selectResult->fetch_assoc()) {
+            $applicantList[] = array('id'=>$row['id'], 'name'=>$row['contactName'], 'waiterID'=>$row['waiterID'], 'phone'=>$row['contactPhone'], 'email'=>$row['contactEmail']);
+        }
+
+        $selectResult->free();
+
+        return $applicantList;
+    }
+
+    public function interviewerList($registTableID, $theWaiterID, $interviewStatus) : array {
+        $selectStr = "SELECT interview_info.id, interview_info.waiterID, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.status >= " . $interviewStatus . " AND interview_info.waiterID > " . $theWaiterID . " ORDER BY interview_info.waiterID ASC;";
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $interviewerList = array();
         while ($row = $selectResult->fetch_assoc()) {
-            $interviewerList[] = array('id'=>$row['id'], 'name'=>$row['name']);
+            $interviewerList[] = array('id'=>$row['id'], 'name'=>$row['contactName'], 'waiterID'=>$row['waiterID'], 'phone'=>$row['contactPhone'], 'email'=>$row['contactEmail']);
         }
 
         $selectResult->free();
@@ -259,7 +431,17 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     }
 
     public function interviewerDetailInfo($interviewerID) : array {
-        $selectStr = "SELECT * FROM " . self::_db_regist_info . " WHERE id = " . $interviewerID . " ;";
+        // 找到面试者的contact_info_id
+        $selectStr = "SELECT contact_info_id FROM " . self::_db_interview_info . " WHERE id = " . $interviewerID . " ;";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $contactID = -1;
+        while ($row = $selectResult->fetch_assoc()) {
+            $contactID = $row['contact_info_id'];
+        }
+        $selectResult->free();
+
+        // 查询信息
+        $selectStr = "SELECT * FROM " . self::_db_contact_info . " WHERE id = " . $contactID . " ;";
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $interviewer = array();
         while($row = $selectResult->fetch_assoc()) {

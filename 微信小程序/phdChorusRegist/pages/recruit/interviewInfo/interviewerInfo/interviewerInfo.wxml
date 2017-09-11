@@ -1,0 +1,29 @@
+<!--pages/recruit/interviewerInfo/interviewerInfo.wxml-->
+
+<view class="contact-view">
+
+<view class="title-view">
+  <view class="title-text">{{contact.name}}</view>
+</view>
+
+<view class="subtitle-view">
+  <view class="subtitle-text">{{contact.sex}} · {{contact.location}} · {{contact.company}} · {{contact.grade}}   </view>
+</view>
+
+<view class="subtitle-view">
+  <view class="subtitle-text">{{contact.phone}} · {{contact.email}}</view>
+</view>
+
+<view class="section-view">
+  <view class="section-text">声乐水平：{{contact.vocal}}</view>
+</view>
+
+<view class="section-view">
+  <view class="section-text">乐器水平：{{contact.instruments}}</view>
+</view>
+
+<view class="section-view">
+  <view class="section-text">是否识谱：{{contact.readMusic}}</view>
+</view>
+
+</view>

@@ -42,7 +42,7 @@ $result = array();
 $result[return_params] = $theTableID . ' ' . $isNewer;
 
 // 校验参数是否合法
-if ($theTableID < 1 || ($isNewer != 0 && $isNewer != 1)) {
+if ($theTableID < 0 || ($isNewer != 0 && $isNewer != 1)) {
     $result[return_status] = '2';
     echo  json_encode($result);
     exit();

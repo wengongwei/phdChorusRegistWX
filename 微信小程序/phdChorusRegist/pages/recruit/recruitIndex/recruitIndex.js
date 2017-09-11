@@ -8,21 +8,33 @@ Page({
   
   },
 
-  regist: function (e) {
+  apply: function (e) {
     wx.navigateTo({
-      url: '../regist/regist',
+      url: '../apply/apply'
     })
   },
 
-  createRegistTable: function(e) {
+  confirmInterview: function (e) {
     wx.navigateTo({
-      url: '../createRegistTable/createRegistTable'
+      url: '../confirmInterview/confirmInterview',
     })
   },
 
-  staticByTable: function (e) {
+  interviewRegist: function (e) {
     wx.navigateTo({
-      url: '../registTableList/registTableList'
+      url: '../interviewRegist/interviewRegist',
+    })
+  },
+
+  setRegistTable: function(e) {
+    wx.navigateTo({
+      url: '../setRegistTable/registTableList'
+    })
+  },
+
+  interviewInfo: function (e) {
+    wx.navigateTo({
+      url: '../interviewInfo/registTableList'
     })
   }
 })

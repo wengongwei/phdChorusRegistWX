@@ -18,6 +18,7 @@
  * 参数
  * registTableDate // 日期 '2018-08-06'
  * registLocationType // 园区 '中关村' OR '雁栖湖'
+ * registTableStatus // 签到表状态 0-禁用 | 1-用于报名和确认面试 | 2-用于现场面试签到
  * wxNickname // 小程序使用者的nickname，用以进行鉴权操作
  *
  * 返回值
@@ -32,13 +33,14 @@ $_INPUT = json_decode(file_get_contents("php://input"));
 $registTableDate = $_INPUT->registTableDate;
 $registLocationType = $_INPUT->registLocationType;
 $wxNickname = $_INPUT->wxNickname;
+$registTableStatus = $_INPUT->registTableStatus;
 
 // 定义返回值
 const return_status = 'status';
 const return_params = 'params';
 $result = array();
 
-$result[return_params] = $registTableDate . $registLocationType . $wxNickname;
+$result[return_params] = $registTableDate . $registLocationType . $registTableStatus . $wxNickname;
 
 $dbManager = new WXRecruitDatabaseManager();
 
@@ -58,7 +60,7 @@ if ($tableID != -1) {
 }
 
 // 创建签到表
-$insertSuccess = $dbManager->insertRegistTable($registTableDate, $registLocationType);
+$insertSuccess = $dbManager->insertRegistTable($registTableDate, $registLocationType, $registTableStatus);
 if ($insertSuccess == 0) {
     $result[return_status] = '0';
     echo json_encode($result);

@@ -1,0 +1,17 @@
+<!--pages/recruit/setRegistTable/registTableInfo/registTableInfo.wxml-->
+
+<view class="info-view">
+
+  <view class="title-text">{{tableDate}} · {{tableLocation}}</view>
+
+<view class="subtitle-view">
+  <view class="subtitle-text">{{tableStatusDescription}}</view>
+</view>
+
+<view class="button-area"> 
+  <button bindtap="useForApply" class="button" type="default" plain="true">用于报名和面试通知</button>
+  <button bindtap="useForInterview" class="button" type="default" plain="true">用于现场面试签到</button>
+  <button bindtap="forbiddenUse" class="button" type="warn" plain="true">禁用签到表</button>
+</view>
+
+</view>

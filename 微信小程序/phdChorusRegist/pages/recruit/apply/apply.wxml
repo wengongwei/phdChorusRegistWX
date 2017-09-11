@@ -1,0 +1,167 @@
+<!--pages/recruit/apply/apply.wxml-->
+<!--pages/recruit/regist/regist.wxml-->
+
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">姓名</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="蓝胖子" focus="true" confirm-type="完成" bindinput="bindNameChange" bindconfirm="bindNameChange" />
+    </view>
+  </view>
+
+  <view class="section">
+  <view class="section-title">性别</view>
+  <radio-group class="radio-group" bindchange="bindSexChange">
+    <label style="display: flex" wx:for="{{sexTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">民族</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="汉" focus="true" confirm-type="完成" bindinput="bindNationChange" bindconfirm="bindNationChange" />
+    </view>
+  </view>
+
+<view class="section">
+    <view class="section-title">手机号</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="13317945775" confirm-type="完成" bindinput="bindPhoneChange" bindconfirm="bindPhoneChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">常用邮箱</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="zhangsan@163.com" confirm-type="完成" bindinput="bindEmailChange" bindconfirm="bindEmailChange" />
+    </view>
+  </view>
+
+  <view class="section">
+  <view class="section-title">所在园区</view>
+  <radio-group class="radio-group" bindchange="bindContactLocationChange">
+    <label style="display: flex" wx:for="{{contactLocationTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.name}}" checked="{{item.checked}}" />
+        {{item.value}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">培养单位(请注明培养单位所在地)</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="北京-软件所 / 广州-植物所" confirm-type="完成" bindinput="bindCompanyChange" bindconfirm="bindCompanyChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">学号</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="2015E8015061083" confirm-type="完成" bindinput="bindStudentIdChange" bindconfirm="bindStudentIdChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">年级(请注明硕士/直博/硕博连读/普博/本科生 + 年级)</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="直博一年级" confirm-type="完成" bindinput="bindGradeChange" bindconfirm="bindGradeChange" />
+    </view>
+  </view>
+
+  <view class="section">
+  <view class="section-title">是否学过声乐</view>
+  <radio-group class="radio-group" bindchange="bindVocalChange">
+    <label style="display: flex" wx:for="{{vocalTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="section">
+  <view class="section-title">是否识谱</view>
+  <radio-group class="radio-group" bindchange="bindReadMusicChange">
+    <label style="display: flex" wx:for="{{readMusicTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">是否学过乐器</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="无 / 钢琴10级 / 小提琴8级" confirm-type="完成" bindinput="bindInstrumentsChange" bindconfirm="bindInstrumentsChange" />
+    </view>
+  </view>
+
+  <view class="section">
+  <view class="section-title">是否有意愿担任钢伴</view>
+  <radio-group class="radio-group" bindchange="bindPianistChange">
+    <label style="display: flex" wx:for="{{pianistTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">你是否熟悉以下工具（打谱、音视频处理、图像处理、微信公众号运营）</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="Photoshop" confirm-type="完成" bindinput="bindSkillChange" bindconfirm="bindSkillChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">兴趣爱好</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="摄影 / 唱歌" confirm-type="完成" bindinput="bindInterestChange" bindconfirm="bindInterestChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">你参加过合唱团、乐队等其他艺术团体吗？如参加过，请详细说明</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="你的经历" confirm-type="完成" bindinput="bindExperienceChange" bindconfirm="bindExperienceChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">其他想要说明的（加入合唱团的目的、文艺经历、对合唱团的希望等</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="你的想法" confirm-type="完成" bindinput="bindExpectChange" bindconfirm="bindExpectChange" />
+    </view>
+  </view>
+
+  <view class="section">
+  <view class="section-title">选择考核时间和校区</view>
+  <radio-group class="radio-group" bindchange="bindInterviewTimeChange">
+    <label style="display: flex" wx:for="{{interviewTimeTypeItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="apply">报名</button>
+  </view>
+
+</view>
+
