@@ -1,0 +1,19 @@
+<!--detailContactInfo.wxml-->
+
+
+<view class="contact-view">
+
+<view class="title-view">
+  <view class="title-text">{{contactName}}</view>
+</view>
+
+<view class="subtitle-view">
+  <view class="subtitle-text">{{contactDescription}}</view>
+</view>
+
+<view class="button-area"> 
+  <button bindtap="alterInfo" class="button" type="default" plain="true">修改团员信息</button>
+  <button bindtap="deleteContact" class="button" type="warn" plain="true">删除团员</button>
+</view>
+
+</view>

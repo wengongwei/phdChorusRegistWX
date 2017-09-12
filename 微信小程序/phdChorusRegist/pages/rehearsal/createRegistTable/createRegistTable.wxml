@@ -1,0 +1,41 @@
+<!--createRegistTable.wxml-->
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">签到表日期</view>
+    <picker bindchange="bindDateChange" mode="date" value="{{registTableDate}}">
+      <view class="section-picker-button">
+        <button type="default">{{registTableDate}}</button>
+      </view>     
+    </picker>
+  </view>
+
+  <view class="section">
+    <view class="section-title">签到表类型</view>
+    <radio-group bindchange="bindTypeChange">
+      <label class="radio" style="display: flex" wx:for="{{registTableTypeItems}}" wx:key="item.value">
+        <view class="section-selector">
+          <radio value="{{item.name}}" checked="{{item.checked}}" />
+          {{item.value}}
+        </view>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">签到所在园区</view>
+    <radio-group class="radio-group" bindchange="bindLocationChange">
+      <label style="display: flex" wx:for="{{registLocationTypeItems}}" wx:key="item.value">
+        <view class="section-selector">
+          <radio value="{{item.name}}" checked="{{item.checked}}" />
+          {{item.value}}
+        </view>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="createRegistTable">创建签到表</button>
+  </view>
+
+</view>

@@ -280,7 +280,7 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     }
 
     public function validRegistTableOfType($registTableType) : array {
-        $selectStr = $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE status = " . $registTableType . ";";
+        $selectStr = $selectStr = "SELECT * FROM " . self::_db_regist_table . " WHERE status >= " . $registTableType . ";";
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $tableList = array();
         while ($row = $selectResult->fetch_assoc()) {

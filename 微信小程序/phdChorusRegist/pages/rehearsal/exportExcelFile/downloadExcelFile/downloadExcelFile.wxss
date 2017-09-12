@@ -1,0 +1,43 @@
+/* downloadExcelFile.wxss */
+
+.excel-view {
+  padding-top: 30pt;
+  text-align: center;
+}
+
+.excel-logo-view {
+  text-align: center;
+  width: 128pt;
+  height: 128pt;
+}
+
+.excel-fileName-view {
+  margin-top: 15pt;
+  text-align: center;
+  color: #333333;
+  font-size: 12pt;
+}
+
+.confirm-button-area {
+  margin-top: 15pt;
+  margin-bottom: 30pt;
+}
+
+.confirm-button {
+  width: 80%;
+  text-align: center;
+}
+
+.tips-area {
+  margin-top: 30pt;
+  padding-left: 10%;
+  padding-right: 10%;
+  text-align: center;
+}
+
+.tips {
+  text-align: center;
+  font-size: 12pt;
+  line-height: 16pt;
+  color: #999999;
+}

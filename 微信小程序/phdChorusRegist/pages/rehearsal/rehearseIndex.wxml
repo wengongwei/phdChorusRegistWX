@@ -1,0 +1,41 @@
+<!--pages/rehearsal/rehearsalIndex.wxml-->
+<!--pages/recruit/recruitIndex/recruitIndex.wxml-->
+<view >
+
+  <view class="function-list-view-light" bindtap="createRegistTable">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">创建签到表</view>
+      <view class="function-list-item-subtitle-light">指定日期和排练地点，为团员创建排练签到表</view>
+    </view>
+  </view>
+
+<view class="function-list-view-dark" bindtap="regist">
+    <view class="function-list-item">
+      <view class="function-list-item-title-dark">排练签到</view>
+      <view class="function-list-item-subtitle-dark">按照排练日期和地点，选择声部和姓名，即可签到</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-light" bindtap="contactInfo">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">团员信息</view>
+      <view class="function-list-item-subtitle-light">在此添加、修改、查看团员信息，设置团员是否纳入统计数据</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-dark" bindtap="dailyStatics">
+    <view class="function-list-item">
+      <view class="function-list-item-title-dark">出勤数据</view>
+      <view class="function-list-item-subtitle-dark">选定一张签到表，即可查看各园区各声部出勤人员列表</view>
+    </view>
+  </view>
+
+  <view class="function-list-view-light" bindtap="exportExcelFile">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">导出签到Excel文件</view>
+      <view class="function-list-item-subtitle-light">指定起止日期，系统将自动整合该时间范围内的签到表，生成Excel文件</view>
+    </view>
+  </view>
+
+</view>
+

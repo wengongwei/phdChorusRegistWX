@@ -1,0 +1,46 @@
+.function-list-view-light {
+  background-color: #ffffff;
+}
+
+.function-list-view-dark {
+  background-color: #0099ff;
+}
+
+.function-list-item {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 10pt;
+  padding-bottom: 10pt;
+}
+
+.function-list-item-title-light {
+  color: #0099ff;
+  font-size: 18pt;
+  margin-top: 5pt;
+  margin-bottom: 10pt;
+  text-align: center;
+}
+
+.function-list-item-title-dark {
+  color: white;
+  font-size: 18pt;
+  padding-top: 5pt;
+  padding-bottom: 10pt;
+  text-align: center;
+}
+
+.function-list-item-subtitle-light {
+  color: #999999;
+  font-size: 12pt;
+  padding-bottom: 10pt;
+  text-align: center;
+  line-height: 16pt;
+}
+
+.function-list-item-subtitle-dark {
+  color: white;
+  font-size: 12pt;
+  padding-bottom: 10pt;
+  text-align: center;
+  line-height: 16pt;
+}

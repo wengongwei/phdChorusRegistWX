@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText" : "团员(下拉可刷新数据)",
+  "enablePullDownRefresh": true
+}
