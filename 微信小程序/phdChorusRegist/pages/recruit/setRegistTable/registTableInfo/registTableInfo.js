@@ -102,7 +102,6 @@ Page({
         'content-type': 'application/json'
       },
       success: function (res) {
-        wx.hideLoading()
         console.log('set regist table:', res.data)
         if (res.data.status == 0) {
           wx.showToast({
@@ -114,6 +113,7 @@ Page({
         }
         else {
           if (res.data.status == 5) {
+            wx.hideLoading()
             wx.showModal({
               title: '您无权查看数据',
               content: '仅有招新小组能查看签到数据',

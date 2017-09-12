@@ -391,10 +391,11 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
 
     public function interviewRegist($registTableID, $contactName) : int {
         // 查询该签到表已经有多少人签到了
-        $countStr = "COUNT(id) FROM " . self::_db_interview_info . " WHERE status = 3;";
+        $countStr = "SELECT COUNT(*) FROM " . self::_db_interview_info . " WHERE regist_table_id = " . $registTableID . " AND status = 3;";
         $countResult = $this->_mysqliConnection->query($countStr);
+        $countArr = $countResult->fetch_array();
+        $waiterID = $countArr[0] + 1;
 
-        $waiterID = $countResult + 1;
         $updateStr = "UPDATE " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id SET interview_info.status = 3, interview_info.waiterID = " . $waiterID . " WHERE interview_info.regist_table_id = " . $registTableID . " AND contact_info.name = '" . $contactName ."';";
         $updateResult = $this->_mysqliConnection->query($updateStr);
         if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {

@@ -26,7 +26,7 @@ Page({
   },
 
   loadInterviewerList: function () {
-    console.log('request inteviewer list with tableID&theInterviewerID', this.data.registTableID, this.data.lastInterviewerID)
+    console.log('request inteviewer list with tableID&theInterviewerID&interviewStatus', this.data.registTableID, this.data.lastWaiterID, this.data.interviewStatus)
     wx.showNavigationBarLoading()
     var that = this
     var interviewStatus = this.data.interviewStatus
@@ -34,7 +34,7 @@ Page({
       url: config.serviceUrl.recruit_interviewerList,
       data: {
         registTableID: this.data.registTableID,
-        theWaiterID: this.data.theWaiterID,
+        theWaiterID: this.data.lastWaiterID,
         interviewStatus: interviewStatus,
         wxNickname: appInstance.globalData.userInfo.nickName
       },

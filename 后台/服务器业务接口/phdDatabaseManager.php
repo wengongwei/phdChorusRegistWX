@@ -223,7 +223,7 @@ class WXDatabaseManager implements DatabaseManager {
 	const _dbHost = "10.66.85.131";
 	const _dbUsername = "phdChorusRegist";
 	const _dbPassword = "SATB@phdChorus";
-	const _dbName = "test_phdChorusRegist";
+	const _dbName = "phdChorusRegist";
 	const _db_regist_table = "regist_table";
 	const _db_contact = "contact";
 	const _db_regist_info = "regist_info";

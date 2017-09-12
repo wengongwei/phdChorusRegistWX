@@ -207,10 +207,7 @@ pass // 默认值0
 // 分配至声部
 part
 
-CREATE TABLE `phdChorusRecruit`.`interview_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `contact_info_id` INT UNSIGNED NOT NULL COMMENT '外键-面试者个人信息' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT '外键-签到表id' , `pass` BOOLEAN NOT NULL COMMENT '是否通过考核' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试信息';
-
-ALTER TABLE `interview_info` ADD `status` TINYINT NOT NULL DEFAULT '0' COMMENT '面试状态' AFTER `regist_table_id`;
-
+CREATE TABLE `phdChorusRecruit`.`interview_info` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , `contact_info_id` INT UNSIGNED NOT NULL COMMENT 'contact_info外键' , `regist_table_id` INT UNSIGNED NOT NULL COMMENT 'regist_table外键' , `status` TINYINT NOT NULL COMMENT '面试状态' , `waiterID` SMALLINT NOT NULL COMMENT '面试签到ID' , `pass` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否通过考核' , `part` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试信息';
 
 
 ### regist_info签到信息

@@ -24,6 +24,7 @@
  */
 
 include_once('phdRecruitDatabaseManager.php');
+include_once('../phdUtils.php');
 
 const return_status = 'status';
 const return_params = 'params';
@@ -35,12 +36,13 @@ $dbManager = new WXRecruitDatabaseManager();
 
 $list = $dbManager->validRegistTableOfType(2);
 $tableList = array();
-for ($i = 0; $i < count($list); ++$i) {
-    $tmpTable = $list[$i];
-    $table = array();
-    $table['value'] = $tmpTable['id'];
-    $table['name'] = $tmpTable['date'] . $tmpTable['location'];
-    $tableList[] = $table;
+for ($i = 0; $i < count($list); $i++) {
+    $table = $list[$i];
+    $date = $table['date'];
+    $weekday = weekdayFromDate($date);
+    $tableName = $date . $weekday . $table['location'];
+    $tableID = $table['id'];
+    $tableList[] = array('value'=>$tableID, 'name'=>$tableName);
 }
 
 $result[return_status] = 0;

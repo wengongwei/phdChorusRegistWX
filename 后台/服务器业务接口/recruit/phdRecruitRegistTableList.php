@@ -25,6 +25,7 @@
  */
 
 include_once('phdRecruitDatabaseManager.php');
+include_once('../phdUtils.php');
 
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
@@ -61,10 +62,12 @@ if($dbManager->userAuthorizedStatus($wxNickname, 'ALL') != 1) {
 $tableList = $dbManager->registTableList($theTableID, $isNewer);
 $registTableList = array();
 
-// 拼接签到表信息
+// 拼接信息
 for ($i = 0; $i < count($tableList); $i++) {
     $table = $tableList[$i];
-    $tableName = $table['date'] . $table['location'];
+    $date = $table['date'];
+    $weekday = weekdayFromDate($date);
+    $tableName = $date . $weekday . $table['location'];
     $tableID = $table['id'];
     $registTableList[] = array('id'=>$tableID, 'name'=>$tableName);
 }

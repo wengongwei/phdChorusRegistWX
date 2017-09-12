@@ -1,30 +1,34 @@
 {
   "pages": [
-    "pages/regist/registIndex/registIndex",
-    "pages/contact/contactIndex/contactIndex",
-    "pages/statics/staticsIndex/staticsIndex",
-    "pages/logs/logs",
-    "pages/regist/regist/regist",
-    "pages/regist/createRegistTable/createRegistTable",
-    "pages/contact/addContact/addContact",
-    "pages/statics/exportExcelFile/exportExcelFile",
-    "pages/statics/exportExcelFile/downloadExcelFile/downloadExcelFile",
-    "pages/statics/staticsBySelectRegistTable/staticsBySelectRegistTable",
-    "pages/statics/staticsByQueryRegistTable/staticsByQueryRegistTable",
-    "pages/statics/registTableDetailStatics/registTableDetailStatics",
-    "pages/contact/detailContactInfo/detailContactInfo",
-    "pages/contact/alterContactInfo/alterContactInfo",
 
-    "pages/recruit/recruitIndex/recruitIndex",
+    "pages/rehearsal/rehearseIndex",
+
+    "pages/rehearsal/createRegistTable/createRegistTable",
+
+    "pages/rehearsal/regist/regist",
+
+    "pages/rehearsal/contact/contactIndex",
+    "pages/rehearsal/contact/addContact/addContact",
+    "pages/rehearsal/contact/detailContactInfo/detailContactInfo",
+    "pages/rehearsal/contact/alterContactInfo/alterContactInfo",
+
+    "pages/rehearsal/dailyStatics/staticsBySelectRegistTable",
+    "pages/rehearsal/dailyStatics/registTableDetailStatics/registTableDetailStatics",
+
+    "pages/rehearsal/exportExcelFile/exportExcelFile",
+    "pages/rehearsal/exportExcelFile/downloadExcelFile/downloadExcelFile",
+
+    "pages/recruit/recruitIndex",
     "pages/recruit/apply/apply",
     "pages/recruit/confirmInterview/confirmInterview",
     "pages/recruit/interviewRegist/interviewRegist",
     "pages/recruit/setRegistTable/registTableList",
-"pages/recruit/setRegistTable/createRegistTable/createRegistTable",
-"pages/recruit/setRegistTable/registTableInfo/registTableInfo",
-"pages/recruit/interviewInfo/registTableList",
-"pages/recruit/interviewInfo/registTableInfo/registTableInfo",
-"pages/recruit/interviewInfo/interviewerInfo/interviewerInfo"
+    "pages/recruit/setRegistTable/createRegistTable/createRegistTable",
+    "pages/recruit/setRegistTable/registTableInfo/registTableInfo",
+    "pages/recruit/interviewInfo/registTableList",
+    "pages/recruit/interviewInfo/registTableInfo/registTableInfo",
+    "pages/recruit/interviewInfo/interviewerInfo/interviewerInfo"
+    
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
@@ -39,25 +43,13 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/regist/registIndex/registIndex",
+        "pagePath": "pages/rehearsal/rehearseIndex",
         "iconPath": "image/regist.png",
         "selectedIconPath": "image/regist_selected.png",
-        "text": "签到"
+        "text": "排练"
       },
       {
-        "pagePath": "pages/contact/contactIndex/contactIndex",
-        "iconPath": "image/contact.png",
-        "selectedIconPath": "image/contact_selected.png",
-        "text": "团员"
-      },
-      {
-        "pagePath": "pages/statics/staticsIndex/staticsIndex",
-        "iconPath": "image/statics.png",
-        "selectedIconPath": "image/statics_selected.png",
-        "text": "统计"
-      },
-      {
-        "pagePath": "pages/recruit/recruitIndex/recruitIndex",
+        "pagePath": "pages/recruit/recruitIndex",
         "iconPath": "image/recruit.png",
         "selectedIconPath": "image/recruit_selected.png",
         "text": "招新"
