@@ -302,14 +302,21 @@ Page({
           })
         }
         else {
+          var title = '报名失败'
+          var content = ''
           if (status == 5) {
-            wx.showModal({
-              title: '报名失败',
-              content: '请完整填写信息',
-              confirmText: '好',
-              showCancel: false
-            })
+            content = '请完整填写信息'
           }
+          else if (status == 2) {
+            content = '您已报名，请勿重复报名'
+          }
+          
+          wx.showModal({
+            title: title,
+            content: content,
+            confirmText: '好',
+            showCancel: false
+          })
         }
       },
       fail: function (res) {

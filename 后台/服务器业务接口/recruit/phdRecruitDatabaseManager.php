@@ -116,6 +116,19 @@ interface RecruitDatabaseManager {
 
     /*
      * 接口功能
+     * 是否已报名，防止重复报名
+     *
+     * 参数
+     * registTableID // 签到表id
+     * contactName // 姓名
+     *
+     * 返回值
+     * status // 0-没有重复 | 1-已报名
+     */
+    public function duplicateApply($registTableID, $contactName) : int;
+
+    /*
+     * 接口功能
      * 在报名表中添加一条信息
      *
      * 参数
@@ -203,6 +216,21 @@ interface RecruitDatabaseManager {
      * interviewerList // 比theInterviewerID大的所有的面试者 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
      */
     public function applicantList($registTableID, $interviewStatus) : array;
+
+    /*
+     * 接口功能
+     * 录取团员
+     *
+     * 参数
+     * interviewerID // interview_info的id
+     * part // 录取到声部
+     *
+     * 返回值
+     * status // 0-成功 | 1-失败
+     */
+    public function enrollInterviewer($interviewerID, $part) : int;
+
+    public function enrolledContactList($registTableID, $part) : array;
 }
 
 class WXRecruitDatabaseManager implements RecruitDatabaseManager
@@ -240,7 +268,10 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
                 $authority = $row['authority'];
             }
 
-            if ($authority == 'ALL') {
+            if ($requestAuthority == 'ANY') {
+                $status = 1;
+            }
+            else if ($authority == 'ALL') {
                 $status = 1;
             }
             else if (strpos($requestAuthority, $authority) === 0) {
@@ -252,6 +283,8 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
 
         return $status;
     }
+
+
 
     public function idOfRegistTable($registTableDate, $registLocationType) : int {
         $queryStr = "SELECT id FROM " . self::_db_regist_table . " WHERE date = '" . $registTableDate . "' AND location = '" . $registLocationType . "'";
@@ -309,6 +342,18 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         $selectResult->free();
 
         return $table;
+    }
+
+    public function duplicateApply($registTableID, $contactName) : int {
+        $selectStr = "SELECT interview_info.id FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND contact_info.name = '" . $contactName . "';";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $status = 0;
+        if ($selectResult->num_rows > 0) {
+            $status = 1;
+        }
+
+        $selectResult->free();
+        return $status;
     }
 
     public function addContactInfo($contactName, $contactSex, $contactNation, $contactPhone, $contactEmail, $contactStudentId, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments ,$contactReadMusic ,$contactPianist, $contactInterest, $contactSkill, $contactExperience, $contactExpect) : int {
@@ -431,6 +476,19 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $interviewerList;
     }
 
+    public function enrolledContactList($registTableID, $part) : array {
+        $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' ORDER BY interview_info.id ASC;";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $interviewerList = array();
+        while ($row = $selectResult->fetch_assoc()) {
+            $interviewerList[] = array('id'=>$row['id'], 'name'=>$row['contactName'], 'phone'=>$row['contactPhone'], 'email'=>$row['contactEmail']);
+        }
+
+        $selectResult->free();
+
+        return $interviewerList;
+    }
+
     public function interviewerDetailInfo($interviewerID) : array {
         // 找到面试者的contact_info_id
         $selectStr = "SELECT contact_info_id FROM " . self::_db_interview_info . " WHERE id = " . $interviewerID . " ;";
@@ -464,10 +522,20 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $interviewer;
     }
 
+    public function enrollInterviewer($interviewerID, $part) : int {
+        $updateStr = "UPDATE " . self::_db_interview_info . " SET pass = 1, part = '" . $part . "' WHERE id = " . $interviewerID .";";
+        $updateResult = $this->_mysqliConnection->query($updateStr);
+        $status = 1;
+        if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
+            $status = 0;
+        }
+
+        return $status;
+    }
+
     public function __destruct() {
         $this->_mysqliConnection->close();
     }
-
 }
 
 

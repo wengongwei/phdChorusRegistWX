@@ -1,6 +1,6 @@
 // pages/recruit/interviewerInfo/interviewerInfo.js
 
-var config = require('../../../../config');
+var config = require('../../../../../config');
 
 Page({
 

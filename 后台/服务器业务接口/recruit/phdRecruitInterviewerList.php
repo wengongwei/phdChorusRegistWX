@@ -47,7 +47,7 @@ $result[return_params] = $registTableID . $theWaiterID . $interviewStatus;
 
 $dbManager = new WXRecruitDatabaseManager();
 // 鉴权
-if($dbManager->userAuthorizedStatus($wxNickname, 'ALL') != 1) {
+if($dbManager->userAuthorizedStatus($wxNickname, 'ANY') != 1) {
     $result[return_status] = '5';
     echo json_encode($result);
     exit();

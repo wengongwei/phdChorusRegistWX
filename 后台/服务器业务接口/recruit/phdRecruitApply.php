@@ -36,7 +36,7 @@
  * registTableID // 选择的参加面试的签到表ID
  *
  * 返回值
- * status // 0-成功 | 1-失败(数据库插入失败) | 4-失败(系统代码bug) | 5-失败(参数错误)
+ * status // 0-成功 | 1-失败(数据库插入失败) | 2-失败（已报名，请勿重复报名）| 4-失败(系统代码bug) | 5-失败(参数错误)
  *
  */
 
@@ -78,6 +78,14 @@ if ($registTableID < 1 || strlen($contactName) <= 0 || strlen($contactNation) <=
 }
 
 $dbManager = new WXRecruitDatabaseManager();
+
+// 是否已报名
+$status = $dbManager->duplicateApply($registTableID, $contactName);
+if ($status == 1) {
+    $result[return_status] = 2;
+    echo json_encode($result);
+    exit();
+}
 
 // 存储报名者个人信息
 $contactID = $dbManager->addContactInfo($contactName, $contactSex, $contactNation, $contactPhone, $contactEmail, $contactStudentId, $contactLocation, $contactCompany, $contactGrade, $contactVocalAbility, $contactInstruments ,$contactReadMusic ,$contactPianist, $contactInterest, $contactSkill, $contactExperience, $contactExpect);

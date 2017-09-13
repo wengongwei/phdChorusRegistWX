@@ -1,23 +1,16 @@
 {
   "pages": [
-
     "pages/rehearsal/rehearseIndex",
-
     "pages/rehearsal/createRegistTable/createRegistTable",
-
     "pages/rehearsal/regist/regist",
-
     "pages/rehearsal/contact/contactIndex",
     "pages/rehearsal/contact/addContact/addContact",
     "pages/rehearsal/contact/detailContactInfo/detailContactInfo",
     "pages/rehearsal/contact/alterContactInfo/alterContactInfo",
-
     "pages/rehearsal/dailyStatics/staticsBySelectRegistTable",
     "pages/rehearsal/dailyStatics/registTableDetailStatics/registTableDetailStatics",
-
     "pages/rehearsal/exportExcelFile/exportExcelFile",
     "pages/rehearsal/exportExcelFile/downloadExcelFile/downloadExcelFile",
-
     "pages/recruit/recruitIndex",
     "pages/recruit/apply/apply",
     "pages/recruit/confirmInterview/confirmInterview",
@@ -27,8 +20,11 @@
     "pages/recruit/setRegistTable/registTableInfo/registTableInfo",
     "pages/recruit/interviewInfo/registTableList",
     "pages/recruit/interviewInfo/registTableInfo/registTableInfo",
-    "pages/recruit/interviewInfo/interviewerInfo/interviewerInfo"
-    
+    "pages/recruit/interviewInfo/interviewerInfo/interviewerInfo",
+    "pages/recruit/interviewInfo/interviewerInfo/enroll/enroll",
+    "pages/recruit/enrolledContact/registTableList",
+    "pages/recruit/enrolledContact/enrolledContactList/enrolledContactList",
+    "pages/recruit/enrolledContact/enrolledContactList/interviewerInfo/interviewerInfo"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

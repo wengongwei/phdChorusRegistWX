@@ -24,7 +24,7 @@
  */
 
 include_once('phdRecruitDatabaseManager.php');
-include_once('../phdUtils.php');
+include_once('phdUtils.php');
 
 const return_status = 'status';
 const return_params = 'params';

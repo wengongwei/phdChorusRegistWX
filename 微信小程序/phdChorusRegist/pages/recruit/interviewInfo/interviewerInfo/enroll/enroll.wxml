@@ -1,0 +1,24 @@
+
+<view class='title-area'>
+  <view class='title-text'>{{name}}</view>
+</view>
+
+<view class='section-container'>
+  <view class="section">
+  <view class="section-title">录取至声部</view>
+  <radio-group class="radio-group" bindchange="bindContactPartChange">
+    <label style="display: flex" wx:for="{{contactPartItems}}" wx:key="item.value">
+      <view class="section-selector">
+        <radio value="{{item.name}}" checked="{{item.checked}}" />
+        {{item.value}}
+      </view>
+    </label>
+  </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="default" bindtap="enroll">确认录取</button>
+  </view>
+</view>
+
+

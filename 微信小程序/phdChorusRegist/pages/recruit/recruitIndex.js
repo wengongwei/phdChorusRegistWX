@@ -36,5 +36,11 @@ Page({
     wx.navigateTo({
       url: 'interviewInfo/registTableList'
     })
+  },
+
+  enrolledContact: function (e) {
+    wx.navigateTo({
+      url: 'enrolledContact/registTableList',
+    })
   }
 })

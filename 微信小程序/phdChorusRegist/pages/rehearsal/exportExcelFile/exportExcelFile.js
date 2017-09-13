@@ -55,7 +55,7 @@ Page({
         if (status == 0) {
           var fileName = res.data.fileName
           var filePath = res.data.filePath
-          filePath = config.serviceUrl.httpsHost + filePath
+          filePath = config.serviceUrl.httpsHostRegist + filePath
           wx.redirectTo({
             url: 'downloadExcelFile/downloadExcelFile?filePath=' + filePath + '&fileName=' + fileName
           })

@@ -26,8 +26,4 @@
   <view class="section-text">是否识谱：{{contact.readMusic}}</view>
 </view>
 
-<view class="confirm-button-area">
-    <button class="confirm-button" type="default" bindtap="enroll">录取</button>
-  </view>
-
 </view>

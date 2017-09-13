@@ -6,6 +6,18 @@
   padding-bottom: 50pt;
 }
 
+.title-area {
+  margin-top: 20pt;
+  margin-bottom: 10pt;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.title-text {
+  font-size: 18pt;
+  color: #000000;
+}
+
 .section {
   padding: 2% 10% 2% 10%;
   margin-top: 10pt;

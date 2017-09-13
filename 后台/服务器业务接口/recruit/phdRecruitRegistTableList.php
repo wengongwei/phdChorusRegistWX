@@ -25,7 +25,7 @@
  */
 
 include_once('phdRecruitDatabaseManager.php');
-include_once('../phdUtils.php');
+include_once('phdUtils.php');
 
 // 获取参数
 $_INPUT = json_decode(file_get_contents("php://input"));
@@ -52,7 +52,7 @@ if ($theTableID < 0 || ($isNewer != 0 && $isNewer != 1)) {
 $dbManager = new WXRecruitDatabaseManager();
 
 // 判定用户是否有进行此操作的权限
-if($dbManager->userAuthorizedStatus($wxNickname, 'ALL') != 1) {
+if($dbManager->userAuthorizedStatus($wxNickname, 'ANY') != 1) {
     $result[return_status] = '5';
     echo json_encode($result);
     exit();

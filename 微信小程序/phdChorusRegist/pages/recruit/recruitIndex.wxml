@@ -36,4 +36,11 @@
     </view>
   </view>
 
+  <view class="function-list-view-light" bindtap="enrolledContact">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">查看录取信息</view>
+      <view class="function-list-item-subtitle-light">选定一张签到表，即可查看各声部录取情况及人员信息</view>
+    </view>
+  </view>
+
 </view>

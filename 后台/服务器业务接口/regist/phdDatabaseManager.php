@@ -696,7 +696,7 @@ class WXDatabaseManager implements DatabaseManager {
             if ($requestAuthority == 'ANY') {
                 $status = 1;
             }
-            if ($authority == 'ALL') {
+            else if ($authority == 'ALL') {
                 $status = 1;
             }
             else if (strpos($requestAuthority, $authority) === 0) {

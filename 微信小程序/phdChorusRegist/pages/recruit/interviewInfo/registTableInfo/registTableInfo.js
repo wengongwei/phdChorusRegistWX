@@ -12,7 +12,10 @@ Page({
     registTableID: -1,
     lastWaiterID: -1,
     interviewStatus: 1,
-    interviewerList: []
+    interviewerList: [],
+    applyTabTitle: '已报名',
+    confirmTabTitle: '已确认',
+    registTabTitle: '已签到'
   },
 
   /**
@@ -71,6 +74,22 @@ Page({
             interviewerList: interviewerList,
             lastWaiterID: lastInterviewer.waiterID
           })
+
+          if (interviewStatus == 1) {
+            that.setData({
+              applyTabTitle: '已报名' + interviewerList.length
+            })
+          }
+          else if (interviewStatus == 2) {
+            that.setData({
+              confirmTabTitle: '已确认' + interviewerList.length
+            })
+          }
+          else if (interviewStatus == 3) {
+            that.setData({
+              registTabTitle: '已签到' + interviewerList.length
+            })
+          }
         }
 
         wx.hideNavigationBarLoading();
