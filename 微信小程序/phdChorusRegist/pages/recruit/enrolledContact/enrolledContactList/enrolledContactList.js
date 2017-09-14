@@ -10,9 +10,12 @@ Page({
    */
   data: {
     registTableID: -1,
+    fromDate: '2017-08-06',
+    toDate: '2018-08-06',
     selectedPart: 'S1',
     contactList: [],
-    
+    listType: 1,
+
     partItems: [
       { value: 'S1', name: 'S1' },
       { value: 'S2', name: 'S2' },
@@ -29,9 +32,23 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      registTableID: options.registTableID
-    })
+    // type = 1 按签到表查询
+    // type = 2 按起止日期查询
+    var listType = options.type
+    if (listType == 1) {
+      this.setData({
+        listType: listType,
+        registTableID: options.registTableID
+      })
+    }
+    else if (listType == 2) {
+      this.setData({
+        listType: listType,
+        fromDate: options.fromDate,
+        toDate: options.toDate
+      })
+    }
+
     this.loadcontactList();
   },
 
@@ -41,7 +58,10 @@ Page({
     wx.request({
       url: config.serviceUrl.recruit_enrolledContactListUrl,
       data: {
+        listType: this.data.listType,
         registTableID: this.data.registTableID,
+        fromDate: this.data.fromDate,
+        toDate: this.data.toDate,
         selectedPart: this.data.selectedPart,
         wxNickname: appInstance.globalData.userInfo.nickName
       },

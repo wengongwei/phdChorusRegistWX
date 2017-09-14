@@ -1,4 +1,4 @@
-var config = require('../../../config');
+var config = require('../../../../config');
 var appInstance = getApp();
 
 Page({
@@ -94,7 +94,7 @@ Page({
     var registTableID = e.currentTarget.id
     console.log("info of table:", registTableID)
     wx.navigateTo({
-      url: 'enrolledContactList/enrolledContactList?registTableID=' + registTableID
+      url: '../enrolledContactList/enrolledContactList?type=1&registTableID=' + registTableID
     })
   }
 

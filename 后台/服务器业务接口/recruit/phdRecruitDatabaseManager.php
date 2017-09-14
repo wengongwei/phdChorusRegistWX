@@ -230,7 +230,32 @@ interface RecruitDatabaseManager {
      */
     public function enrollInterviewer($interviewerID, $part) : int;
 
+    /*
+     * 接口功能
+     * 查询某张签到表中某声部录取情况
+     *
+     * 参数
+     * registTableID // 签到表id
+     * part // 声部
+     *
+     * 返回值
+     * contactList // 录取者列表 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
+     */
     public function enrolledContactList($registTableID, $part) : array;
+
+    /*
+     * 接口功能
+     * 查询某个时间段内某声部录取情况
+     *
+     * 参数
+     * fromDate // 开始日期
+     * toDate // 截止日期
+     * part // 声部
+     *
+     * 返回值
+     * contactList // 录取者列表 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
+     */
+    public function enrolledContactListWithinDate($fromDate, $toDate, $part) : array;
 }
 
 class WXRecruitDatabaseManager implements RecruitDatabaseManager
@@ -489,6 +514,19 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $interviewerList;
     }
 
+    public function enrolledContactListWithinDate($fromDate, $toDate, $part) : array {
+        $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM (interview_info INNER JOIN regist_table ON regist_table.id = interview_info.regist_table_id) INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE regist_table.date >= '" . $fromDate . "' AND regist_table.date <= '" . $toDate . "' AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' ORDER BY interview_info.id DESC;";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $interviewerList = array();
+        while ($row = $selectResult->fetch_assoc()) {
+            $interviewerList[] = array('id'=>$row['id'], 'name'=>$row['contactName'], 'phone'=>$row['contactPhone'], 'email'=>$row['contactEmail']);
+        }
+
+        $selectResult->free();
+
+        return $interviewerList;
+    }
+
     public function interviewerDetailInfo($interviewerID) : array {
         // 找到面试者的contact_info_id
         $selectStr = "SELECT contact_info_id FROM " . self::_db_interview_info . " WHERE id = " . $interviewerID . " ;";
@@ -515,6 +553,11 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
             $interviewer['vocal'] = $row['vocal'];
             $interviewer['instruments'] = $row['instruments'];
             $interviewer['readMusic'] = $row['readMusic'];
+            $interviewer['pianist'] = $row['pianist'];
+            $interviewer['interest'] = $row['interest'];
+            $interviewer['skill'] = $row['skill'];
+            $interviewer['experience'] =  $row['experience'];
+            $interviewer['expect'] = $row['expect'];
         }
 
         $selectResult->free();

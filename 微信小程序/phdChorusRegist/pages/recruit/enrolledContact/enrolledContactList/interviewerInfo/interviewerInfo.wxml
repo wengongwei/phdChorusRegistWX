@@ -26,4 +26,20 @@
   <view class="section-text">是否识谱：{{contact.readMusic}}</view>
 </view>
 
+<view class="section-view">
+  <view class="section-text">兴趣爱好：{{contact.interest}}</view>
+</view>
+
+<view class="section-view">
+  <view class="section-text">技能：{{contact.skill}}</view>
+</view>
+
+<view class="section-view">
+  <view class="section-text">艺术团体经历：{{contact.experience}}</view>
+</view>
+
+<view class="section-view">
+  <view class="section-text">加入合唱团的期望：{{contact.expect}}</view>
+</view>
+
 </view>

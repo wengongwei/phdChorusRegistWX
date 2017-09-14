@@ -21,8 +21,13 @@
     "pages/recruit/interviewInfo/registTableList",
     "pages/recruit/interviewInfo/registTableInfo/registTableInfo",
     "pages/recruit/interviewInfo/interviewerInfo/interviewerInfo",
-    "pages/recruit/interviewInfo/interviewerInfo/enroll/enroll",
-    "pages/recruit/enrolledContact/registTableList",
+
+"pages/recruit/interviewInfo/interviewerInfo/enroll/enroll",
+
+"pages/recruit/enrolledContact/enrolledContactIndex",
+    "pages/recruit/enrolledContact/registTableList/registTableList",
+
+"pages/recruit/enrolledContact/selectDate/selectDate",
     "pages/recruit/enrolledContact/enrolledContactList/enrolledContactList",
     "pages/recruit/enrolledContact/enrolledContactList/interviewerInfo/interviewerInfo"
   ],

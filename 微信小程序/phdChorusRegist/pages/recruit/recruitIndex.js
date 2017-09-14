@@ -40,7 +40,7 @@ Page({
 
   enrolledContact: function (e) {
     wx.navigateTo({
-      url: 'enrolledContact/registTableList',
+      url: 'enrolledContact/enrolledContactIndex',
     })
   }
 })

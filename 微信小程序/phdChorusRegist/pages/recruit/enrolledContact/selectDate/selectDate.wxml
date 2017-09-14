@@ -1,0 +1,27 @@
+<!--exportExcelFile.wxml-->
+
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">开始日期</view>
+    <picker bindchange="bindFromDateChange" mode="date" value="{{fromDate}}">
+      <view class="section-picker-button">
+        <button type="default">{{fromDate}}</button>
+      </view>     
+    </picker>
+  </view>
+
+  <view class="section">
+    <view class="section-title">截止日期</view>
+    <picker bindchange="bindToDateChange" mode="date" value="{{toDate}}">
+      <view class="section-picker-button">
+        <button type="default">{{toDate}}</button>
+      </view>     
+    </picker>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="query">查询录取信息</button>
+  </view>
+
+</view>

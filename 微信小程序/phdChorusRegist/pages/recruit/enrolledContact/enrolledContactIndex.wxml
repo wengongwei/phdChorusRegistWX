@@ -1,0 +1,20 @@
+<!--pages/rehearsal/rehearsalIndex.wxml-->
+<!--pages/recruit/recruitIndex/recruitIndex.wxml-->
+<view >
+
+  <view class="function-list-view-light" bindtap="queryByRegistTable">
+    <view class="function-list-item">
+      <view class="function-list-item-title-light">选择签到表查看</view>
+      <view class="function-list-item-subtitle-light">选定一张签到表，即可查看该签到表上各声部录取人员信息</view>
+    </view>
+  </view>
+
+<view class="function-list-view-dark" bindtap="queryByDate">
+    <view class="function-list-item">
+      <view class="function-list-item-title-dark">指定时间段查看</view>
+      <view class="function-list-item-subtitle-dark">指定起止日期，即可查看该时间段内各声部录取人员信息</view>
+    </view>
+  </view>
+
+</view>
+

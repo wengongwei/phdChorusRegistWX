@@ -13,9 +13,11 @@ Page({
     lastWaiterID: -1,
     interviewStatus: 1,
     interviewerList: [],
-    applyTabTitle: '已报名',
-    confirmTabTitle: '已确认',
-    registTabTitle: '已签到'
+    statusItem: [
+      { status: 1, value: '已报名', name: '已报名' },
+      { status: 2, value: '已确认', name: '已确认' },
+      { status: 3, value: '已签到', name: '已签到' }
+    ]
   },
 
   /**
@@ -47,52 +49,46 @@ Page({
       },
       success: function (res) {
         console.log('recruit - interviewer list:', res.data)
+        wx.hideNavigationBarLoading();
         if (res.data.status != 0) {
           return
         }
 
         var newInterviewerList = res.data.interviewerList
-        if (newInterviewerList.length > 0) {
-          if (interviewStatus == 1 || interviewStatus == 2) {
-            newInterviewerList.sort(function (obj1, obj2) {
-              return obj1.id - obj2.id
-            })
-          }
-          else if (interviewStatus == 3) {
-            newInterviewerList.sort(function (obj1, obj2) {
-              return obj1.waiterID - obj2.waiterID
-            })
-          }
+        if (newInterviewerList.length <= 0) {
+          return
+        }
 
-          var interviewerList = that.data.interviewerList
-          for (var i = 0; i < newInterviewerList.length; i++) {
-            interviewerList.push(newInterviewerList[i]);
-          }
-
-          var lastInterviewer = interviewerList[interviewerList.length - 1]
-          that.setData({
-            interviewerList: interviewerList,
-            lastWaiterID: lastInterviewer.waiterID
+        if (interviewStatus == 1 || interviewStatus == 2) {
+          newInterviewerList.sort(function (obj1, obj2) {
+            return obj1.id - obj2.id
           })
+        }
+        else if (interviewStatus == 3) {
+          newInterviewerList.sort(function (obj1, obj2) {
+            return obj1.waiterID - obj2.waiterID
+          })
+        }
 
-          if (interviewStatus == 1) {
-            that.setData({
-              applyTabTitle: '已报名' + interviewerList.length
-            })
-          }
-          else if (interviewStatus == 2) {
-            that.setData({
-              confirmTabTitle: '已确认' + interviewerList.length
-            })
-          }
-          else if (interviewStatus == 3) {
-            that.setData({
-              registTabTitle: '已签到' + interviewerList.length
-            })
+        var interviewerList = that.data.interviewerList
+        for (var i = 0; i < newInterviewerList.length; i++) {
+          interviewerList.push(newInterviewerList[i]);
+        }
+
+        var tmpArray = that.data.statusItem
+        for (var i = 0, len = tmpArray.length; i < len; ++i) {
+          if (interviewStatus == tmpArray[i].status) {
+            tmpArray[i].name = tmpArray[i].value + '·' + interviewerList.length
+            break
           }
         }
 
-        wx.hideNavigationBarLoading();
+        var lastInterviewer = interviewerList[interviewerList.length - 1]
+        that.setData({
+          interviewerList: interviewerList,
+          lastWaiterID: lastInterviewer.waiterID,
+          statusItem: tmpArray
+        })
       },
       fail: function (res) {
         wx.hideNavigationBarLoading();
@@ -108,12 +104,12 @@ Page({
 
   // 点击tab切换
   swichStatus: function (e) {
-    if (this.data.interviewStatus == e.target.dataset.current) {
+    var newStatus = e.target.dataset.current
+    if (this.data.interviewStatus == newStatus) {
       return;
     } else {
       this.setData({
-        interviewStatus: e.target.dataset.current,
-        lastWaiterID: -1,
+        interviewStatus: newStatus,
         interviewerList: []
       })
     }
