@@ -187,14 +187,14 @@ __表结构__
 | contact_info_id | INT UNSIGNED NOT NULL            | 外键-连接contact_info表                |
 | regist_table_id | INT UNSIGNED NOT NULL            | 外键-连接regist_table表                |
 | status          | TINYINT NOT NULL                 | 面试状态（0-已报名 \| 1-已确认参加 \| 2-已面试签到） |
-| waiterID        | SMALLINT NOT NULL                | 面试签到ID (每张签到表的面试者都从1开始编号)         |
+| waiterID        | SMALLINT NOT NULL DEFAULT '0'    | 面试签到ID (每张签到表的面试者都从1开始编号)         |
 | pass            | BOOLEAN NOT NULL                 | 是否通过考核（0-未通过 \| 1-通过）             |
 | part            | TINYTEXT NOT NULL                | 分配至声部                             |
 
 __建表__
 
 ```
-CREATE TABLE phdChorusRecruit.interview_info ( id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , contact_info_id INT UNSIGNED NOT NULL COMMENT 'contact_info外键' , regist_table_id INT UNSIGNED NOT NULL COMMENT 'regist_table外键' , status TINYINT NOT NULL COMMENT '面试状态' , waiterID SMALLINT NOT NULL COMMENT '面试签到ID' , pass BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否通过考核' , part TINYTEXT NOT NULL , PRIMARY KEY (id)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试信息';
+CREATE TABLE phdChorusRecruit.interview_info ( id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , contact_info_id INT UNSIGNED NOT NULL COMMENT 'contact_info外键' , regist_table_id INT UNSIGNED NOT NULL COMMENT 'regist_table外键' , status TINYINT NOT NULL COMMENT '面试状态' , waiterID SMALLINT NOT NULL DEFAULT '0' COMMENT '面试签到ID' , pass BOOLEAN NOT NULL DEFAULT FALSE COMMENT '是否通过考核' , part TINYTEXT NOT NULL , PRIMARY KEY (id)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '面试信息';
 ```
 
 设置级联删除策略，删除regist_table或contact_info时，级联删除所有相应的interview_info信息

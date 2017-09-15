@@ -83,10 +83,15 @@ Page({
           }
         }
 
-        var lastInterviewer = interviewerList[interviewerList.length - 1]
+        if (interviewStatus == 3) {
+          var lastInterviewer = interviewerList[interviewerList.length - 1]
+          that.setData({
+            lastWaiterID: lastInterviewer.waiterID
+          })
+        }
+        
         that.setData({
           interviewerList: interviewerList,
-          lastWaiterID: lastInterviewer.waiterID,
           statusItem: tmpArray
         })
       },
@@ -110,7 +115,8 @@ Page({
     } else {
       this.setData({
         interviewStatus: newStatus,
-        interviewerList: []
+        interviewerList: [],
+        lastWaiterID: -1
       })
     }
 

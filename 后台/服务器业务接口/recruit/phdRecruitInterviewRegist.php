@@ -20,7 +20,7 @@
  * contactName // 姓名
  *
  * 返回
- * status // 0-成功 | 1-失败
+ * status // 0-成功 | 1-失败 | 2-成功(已签到)
  * interviewID // 面试者ID
  */
 
@@ -49,7 +49,6 @@ if ($registTableID < 1 || strlen($contactName) <= 0) {
 $dbManager = new WXRecruitDatabaseManager();
 
 $waiterID = $dbManager->interviewRegist($registTableID, $contactName);
-
 if ($waiterID == -1) {
     $result[return_status] = 1;
     echo json_encode($result);

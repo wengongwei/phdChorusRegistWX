@@ -93,7 +93,7 @@ Page({
       success: function (res) {
         console.log('confirm interview...', res.data)
         var status = res.data.status
-        if (status == 0) {
+        if (status == 0 || status == 2) {
           wx.showModal({
             title: '签到成功',
             content: '您是' + res.data.interviewID + '号面试者，请耐心等待叫号，等候过程中请保持安静',
@@ -104,11 +104,12 @@ Page({
         else {
           var content = ''
           if (status == 1) {
-            content = '如已签到，请勿重复签到。否则请检查您选择的面试时间、姓名是否与之前确认面试时所填写的相同'
+            content = '请检查您选择的面试时间、姓名是否与之前确认面试时所填写的相同'
           }
           else if (status == 5) {
             content = '请完整填写信息'
           }
+          
           wx.showModal({
             title: '签到失败',
             content: content,

@@ -427,7 +427,7 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     }
 
     public function statusOfRegistTable($registTableID) : int {
-        $selectStr = "SELECT status FROM" . self::_db_regist_table . " WHERE id = " . $registTableID . ";";
+        $selectStr = "SELECT status FROM " . self::_db_regist_table . " WHERE id = " . $registTableID . ";";
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $status = 0;
         while ($row = $selectResult->fetch_assoc()) {
@@ -460,19 +460,38 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     }
 
     public function interviewRegist($registTableID, $contactName) : int {
+        // 如已签到，直接返回waiterID
+        $selectStr = "SELECT waiterID FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.status = 3 AND contact_info.name = '" . $contactName . "';";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        $waiterID = -1;
+        while ($row = $selectResult->fetch_assoc()) {
+            $waiterID = $row['waiterID'];
+        }
+        $selectResult->free();
+        if ($waiterID != -1) {
+            return $waiterID;
+        }
+
+        // 锁表，防止因为并发【签到】产生相同的waiterID
+        $this->_mysqliConnection->begin_transaction();
+
         // 查询该签到表已经有多少人签到了
-        $countStr = "SELECT COUNT(*) FROM " . self::_db_interview_info . " WHERE regist_table_id = " . $registTableID . " AND status = 3;";
+        $countStr = "SELECT COUNT(*) FROM " . self::_db_interview_info . " WHERE regist_table_id = " . $registTableID . " AND status = 3 FOR UPDATE;";
         $countResult = $this->_mysqliConnection->query($countStr);
-        $countArr = $countResult->fetch_array();
-        $waiterID = $countArr[0] + 1;
+        $row = $countResult->fetch_array();
+        $waiterID = $row[0] + 1;
 
         $updateStr = "UPDATE " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id SET interview_info.status = 3, interview_info.waiterID = " . $waiterID . " WHERE interview_info.regist_table_id = " . $registTableID . " AND contact_info.name = '" . $contactName ."';";
         $updateResult = $this->_mysqliConnection->query($updateStr);
         if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
-            return $waiterID;
+            $this->_mysqliConnection->commit();
+        }
+        else {
+            $waiterID = -1;
+            $this->_mysqliConnection->rollback();
         }
 
-        return -1;
+        return $waiterID;
     }
 
     public function applicantList($registTableID, $interviewStatus) : array {
