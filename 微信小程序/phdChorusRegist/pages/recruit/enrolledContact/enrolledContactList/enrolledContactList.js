@@ -14,7 +14,14 @@ Page({
     toDate: '2018-08-06',
     selectedPart: 'S1',
     contactList: [],
-    listType: 1,
+    listType: 1, // type = 1-按签到表查询 | 2-按起止日期查询
+    selectedLocationType: 0,
+
+    locationItems: [
+      { value: 0, name: '全部' },
+      { value: 1, name: '仅雁栖湖' },
+      { value: 2, name: '仅中关村' }
+    ],
 
     partItems: [
       { value: 'S1', name: 'S1' },
@@ -63,6 +70,7 @@ Page({
         fromDate: this.data.fromDate,
         toDate: this.data.toDate,
         selectedPart: this.data.selectedPart,
+        selectedLocationType: this.data.selectedLocationType,
         wxNickname: appInstance.globalData.userInfo.nickName
       },
       method: 'POST',
@@ -108,10 +116,26 @@ Page({
   swichPart: function (e) {
     var newPart = e.target.dataset.current
     if (this.data.selectedPart == newPart) {
-      return;
-    } else {
+      return
+    }
+    else {
       this.setData({
         selectedPart: newPart,
+        contactList: []
+      })
+    }
+
+    this.loadcontactList()
+  },
+
+  switchLocation: function (e) {
+    var newLocation = e.target.dataset.current
+    if (this.data.selectedLocationType == newLocation) {
+      return
+    }
+    else {
+      this.setData({
+        selectedLocationType: newLocation,
         contactList: []
       })
     }

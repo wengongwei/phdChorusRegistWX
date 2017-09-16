@@ -1,0 +1,18 @@
+.location-swiper-tab {  
+  width: 100%;  
+  border-bottom: 1pt solid #999999;  
+  text-align: center;  
+  line-height: 80rpx;
+}
+
+.location-swiper-tab-list {  
+  font-size: 10pt;  
+  display: inline-block;  
+  width: 33.33%;  
+  color: #999999;  
+}
+
+.location-on {
+  color: #0099ff;  
+  border-bottom: 2pt solid #0099ff;
+}

@@ -1,9 +1,14 @@
 <!--pages/recruit/registTableInfo/registTableInfo.wxml-->
 
+<view class="location-swiper-tab">
+  <block wx:for-items="{{locationItems}}" wx:key="{{item.value}}">
+    <view class="location-swiper-tab-list {{selectedLocationType==item.value ? 'location-on' : ''}}" data-current="{{item.value}}" bindtap="switchLocation">{{item.name}}</view>  
+  </block>
+</view>
 
-<view class="swiper-tab">
+<view class="part-swiper-tab">
   <block wx:for-items="{{partItems}}" wx:key="{{item.value}}">
-    <view class="swiper-tab-list {{selectedPart==item.value ? 'on' : ''}}" data-current="{{item.value}}" bindtap="swichPart">{{item.name}}</view>  
+    <view class="part-swiper-tab-list {{selectedPart==item.value ? 'part-on' : ''}}" data-current="{{item.value}}" bindtap="swichPart">{{item.name}}</view>  
   </block>
 </view>
 

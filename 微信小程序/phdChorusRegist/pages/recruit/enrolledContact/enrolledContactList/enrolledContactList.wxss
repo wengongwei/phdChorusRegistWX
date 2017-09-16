@@ -1,25 +1,8 @@
 /* pages/recruit/registTableInfo/registTableInfo.wxss */
 
 @import '/pages/common/item-list.wxss';
-
-.swiper-tab {  
-  width: 100%;  
-  border-bottom: 1pt solid #999999;  
-  text-align: center;  
-  line-height: 80rpx;
-}
-
-.swiper-tab-list {  
-  font-size: 10pt;  
-  display: inline-block;  
-  width: 12.5%;  
-  color: #999999;  
-}
-
-.on {
-  color: #0099ff;  
-  border-bottom: 2pt solid #0099ff;
-}
+@import '/pages/common/part-swiper-tab.wxss';
+@import '/pages/common/location-swiper-tab.wxss';
 
 .header-button-area {
   margin-top: 10pt;

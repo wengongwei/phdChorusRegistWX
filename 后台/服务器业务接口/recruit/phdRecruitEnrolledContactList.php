@@ -20,6 +20,7 @@
  * registTableID // 签到表id，仅listType=1时有效
  * fromDate
  * toDate // 起止日期
+ * selectedLocationType // 团员所在园区 0-全部 | 1-仅雁栖湖 | 2-北京城区
  * selectedPart // 查看该声部录取信息
  * wxNickname // 微信昵称，用以鉴权
  *
@@ -38,6 +39,7 @@ $fromDate = $_INPUT->fromDate;
 $toDate = $_INPUT->toDate;
 $wxNickname = $_INPUT->wxNickname;
 $selectedPart = $_INPUT->selectedPart;
+$selectedLocationType = $_INPUT->selectedLocationType;
 
 // 定义返回值
 const return_status = 'status';
@@ -45,7 +47,7 @@ const return_params = 'params';
 const return_contactList = 'contactList';
 $result = array();
 
-$result[return_params] = $listType . '&' .$fromDate . $toDate . $registTableID . $wxNickname;
+$result[return_params] = $listType . '&' .$fromDate . $toDate . $registTableID . $wxNickname . $selectedLocationType;
 
 $dbManager = new WXRecruitDatabaseManager();
 // 鉴权
@@ -57,10 +59,10 @@ if($dbManager->userAuthorizedStatus($wxNickname, 'ANY') != 1) {
 
 $contactList = null;
 if ($listType == 1) {
-    $contactList = $dbManager->enrolledContactList($registTableID, $selectedPart);
+    $contactList = $dbManager->enrolledContactList($registTableID, $selectedPart, $selectedLocationType);
 }
 else if ($listType == 2) {
-    $contactList = $dbManager->enrolledContactListWithinDate($fromDate, $toDate, $selectedPart);
+    $contactList = $dbManager->enrolledContactListWithinDate($fromDate, $toDate, $selectedPart, $selectedLocationType);
 }
 
 $result[return_status] = 0;

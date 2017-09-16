@@ -1,9 +1,9 @@
 // 小程序配置
 
 // 服务器IP
-var httpsHostRegist = "https://www.liangzhipeng.cn/phdChorusRegist/";
+var httpsHostRegist = "https://www.liangzhipeng.cn/test_phdChorusRegist/";
 
-var httpsHostRecruit = "https://www.liangzhipeng.cn/phdChorusRecruit/";
+var httpsHostRecruit = "https://www.liangzhipeng.cn/test_phdChorusRecruit/";
 
 var config = {
 

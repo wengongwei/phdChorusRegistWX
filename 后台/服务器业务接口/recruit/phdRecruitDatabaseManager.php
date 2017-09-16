@@ -237,12 +237,12 @@ interface RecruitDatabaseManager {
      * 参数
      * registTableID // 签到表id
      * part // 声部
+     * locationType // 团员所在园区 0-全部 | 1-仅雁栖湖 | 2-仅中关村
      *
      * 返回值
      * contactList // 录取者列表 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
      */
-    public function enrolledContactList($registTableID, $part) : array;
-
+    public function enrolledContactList($registTableID, $part, $locationType) : array;
     /*
      * 接口功能
      * 查询某个时间段内某声部录取情况
@@ -251,11 +251,12 @@ interface RecruitDatabaseManager {
      * fromDate // 开始日期
      * toDate // 截止日期
      * part // 声部
+     * locationType // 团员所在园区 0-全部 | 1-仅雁栖湖 | 2-仅中关村
      *
      * 返回值
      * contactList // 录取者列表 [{'id': 12, 'name': 蓝胖, 'waiterID': 2, 'phone': 13317945775, 'email': mingjiameng@sina.com}, ...]
      */
-    public function enrolledContactListWithinDate($fromDate, $toDate, $part) : array;
+    public function enrolledContactListWithinDate($fromDate, $toDate, $part, $locationType) : array;
 }
 
 class WXRecruitDatabaseManager implements RecruitDatabaseManager
@@ -520,8 +521,19 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $interviewerList;
     }
 
-    public function enrolledContactList($registTableID, $part) : array {
-        $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' ORDER BY interview_info.id ASC;";
+    public function enrolledContactList($registTableID, $part, $locationType) : array {
+        // locationType = 0-全部 | 1-仅雁栖湖 | 2-仅中关村
+        $selectStr = "";
+        if ($locationType == 0) {
+            $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' ORDER BY interview_info.id ASC;";
+        }
+        else if ($locationType == 1) {
+            $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' AND contact_info.location = '雁栖湖' ORDER BY interview_info.id ASC;";
+        }
+        else if ($locationType == 2) {
+            $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM " . self::_db_interview_info . " INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE interview_info.regist_table_id = " . $registTableID . " AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' AND contact_info.location != '雁栖湖' ORDER BY interview_info.id ASC;";
+        }
+
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $interviewerList = array();
         while ($row = $selectResult->fetch_assoc()) {
@@ -533,8 +545,18 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         return $interviewerList;
     }
 
-    public function enrolledContactListWithinDate($fromDate, $toDate, $part) : array {
-        $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM (interview_info INNER JOIN regist_table ON regist_table.id = interview_info.regist_table_id) INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE regist_table.date >= '" . $fromDate . "' AND regist_table.date <= '" . $toDate . "' AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' ORDER BY interview_info.id DESC;";
+    public function enrolledContactListWithinDate($fromDate, $toDate, $part, $locationType) : array {
+        $selectStr = "";
+        if ($locationType == 0) {
+            $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM (interview_info INNER JOIN regist_table ON regist_table.id = interview_info.regist_table_id) INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE regist_table.date >= '" . $fromDate . "' AND regist_table.date <= '" . $toDate . "' AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' ORDER BY interview_info.id DESC;";
+        }
+        else if ($locationType == 1) {
+            $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM (interview_info INNER JOIN regist_table ON regist_table.id = interview_info.regist_table_id) INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE regist_table.date >= '" . $fromDate . "' AND regist_table.date <= '" . $toDate . "' AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' AND contact_info.location = '雁栖湖' ORDER BY interview_info.id DESC;";
+        }
+        else if ($locationType == 2) {
+            $selectStr = "SELECT interview_info.id, contact_info.name as contactName, contact_info.phone as contactPhone, contact_info.email as contactEmail FROM (interview_info INNER JOIN regist_table ON regist_table.id = interview_info.regist_table_id) INNER JOIN contact_info ON contact_info.id = interview_info.contact_info_id WHERE regist_table.date >= '" . $fromDate . "' AND regist_table.date <= '" . $toDate . "' AND interview_info.pass = 1 AND interview_info.part = '" . $part . "' AND contact_info.location != '雁栖湖' ORDER BY interview_info.id DESC;";
+        }
+
         $selectResult = $this->_mysqliConnection->query($selectStr);
         $interviewerList = array();
         while ($row = $selectResult->fetch_assoc()) {
@@ -585,9 +607,22 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     }
 
     public function enrollInterviewer($interviewerID, $part) : int {
+        // 查询是否已经录取
+        $countStr = "SELECT COUNT(*) FROM " . self::_db_interview_info . " WHERE id = " . $interviewerID . " AND pass = 1 AND part = '" . $part . "';";
+        $countResult = $this->_mysqliConnection->query($countStr);
+        $row = $countResult->fetch_array();
+        $status = 1;
+        if ($row[0] > 0) {
+            $status = 0;
+        }
+        $countResult->free();
+        if ($status == 0) {
+            return $status;
+        }
+
         $updateStr = "UPDATE " . self::_db_interview_info . " SET pass = 1, part = '" . $part . "' WHERE id = " . $interviewerID .";";
         $updateResult = $this->_mysqliConnection->query($updateStr);
-        $status = 1;
+
         if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
             $status = 0;
         }
