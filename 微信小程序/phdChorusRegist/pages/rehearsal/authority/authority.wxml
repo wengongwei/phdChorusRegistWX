@@ -1,0 +1,46 @@
+<!--pages/rehearsal/authority/authority.wxml-->
+<view class='title-area'>
+  <view class='title-text'>为TA分配权限</view>
+</view>
+
+<view class="section-container">
+
+  <view class="section">
+    <view class="section-title">姓名</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="蓝胖子" focus="true" confirm-type="完成" bindinput="bindNameChange" bindconfirm="bindNameChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">微信号</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="mingjiameng" confirm-type="完成" bindinput="bindWXidChange" bindconfirm="bindWXidChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">微信昵称</view>
+    <view class="section-input-view">
+      <input class="section-input" type="text" placeholder="彬哲" confirm-type="完成" bindinput="bindWXnicknameChange" bindconfirm="bindWXnicknameChange" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">权限(不管给TA分配了何种权限，TA都可以看到所有数据)</view>
+    <radio-group class="radio-group" bindchange="bindAuthorityChange">
+      <label style="display: flex" wx:for="{{authorityTypeItems}}" wx:key="item.value">
+        <view class="section-selector">
+          <radio value="{{item.value}}" checked="{{item.checked}}" />
+          {{item.name}}
+        </view>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="confirm-button-area">
+    <button class="confirm-button" type="primary" bindtap="allocAuthority">分配权限</button>
+  </view>
+
+  </view>
+

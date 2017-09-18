@@ -37,5 +37,12 @@
     </view>
   </view>
 
+  <view class="function-list-view-dark" bindtap="allocAuthority">
+    <view class="function-list-item">
+      <view class="function-list-item-title-dark">给TA分配权限</view>
+      <view class="function-list-item-subtitle-dark">指定姓名、微信号等信息，即可给TA分配签到、数据查看等权限</view>
+    </view>
+  </view>
+
 </view>
 

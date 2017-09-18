@@ -1,0 +1,3 @@
+/* pages/rehearsal/authority/authority.wxss */
+@import '/pages/common/sheet-section-container.wxss';
+

@@ -1,6 +1,7 @@
 # 签到表类型博士合唱团签到小程序-MySQL数据库设计
 
-## 数据库表列值
+__数据库表列值格式__
+
 园区 = 中关村 | 雁栖湖
 声部 = S1 | S2 | A1 | A2 | T1 | T2 | B1 | B2
 日期 = 2018-09-12
@@ -42,7 +43,7 @@ CREATE TABLE phdChorusRegist.contact ( id INT UNSIGNED NOT NULL AUTO_INCREMENT C
 | -------- | ------------------------------------ | ------ |
 | id       | INT UNSIGNED NOT NULL AUTO_INCREMENT | 主键     |
 | date     | DATE NOT NULL                        | 日期     |
-| type     | TINYTEXT NOT NULL                    | 类型     |
+| type     | TINYTEXT NOT NULL                    | 签到表类型  |
 | location | TINYTEXT NOT NULL                    | 签到所在园区 |
 
 __建表__
@@ -77,7 +78,7 @@ ALTER TABLE regist_info ADD FOREIGN KEY(contact_id) REFERENCES contact(id) ON DE
 
 
 
-#### 授权用户列表
+#### authorized_user授权用户列表
 
 仅授权用户可查看数据
 
@@ -86,11 +87,13 @@ __表结构__
 | 列名          | 属性                                   | 备注                                       |
 | ----------- | ------------------------------------ | ---------------------------------------- |
 | id          | INT UNSIGNED NOT NULL AUTO_INCREMENT | 主键                                       |
+| name        | TINYTEXT NOT NULL                    | 姓名                                       |
+| wx_id       | TINYTEXT NOT NULL COMMENT '微信ID'     | 微信ID，唯一性（UNIQUE）                         |
 | wx_nickname | TINYTEXT NOT NULL COMMENT            | 微信昵称，用以鉴权                                |
-| authority   | TINYTEXT NOT NULL                    | 用户权限（S \| A \| T \| B \| ALL），声部长只可修改自己声部相关的信息，团长可以修改所有的信息 |
+| authority   | TINYTEXT NOT NULL                    | 用户权限（S \| A \| T \| B \| ALL \| READ），声部长只可修改自己声部相关的信息，团长可以修改所有的信息，部分团员可读取数据。 |
 
 ```
-CREATE TABLE phdChorusRegist.authorized_user ( id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , wx_nickname TINYTEXT NOT NULL COMMENT '微信昵称' , authority TINYTEXT NOT NULL COMMENT '用户权限' , PRIMARY KEY (id)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权(修改数据库内容)用户列表';
+CREATE TABLE `test_phdChorusRegist`.`authorized_user` ( `id` INT NOT NULL AUTO_INCREMENT COMMENT '主键' , `name` TINYTEXT NOT NULL COMMENT '姓名' , `wx_id` TINYTEXT NOT NULL COMMENT '微信ID' , `wx_nickname` TINYTEXT NOT NULL COMMENT '微信昵称' , `authority` TINYTEXT NOT NULL COMMENT '权限' , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权用户';
 ```
 
 

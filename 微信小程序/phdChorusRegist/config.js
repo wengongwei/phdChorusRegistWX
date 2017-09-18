@@ -49,6 +49,9 @@ var config = {
     // 删除团员
     deleteContactInfoUrl: (httpsHostRegist + 'phdDeleteContact.php'),
 
+    // 分配权限
+    allocAuthorityUrl: (httpsHostRegist + 'phdAllocAuthority.php'),
+
     // 招新-创建签到表
     recruit_createRegistTableUrl: (httpsHostRecruit + 'phdRecruitCreateRegistTable.php'),
 

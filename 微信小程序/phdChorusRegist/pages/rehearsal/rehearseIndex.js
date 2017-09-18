@@ -29,6 +29,13 @@ Page({
     wx.navigateTo({
       url: 'exportExcelFile/exportExcelFile'
     })
+  },
+
+  allocAuthority:function () {
+    wx.navigateTo({
+      url: 'authority/authority',
+    })
+
   }
   
 })

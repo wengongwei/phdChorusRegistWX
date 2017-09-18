@@ -215,6 +215,22 @@ interface DatabaseManager {
      *
      */
     public function userAuthorizedStatus($wxNickname, $requestAuthority): int;
+
+    /*
+     * 接口功能
+     * 给TA分配权限
+     *
+     * 参数
+     * contactName // TA的姓名
+     * contactWxID // TA的微信ID
+     * contactWXNickname // TA的微信昵称
+     * allocAuthority // 分配给TA的权限
+     * wxNickname // 我的微信昵称
+     *
+     * 返回值
+     * status // 1-成功 | 0-失败 | 2-失败(没有权限)
+     */
+    public function allocAuthority($contactName, $contactWxID, $contactWXNickname, $allocAuthority, $wxNickname) : int;
 }
 
 class WXDatabaseManager implements DatabaseManager {
@@ -696,6 +712,9 @@ class WXDatabaseManager implements DatabaseManager {
             if ($requestAuthority == 'ANY') {
                 $status = 1;
             }
+            else if ($requestAuthority == 'READ') {
+                $status = 1;
+            }
             else if ($authority == 'ALL') {
                 $status = 1;
             }
@@ -707,6 +726,41 @@ class WXDatabaseManager implements DatabaseManager {
         $result->free();
 
         return $status;
+    }
+
+    public function allocAuthority($contactName, $contactWxID, $contactWXNickname, $allocAuthority, $wxNickname) : int {
+	    if ($this->userAuthorizedStatus($wxNickname, $allocAuthority) != 1) {
+            return 2;
+        }
+
+        // 看是否已经给此人分配权限
+        $selectStr = "SELECT authority FROM " . self::_db_authorized_user . " WHERE wx_id = '" . $contactWxID ."';";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        if ($selectResult->num_rows > 0) {
+            // 如果更新了权限，则update，否则直接返回
+            $row = $selectResult->fetch_assoc();
+            $authority = $row['authority'];
+            if ($authority == $allocAuthority) {
+                return 1;
+            }
+
+            $updateStr = "UPDATE " . self::_db_authorized_user . " SET name = '" . $contactName . "', wx_nickname = '" . $contactWXNickname . "', authority = '" . $allocAuthority . "' WHERE wx_id = '" . $contactWxID ."';";
+            $updateResult = $this->_mysqliConnection->query($updateStr);
+            if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        // 如未分配权限，则分配权限
+        $insertStr = "INSERT INTO " . self::_db_authorized_user . " (name, wx_id, wx_nickname, authority) VALUES ('" . $contactName . "', '" . $contactWxID . "', '" . $contactWXNickname . "', '" . $allocAuthority . "');";
+        $insertResult = $this->_mysqliConnection->query($insertStr);
+        if ($insertResult == true) {
+            return 1;
+        }
+
+        return 0;
     }
 
     public function __destruct() {
