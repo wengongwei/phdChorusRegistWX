@@ -1,6 +1,6 @@
 <!--pages/rehearsal/authority/authority.wxml-->
 <view class='title-area'>
-  <view class='title-text'>为TA分配权限</view>
+  <view class='title-text'>给TA分配权限</view>
 </view>
 
 <view class="section-container">

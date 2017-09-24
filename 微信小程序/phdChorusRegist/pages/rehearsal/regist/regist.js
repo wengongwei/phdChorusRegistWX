@@ -230,7 +230,7 @@ Page({
         else {
           var warningContent = ''
           if (status == 1) {
-            warningContent = '签到表不存在，请联系团长或声部长创建签到表'
+            warningContent = '签到表不存在，请联系团长创建签到表'
           }
           else if (status == 2) {
             warningContent = '该团员不存在，请联系声部长添加团员'
