@@ -42,5 +42,12 @@ Page({
     wx.navigateTo({
       url: 'enrolledContact/enrolledContactIndex',
     })
+  },
+
+  allocAuthority: function () {
+    wx.navigateTo({
+      url: 'authority/authority',
+    })
+
   }
 })

@@ -88,7 +88,7 @@ __表结构__
 | ----------- | ------------------------------------ | ---------------------------------------- |
 | id          | INT UNSIGNED NOT NULL AUTO_INCREMENT | 主键                                       |
 | name        | TINYTEXT NOT NULL                    | 姓名                                       |
-| wx_id       | TINYTEXT NOT NULL COMMENT '微信ID'     | 微信ID，唯一性（UNIQUE）                         |
+| wx_id       | TINYTEXT NOT NULL                    | 微信ID                                     |
 | wx_nickname | TINYTEXT NOT NULL COMMENT            | 微信昵称，用以鉴权                                |
 | authority   | TINYTEXT NOT NULL                    | 用户权限（S \| A \| T \| B \| ALL \| READ），声部长只可修改自己声部相关的信息，团长可以修改所有的信息，部分团员可读取数据。 |
 
@@ -119,11 +119,13 @@ __表结构__
 | 列名          | 属性                                   | 备注                                       |
 | ----------- | ------------------------------------ | ---------------------------------------- |
 | id          | INT UNSIGNED NOT NULL AUTO_INCREMENT | 主键                                       |
+| name        | TINYTEXT NOT NULL                    | 姓名                                       |
+| wx_id       | TINYTEXT NOT NULL                    | 微信ID                                     |
 | wx_nickname | TINYTEXT NOT NULL COMMENT            | 微信昵称，用以鉴权                                |
 | authority   | TINYTEXT NOT NULL                    | 用户权限（S \| A \| T \| B \| ALL），声部长只可修改自己声部相关的信息，团长可以修改所有的信息 |
 
 ```
-CREATE TABLE test_phdChorusRecruit.authorized_user ( id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , wx_nickname TINYTEXT NOT NULL COMMENT '微信昵称' , authority TINYTEXT NOT NULL COMMENT '用户权限' , PRIMARY KEY (id)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权(修改数据库内容)用户列表';
+CREATE TABLE test_phdChorusRecruit.authorized_user ( id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键' , name TINYTEXT NOT NULL COMMENT '姓名', TINYTEXT NOT NULL COMMENT '微信ID' , wx_id  wx_nickname TINYTEXT NOT NULL COMMENT '微信昵称' , authority TINYTEXT NOT NULL COMMENT '用户权限' , PRIMARY KEY (id)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_unicode_ci COMMENT = '授权(修改数据库内容)用户列表';
 ```
 
 

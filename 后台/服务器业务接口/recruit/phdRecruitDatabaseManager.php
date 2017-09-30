@@ -265,7 +265,7 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
     const _dbHost = "10.66.85.131";
     const _dbUsername = "phdChorusRecruit";
     const _dbPassword = "SATB@phdChorus";
-    const _dbName = "test_phdChorusRecruit";
+    const _dbName = "phdChorusRecruit";
     const _db_regist_table = "regist_table";
     const _db_regist_info = "regist_info";
     const _db_interview_info = "interview_info";
@@ -628,6 +628,41 @@ class WXRecruitDatabaseManager implements RecruitDatabaseManager
         }
 
         return $status;
+    }
+
+    public function allocAuthority($contactName, $contactWxID, $contactWXNickname, $allocAuthority, $wxNickname) : int {
+        if ($this->userAuthorizedStatus($wxNickname, $allocAuthority) != 1) {
+            return 2;
+        }
+
+        // 看是否已经给此人分配权限
+        $selectStr = "SELECT authority FROM " . self::_db_authorized_user . " WHERE wx_id = '" . $contactWxID ."';";
+        $selectResult = $this->_mysqliConnection->query($selectStr);
+        if ($selectResult->num_rows > 0) {
+            // 如果更新了权限，则update，否则直接返回
+            $row = $selectResult->fetch_assoc();
+            $authority = $row['authority'];
+            if ($authority == $allocAuthority) {
+                return 1;
+            }
+
+            $updateStr = "UPDATE " . self::_db_authorized_user . " SET name = '" . $contactName . "', wx_nickname = '" . $contactWXNickname . "', authority = '" . $allocAuthority . "' WHERE wx_id = '" . $contactWxID ."';";
+            $updateResult = $this->_mysqliConnection->query($updateStr);
+            if ($updateResult == true && $this->_mysqliConnection->affected_rows > 0) {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        // 如未分配权限，则分配权限
+        $insertStr = "INSERT INTO " . self::_db_authorized_user . " (name, wx_id, wx_nickname, authority) VALUES ('" . $contactName . "', '" . $contactWxID . "', '" . $contactWXNickname . "', '" . $allocAuthority . "');";
+        $insertResult = $this->_mysqliConnection->query($insertStr);
+        if ($insertResult == true) {
+            return 1;
+        }
+
+        return 0;
     }
 
     public function __destruct() {

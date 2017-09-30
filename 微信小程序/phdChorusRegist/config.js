@@ -1,9 +1,9 @@
 // 小程序配置
 
 // 服务器IP
-var httpsHostRegist = "https://www.liangzhipeng.cn/test_phdChorusRegist/";
+var httpsHostRegist = "https://www.liangzhipeng.cn/phdChorusRegist/";
 
-var httpsHostRecruit = "https://www.liangzhipeng.cn/test_phdChorusRecruit/";
+var httpsHostRecruit = "https://www.liangzhipeng.cn/phdChorusRecruit/";
 
 var config = {
 
@@ -87,7 +87,9 @@ var config = {
 
     recruit_enrollContactUrl: (httpsHostRecruit + 'phdRecruitEnrollContact.php'),
 
-    recruit_enrolledContactListUrl: (httpsHostRecruit + 'phdRecruitEnrolledContactList.php')
+    recruit_enrolledContactListUrl: (httpsHostRecruit + 'phdRecruitEnrolledContactList.php'),
+
+    recruit_allocAuthorityUrl: (httpsHostRecruit + 'phdRecruitAllocAuthority.php')
   }
 
 };

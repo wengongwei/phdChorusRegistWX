@@ -27,7 +27,7 @@
   </view>
 
   <view class="section">
-    <view class="section-title">权限(不管给TA分配了何种权限，TA都可以看到所有签到数据)</view>
+    <view class="section-title">权限(不管给TA分配了何种权限，TA都可以看到所有招新数据)</view>
     <radio-group class="radio-group" bindchange="bindAuthorityChange">
       <label style="display: flex" wx:for="{{authorityTypeItems}}" wx:key="item.value">
         <view class="section-selector">

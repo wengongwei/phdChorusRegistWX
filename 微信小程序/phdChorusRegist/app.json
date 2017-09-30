@@ -11,6 +11,8 @@
     "pages/rehearsal/dailyStatics/registTableDetailStatics/registTableDetailStatics",
     "pages/rehearsal/exportExcelFile/exportExcelFile",
     "pages/rehearsal/exportExcelFile/downloadExcelFile/downloadExcelFile",
+    "pages/rehearsal/authority/authority",
+    
     "pages/recruit/recruitIndex",
     "pages/recruit/apply/apply",
     "pages/recruit/confirmInterview/confirmInterview",
@@ -27,7 +29,8 @@
     "pages/recruit/enrolledContact/selectDate/selectDate",
     "pages/recruit/enrolledContact/enrolledContactList/enrolledContactList",
     "pages/recruit/enrolledContact/enrolledContactList/interviewerInfo/interviewerInfo",
-    "pages/rehearsal/authority/authority"
+    "pages/recruit/authority/authority"
+    
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
